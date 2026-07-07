@@ -49,7 +49,7 @@ export default function Tabs({ value, onChange }: Props) {
             onClick={() => onChange(t.id)}
             className={`inline-flex items-center gap-1.5 rounded-lg px-2.5 py-1.5 text-sm font-medium transition sm:px-3 ${
               on
-                ? "bg-white text-ink shadow-sm ring-1 ring-line dark:bg-white/10"
+                ? "bg-elevated text-ink shadow-sm ring-1 ring-line"
                 : "text-ink-soft hover:text-ink"
             }`}
           >

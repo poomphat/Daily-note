@@ -21,7 +21,7 @@ export default function MoodPicker({ mood, onChange }: Props) {
               className={`grid h-9 w-9 place-items-center rounded-full text-lg transition ${
                 on
                   ? "scale-110 bg-brand-soft ring-2 ring-brand/50"
-                  : "opacity-60 ring-1 ring-line hover:bg-white hover:opacity-100"
+                  : "opacity-60 ring-1 ring-line hover:bg-elevated hover:opacity-100"
               }`}
             >
               {m.emoji}

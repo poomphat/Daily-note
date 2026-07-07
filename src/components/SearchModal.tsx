@@ -33,7 +33,7 @@ export default function SearchModal({ store, onSelectDate, onClose }: Props) {
   return (
     <div className="fixed inset-0 z-50 flex items-start justify-center bg-ink/40 p-4 pt-[12vh] backdrop-blur-sm">
       <div
-        className="animate-rise w-full max-w-lg overflow-hidden rounded-2xl border border-line bg-paper shadow-2xl ring-1 ring-black/5"
+        className="animate-rise w-full max-w-lg overflow-hidden rounded-2xl border border-line bg-paper shadow-2xl ring-1 ring-black/5 dark:ring-white/5"
         role="dialog"
         aria-label="ค้นหาบันทึก"
       >
@@ -81,7 +81,7 @@ export default function SearchModal({ store, onSelectDate, onClose }: Props) {
                             onSelectDate(date);
                             onClose();
                           }}
-                          className="flex w-full items-start gap-2 rounded-xl px-2.5 py-2 text-left transition hover:bg-white"
+                          className="flex w-full items-start gap-2 rounded-xl px-2.5 py-2 text-left transition hover:bg-elevated"
                         >
                           {hit.type === "entry" && hit.category ? (
                             <span className="text-base leading-none">

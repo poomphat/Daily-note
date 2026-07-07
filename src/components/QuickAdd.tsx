@@ -43,7 +43,7 @@ const QuickAdd = forwardRef<QuickAddHandle, Props>(function QuickAdd(
   const active = CATEGORY_MAP[category];
 
   return (
-    <div className="rounded-2xl border border-line bg-white/80 p-3 shadow-sm ring-1 ring-black/[0.02] sm:p-4">
+    <div className="rounded-2xl border border-line bg-elevated/80 p-3 shadow-sm ring-1 ring-black/[0.02] dark:ring-white/[0.04] sm:p-4">
       <div className="mb-3 flex flex-wrap gap-2">
         {CATEGORIES.map((c) => {
           const on = c.id === category;
@@ -54,7 +54,7 @@ const QuickAdd = forwardRef<QuickAddHandle, Props>(function QuickAdd(
               className={`inline-flex items-center gap-1.5 rounded-full px-3 py-1.5 text-sm font-medium ring-1 transition ${
                 on
                   ? `${c.tint} scale-[1.02] shadow-sm`
-                  : "bg-paper-2/60 text-ink-soft ring-line hover:bg-white"
+                  : "bg-paper-2/60 text-ink-soft ring-line hover:bg-elevated"
               }`}
             >
               <span className="text-[15px] leading-none">{c.emoji}</span>
@@ -80,7 +80,7 @@ const QuickAdd = forwardRef<QuickAddHandle, Props>(function QuickAdd(
               }
             }}
             placeholder={`เพิ่ม “${active.label}”… แล้วกด Enter`}
-            className="w-full rounded-xl border-0 bg-paper-2/50 py-3 pl-7 pr-3 text-[15px] text-ink outline-none ring-1 ring-line transition placeholder:text-ink-faint focus:bg-white focus:ring-2 focus:ring-brand/40"
+            className="w-full rounded-xl border-0 bg-paper-2/50 py-3 pl-7 pr-3 text-[15px] text-ink outline-none ring-1 ring-line transition placeholder:text-ink-faint focus:bg-elevated focus:ring-2 focus:ring-brand/40"
           />
         </div>
         <button
@@ -99,7 +99,7 @@ const QuickAdd = forwardRef<QuickAddHandle, Props>(function QuickAdd(
           <button
             key={t.id}
             onClick={() => onAddMany(t.entries)}
-            className="inline-flex items-center gap-1 rounded-full bg-paper-2/80 px-2.5 py-1 text-xs font-medium text-ink-soft ring-1 ring-line transition hover:bg-white hover:text-ink"
+            className="inline-flex items-center gap-1 rounded-full bg-paper-2/80 px-2.5 py-1 text-xs font-medium text-ink-soft ring-1 ring-line transition hover:bg-elevated hover:text-ink"
           >
             <span>{t.emoji}</span>
             {t.label}

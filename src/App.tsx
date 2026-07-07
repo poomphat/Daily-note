@@ -255,7 +255,7 @@ export default function App() {
               <EmptyState activeDate={activeDate} yesterdayPreview={yesterdayPreview} />
             ) : (
               day.entries.length > 0 && (
-                <div className="rounded-2xl border border-line bg-white/60 p-2 shadow-sm ring-1 ring-black/[0.02] dark:bg-white/5 sm:p-3">
+                <div className="rounded-2xl border border-line bg-elevated/60 p-2 shadow-sm ring-1 ring-black/[0.02] dark:ring-white/[0.04] sm:p-3">
                   <EntryList
                     entries={day.entries}
                     onToggle={toggleEntry}
@@ -267,7 +267,7 @@ export default function App() {
               )
             )}
 
-            <div className="rounded-2xl border border-line bg-white/60 p-4 shadow-sm ring-1 ring-black/[0.02] dark:bg-white/5">
+            <div className="rounded-2xl border border-line bg-elevated/60 p-4 shadow-sm ring-1 ring-black/[0.02] dark:ring-white/[0.04]">
               <MoodPicker mood={day.mood} onChange={setMood} />
             </div>
 

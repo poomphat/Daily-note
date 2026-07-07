@@ -25,20 +25,20 @@ export default function ExportMenu({ day, store }: Props) {
     <div className="relative" ref={ref}>
       <button
         onClick={() => setOpen((o) => !o)}
-        className="grid h-10 w-10 place-items-center rounded-xl text-ink-soft ring-1 ring-line transition hover:bg-white hover:text-ink"
+        className="grid h-10 w-10 place-items-center rounded-xl text-ink-soft ring-1 ring-line transition hover:bg-elevated hover:text-ink"
         aria-label="ส่งออกข้อมูล"
         title="ส่งออก"
       >
         <Download className="h-5 w-5" />
       </button>
       {open && (
-        <div className="animate-rise absolute right-0 top-full z-30 mt-1.5 min-w-[180px] overflow-hidden rounded-xl border border-line bg-paper py-1 shadow-xl ring-1 ring-black/5">
+        <div className="animate-rise absolute right-0 top-full z-30 mt-1.5 min-w-[180px] overflow-hidden rounded-xl border border-line bg-paper py-1 shadow-xl ring-1 ring-black/5 dark:ring-white/5">
           <button
             onClick={() => {
               exportDayMarkdown(day);
               setOpen(false);
             }}
-            className="flex w-full px-3 py-2 text-left text-sm text-ink transition hover:bg-white"
+            className="flex w-full px-3 py-2 text-left text-sm text-ink transition hover:bg-elevated"
           >
             วันนี้ (.md)
           </button>
@@ -47,7 +47,7 @@ export default function ExportMenu({ day, store }: Props) {
               exportAllMarkdown(store);
               setOpen(false);
             }}
-            className="flex w-full px-3 py-2 text-left text-sm text-ink transition hover:bg-white"
+            className="flex w-full px-3 py-2 text-left text-sm text-ink transition hover:bg-elevated"
           >
             ทั้งหมด (.md)
           </button>
@@ -56,7 +56,7 @@ export default function ExportMenu({ day, store }: Props) {
               exportAllJson(store);
               setOpen(false);
             }}
-            className="flex w-full px-3 py-2 text-left text-sm text-ink transition hover:bg-white"
+            className="flex w-full px-3 py-2 text-left text-sm text-ink transition hover:bg-elevated"
           >
             ทั้งหมด (.json)
           </button>

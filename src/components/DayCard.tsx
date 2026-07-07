@@ -15,7 +15,7 @@ export default function DayCard({ day, onSelect }: Props) {
   return (
     <button
       onClick={() => onSelect(day.date)}
-      className="group flex w-full items-start gap-3 rounded-2xl border border-line bg-white/70 p-3 text-left shadow-sm ring-1 ring-black/[0.02] transition hover:-translate-y-0.5 hover:bg-white hover:shadow-md dark:bg-white/5 dark:hover:bg-white/10 sm:p-4"
+      className="group flex w-full items-start gap-3 rounded-2xl border border-line bg-elevated/70 p-3 text-left shadow-sm ring-1 ring-black/[0.02] transition hover:-translate-y-0.5 hover:bg-elevated hover:shadow-md dark:ring-white/[0.04] sm:p-4"
     >
       <div
         className={`grid h-14 w-14 shrink-0 place-items-center rounded-xl leading-none ${

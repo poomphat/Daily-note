@@ -22,7 +22,7 @@ interface Props {
 
 function Stat({ label, value }: { label: string; value: string | number }) {
   return (
-    <div className="rounded-xl border border-line bg-white/60 px-3 py-2.5 text-center shadow-sm ring-1 ring-black/[0.02] dark:bg-white/5">
+    <div className="rounded-xl border border-line bg-elevated/60 px-3 py-2.5 text-center shadow-sm ring-1 ring-black/[0.02] dark:ring-white/[0.04]">
       <div className="font-display text-lg font-semibold text-ink">{value}</div>
       <div className="mt-0.5 text-[11px] text-ink-faint">{label}</div>
     </div>
@@ -48,8 +48,8 @@ function WeekCell({
       onClick={() => onSelect(dateKey)}
       className={`group flex items-start gap-3 rounded-2xl border p-3 text-left transition ${
         empty
-          ? "border-dashed border-line bg-white/30 hover:bg-white/60 dark:bg-white/[0.02] dark:hover:bg-white/5"
-          : "border-line bg-white/70 shadow-sm ring-1 ring-black/[0.02] hover:-translate-y-0.5 hover:bg-white hover:shadow-md dark:bg-white/5 dark:hover:bg-white/10"
+          ? "border-dashed border-line bg-elevated/30 hover:bg-elevated/60 dark:bg-elevated/10 dark:hover:bg-elevated/20"
+          : "border-line bg-elevated/70 shadow-sm ring-1 ring-black/[0.02] hover:-translate-y-0.5 hover:bg-elevated hover:shadow-md dark:ring-white/[0.04] dark:hover:bg-elevated/90"
       }`}
     >
       <div
@@ -145,7 +145,7 @@ export default function WeekView({ store, onSelectDay }: Props) {
         <div className="flex shrink-0 items-center gap-1">
           <button
             onClick={() => setAnchor(addDays(anchor, -7))}
-            className="grid h-9 w-9 place-items-center rounded-xl text-ink-soft ring-1 ring-line transition hover:bg-white hover:text-ink dark:hover:bg-white/10"
+            className="grid h-9 w-9 place-items-center rounded-xl text-ink-soft ring-1 ring-line transition hover:bg-elevated hover:text-ink"
             aria-label="สัปดาห์ก่อนหน้า"
           >
             <ChevronLeft className="h-5 w-5" />
@@ -153,7 +153,7 @@ export default function WeekView({ store, onSelectDay }: Props) {
           {!isThisWeek && (
             <button
               onClick={() => setAnchor(startOfWeek(todayKey()))}
-              className="rounded-xl px-3 py-2 text-sm font-medium text-brand ring-1 ring-line transition hover:bg-white dark:hover:bg-white/10"
+              className="rounded-xl px-3 py-2 text-sm font-medium text-brand ring-1 ring-line transition hover:bg-elevated"
             >
               สัปดาห์นี้
             </button>
@@ -161,7 +161,7 @@ export default function WeekView({ store, onSelectDay }: Props) {
           <button
             onClick={() => !nextDisabled && setAnchor(addDays(anchor, 7))}
             disabled={nextDisabled}
-            className="grid h-9 w-9 place-items-center rounded-xl text-ink-soft ring-1 ring-line transition enabled:hover:bg-white enabled:hover:text-ink disabled:opacity-30 dark:enabled:hover:bg-white/10"
+            className="grid h-9 w-9 place-items-center rounded-xl text-ink-soft ring-1 ring-line transition enabled:hover:bg-elevated enabled:hover:text-ink disabled:opacity-30"
             aria-label="สัปดาห์ถัดไป"
           >
             <ChevronRight className="h-5 w-5" />

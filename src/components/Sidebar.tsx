@@ -38,7 +38,7 @@ function DayItem({
   return (
     <div
       className={`group flex w-full items-start gap-1 rounded-xl transition ${
-        active ? "bg-white shadow-sm ring-1 ring-line dark:bg-white/10" : "hover:bg-white/60 dark:hover:bg-white/5"
+        active ? "bg-elevated shadow-sm ring-1 ring-line" : "hover:bg-elevated/60"
       }`}
     >
       <button onClick={onSelect} className="flex min-w-0 flex-1 items-start gap-3 px-2.5 py-2.5 text-left">
@@ -110,7 +110,7 @@ export default function Sidebar({ days, activeDate, onSelect, onTogglePin, onClo
         {onClose && (
           <button
             onClick={onClose}
-            className="grid h-9 w-9 place-items-center rounded-xl text-ink-soft ring-1 ring-line transition hover:bg-white lg:hidden"
+            className="grid h-9 w-9 place-items-center rounded-xl text-ink-soft ring-1 ring-line transition hover:bg-elevated lg:hidden"
             aria-label="ปิดเมนู"
           >
             <X className="h-5 w-5" />

@@ -77,7 +77,7 @@ function EntryRow({
         className={`grid h-6 w-6 shrink-0 place-items-center rounded-md border transition ${
           entry.done
             ? "border-emerald-500 bg-emerald-500 text-white"
-            : "border-line bg-white text-transparent hover:border-brand"
+            : "border-line bg-elevated text-transparent hover:border-brand"
         }`}
         aria-label={entry.done ? "ทำเครื่องหมายยังไม่เสร็จ" : "ทำเครื่องหมายเสร็จ"}
       >
@@ -105,7 +105,7 @@ function EntryRow({
               inputRef.current?.blur();
             }
           }}
-          className="flex-1 rounded-md bg-white px-2 py-1 text-[15px] text-ink outline-none ring-2 ring-brand/40"
+          className="flex-1 rounded-md bg-elevated px-2 py-1 text-[15px] text-ink outline-none ring-2 ring-brand/40"
         />
       ) : (
         <button
@@ -120,7 +120,7 @@ function EntryRow({
 
       <button
         onClick={() => onRemove(entry.id)}
-        className="grid h-8 w-8 shrink-0 place-items-center rounded-lg text-ink-faint opacity-0 transition hover:bg-rose-50 hover:text-rose-600 focus:opacity-100 group-hover:opacity-100"
+        className="grid h-8 w-8 shrink-0 place-items-center rounded-lg text-ink-faint opacity-0 transition hover:bg-rose-50 hover:text-rose-600 focus:opacity-100 group-hover:opacity-100 dark:hover:bg-rose-950/40 dark:hover:text-rose-400"
         aria-label="ลบรายการ"
       >
         <Trash className="h-4 w-4" />
