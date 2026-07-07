@@ -1,7 +1,7 @@
 import type { KeyboardEvent, ReactElement, SVGProps } from "react";
-import { CalendarRange, Layers, Sun } from "./icons";
+import { CalendarRange, Chart, Layers, Sun } from "./icons";
 
-export type TabId = "day" | "week" | "all";
+export type TabId = "day" | "week" | "all" | "insights";
 
 interface TabMeta {
   id: TabId;
@@ -13,6 +13,7 @@ export const TABS: TabMeta[] = [
   { id: "day", label: "วันนี้", Icon: Sun },
   { id: "week", label: "สัปดาห์นี้", Icon: CalendarRange },
   { id: "all", label: "ทั้งหมด", Icon: Layers },
+  { id: "insights", label: "สรุป", Icon: Chart },
 ];
 
 interface Props {

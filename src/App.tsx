@@ -1,20 +1,25 @@
 import { useCallback, useEffect, useRef, useState } from "react";
 import { useNotes } from "./hooks/useNotes";
 import { useSettings } from "./hooks/useSettings";
+import { useHabits } from "./hooks/useHabits";
+import { useReminder } from "./hooks/useReminder";
 import { addDays, isFuture, isToday, todayKey } from "./lib/date";
-import { isDayEmpty } from "./lib/storage";
+import { hasDayContent, isDayEmpty } from "./lib/storage";
 import Header from "./components/Header";
 import Sidebar from "./components/Sidebar";
 import QuickAdd, { type QuickAddHandle } from "./components/QuickAdd";
 import EntryList from "./components/EntryList";
 import FreeNote from "./components/FreeNote";
 import MoodPicker from "./components/MoodPicker";
+import HabitTracker from "./components/HabitTracker";
 import EmptyState from "./components/EmptyState";
 import SearchModal from "./components/SearchModal";
 import ShortcutsModal from "./components/ShortcutsModal";
+import ReminderModal from "./components/ReminderModal";
 import Toast from "./components/Toast";
 import WeekView from "./components/WeekView";
 import TimelineView from "./components/TimelineView";
+import InsightsView from "./components/InsightsView";
 import type { TabId } from "./components/Tabs";
 import type { Entry } from "./lib/types";
 
@@ -41,20 +46,29 @@ export default function App() {
     setReflection,
     setMood,
     togglePin,
+    toggleHabit,
     copyFromYesterday,
+    carryOver,
+    carryOverUnfinished,
+    mergeStore,
     daysWithNotes,
     streak,
     yesterdayPreview,
   } = useNotes();
 
-  const { settings, toggleDarkMode } = useSettings();
+  const { settings, toggleDarkMode, setReminder } = useSettings();
+  const { activeHabits, addHabit, removeHabit } = useHabits();
+
+  useReminder(settings.reminder, hasDayContent(store[todayKey()]));
 
   const [tab, setTab] = useState<TabId>("day");
   const [menuOpen, setMenuOpen] = useState(false);
   const [searchOpen, setSearchOpen] = useState(false);
   const [shortcutsOpen, setShortcutsOpen] = useState(false);
+  const [reminderOpen, setReminderOpen] = useState(false);
   const [copyConfirm, setCopyConfirm] = useState(false);
   const [undo, setUndo] = useState<{ entry: Entry; index: number } | null>(null);
+  const [message, setMessage] = useState<string | null>(null);
 
   const quickAddRef = useRef<QuickAddHandle>(null);
 
@@ -99,6 +113,11 @@ export default function App() {
     copyFromYesterday();
     setCopyConfirm(false);
   }, [copyConfirm, copyFromYesterday]);
+
+  const handleCarryOver = useCallback(() => {
+    const n = carryOverUnfinished();
+    if (n > 0) setMessage(`ยกงานค้างมา ${n} รายการ`);
+  }, [carryOverUnfinished]);
 
   useEffect(() => {
     setCopyConfirm(false);
@@ -209,6 +228,10 @@ export default function App() {
           onOpenMenu={() => setMenuOpen(true)}
           onOpenSearch={() => setSearchOpen(true)}
           onOpenShortcuts={() => setShortcutsOpen(true)}
+          onOpenReminder={() => setReminderOpen(true)}
+          reminderOn={settings.reminder.enabled}
+          onImport={mergeStore}
+          onMessage={setMessage}
         />
 
         <main className="mx-auto w-full max-w-3xl flex-1 px-4 py-6 sm:px-6">
@@ -220,6 +243,10 @@ export default function App() {
             <TimelineView days={daysWithNotes} onSelectDay={openDay} />
           )}
 
+          {tab === "insights" && (
+            <InsightsView store={store} habits={activeHabits} onSelectDay={openDay} />
+          )}
+
           {tab === "day" && (
           <div className="flex flex-col gap-6">
             <QuickAdd
@@ -228,6 +255,8 @@ export default function App() {
               onAddMany={addEntries}
               onCopyYesterday={handleCopyYesterday}
               canCopyYesterday={yesterdayHasEntries}
+              onCarryOver={handleCarryOver}
+              carryOverCount={isToday(activeDate) ? carryOver.count : 0}
               autoFocus={autoFocus}
             />
 
@@ -271,6 +300,15 @@ export default function App() {
               <MoodPicker mood={day.mood} onChange={setMood} />
             </div>
 
+            <HabitTracker
+              habits={activeHabits}
+              habitLog={day.habitLog}
+              store={store}
+              onToggle={toggleHabit}
+              onAdd={addHabit}
+              onRemove={removeHabit}
+            />
+
             <FreeNote value={day.reflection} onChange={setReflection} />
           </div>
           )}
@@ -291,6 +329,14 @@ export default function App() {
 
       {shortcutsOpen && <ShortcutsModal onClose={() => setShortcutsOpen(false)} />}
 
+      {reminderOpen && (
+        <ReminderModal
+          reminder={settings.reminder}
+          onChange={setReminder}
+          onClose={() => setReminderOpen(false)}
+        />
+      )}
+
       {undo && (
         <Toast
           message="ลบรายการแล้ว"
@@ -302,6 +348,8 @@ export default function App() {
           onDismiss={() => setUndo(null)}
         />
       )}
+
+      {message && <Toast message={message} onDismiss={() => setMessage(null)} />}
     </div>
   );
 }

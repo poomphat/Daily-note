@@ -17,14 +17,31 @@ export interface DayNote {
   mood: Mood | null;
   updatedAt: number;
   pinned?: boolean;
+  /** per-habit completion for the day, keyed by habit id */
+  habitLog?: Record<string, boolean>;
 }
 
 export type Mood = "great" | "good" | "okay" | "tired" | "rough";
 
 export type NotesStore = Record<string, DayNote>;
 
+export interface Habit {
+  id: string;
+  name: string;
+  emoji: string;
+  createdAt: number;
+  archived?: boolean;
+}
+
+export interface ReminderSettings {
+  enabled: boolean;
+  /** local time in "HH:mm" */
+  time: string;
+}
+
 export interface AppSettings {
   darkMode: boolean;
+  reminder: ReminderSettings;
 }
 
 export interface SearchHit {

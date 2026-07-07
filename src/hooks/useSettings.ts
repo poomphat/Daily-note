@@ -1,5 +1,5 @@
 import { useCallback, useEffect, useState } from "react";
-import type { AppSettings } from "../lib/types";
+import type { AppSettings, ReminderSettings } from "../lib/types";
 import { loadSettings, saveSettings } from "../lib/storage";
 
 export function useSettings() {
@@ -14,5 +14,9 @@ export function useSettings() {
     setSettings((s) => ({ ...s, darkMode: !s.darkMode }));
   }, []);
 
-  return { settings, toggleDarkMode };
+  const setReminder = useCallback((patch: Partial<ReminderSettings>) => {
+    setSettings((s) => ({ ...s, reminder: { ...s.reminder, ...patch } }));
+  }, []);
+
+  return { settings, toggleDarkMode, setReminder };
 }

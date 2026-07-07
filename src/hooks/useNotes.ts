@@ -182,6 +182,17 @@ export function useNotes() {
     [mutateDay],
   );
 
+  const toggleHabit = useCallback(
+    (habitId: string) => {
+      mutateActiveDay((d) => {
+        const log = { ...(d.habitLog ?? {}) };
+        log[habitId] = !log[habitId];
+        return { ...d, habitLog: log };
+      });
+    },
+    [mutateActiveDay],
+  );
+
   const copyFromYesterday = useCallback((): number => {
     const yesterday = addDays(activeDate, -1);
     const source = store[yesterday];
@@ -202,6 +213,54 @@ export function useNotes() {
 
     return copies.length;
   }, [activeDate, store, mutateActiveDay]);
+
+  const mergeStore = useCallback(
+    (incoming: NotesStore, mode: "merge" | "replace") => {
+      setStore((prev) => {
+        if (mode === "replace") return { ...incoming };
+        return { ...prev, ...incoming };
+      });
+    },
+    [],
+  );
+
+  // The most recent previous day (within 30 days) that still has unfinished
+  // entries, plus how many of them are not already present in the active day.
+  const carryOver = useMemo(() => {
+    const current = store[activeDate] ?? emptyDay(activeDate);
+    const existing = new Set(current.entries.map((e) => `${e.category}::${e.text}`));
+    let key = activeDate;
+    for (let i = 0; i < 30; i++) {
+      key = addDays(key, -1);
+      const d = store[key];
+      if (d && d.entries.some((e) => !e.done)) {
+        const count = d.entries.filter(
+          (e) => !e.done && !existing.has(`${e.category}::${e.text}`),
+        ).length;
+        return { date: key, count };
+      }
+    }
+    return { date: null as string | null, count: 0 };
+  }, [activeDate, store]);
+
+  const carryOverUnfinished = useCallback((): number => {
+    const src = carryOver.date ? store[carryOver.date] : undefined;
+    if (!src) return 0;
+    const current = store[activeDate] ?? emptyDay(activeDate);
+    const existing = new Set(current.entries.map((e) => `${e.category}::${e.text}`));
+    const copies = src.entries
+      .filter((e) => !e.done && !existing.has(`${e.category}::${e.text}`))
+      .map((e) => ({
+        id: uid(),
+        category: e.category,
+        text: e.text,
+        done: false,
+        createdAt: Date.now(),
+      }));
+    if (copies.length === 0) return 0;
+    mutateActiveDay((d) => ({ ...d, entries: [...d.entries, ...copies] }));
+    return copies.length;
+  }, [carryOver.date, activeDate, store, mutateActiveDay]);
 
   const daysWithNotes = useMemo(() => {
     return sortDays(Object.values(store).filter(hasContent));
@@ -233,7 +292,11 @@ export function useNotes() {
     setReflection,
     setMood,
     togglePin,
+    toggleHabit,
     copyFromYesterday,
+    carryOver,
+    carryOverUnfinished,
+    mergeStore,
     daysWithNotes,
     streak,
     yesterdayPreview,

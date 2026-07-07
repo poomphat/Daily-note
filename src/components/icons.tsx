@@ -115,6 +115,13 @@ export const Download = (p: IconProps) => (
   </svg>
 );
 
+export const Upload = (p: IconProps) => (
+  <svg {...base} {...p}>
+    <path d="M12 21V9M7 13l5-5 5 5" />
+    <path d="M5 3h14" />
+  </svg>
+);
+
 export const Star = (p: IconProps) => (
   <svg {...base} {...p}>
     <path d="m12 2 3.09 6.26L22 9.27l-5 4.87 1.18 6.88L12 17.77l-6.18 3.25L7 14.14 2 9.27l6.91-1.01L12 2Z" />
@@ -145,5 +152,26 @@ export const Copy = (p: IconProps) => (
   <svg {...base} {...p}>
     <rect x="8" y="8" width="12" height="12" rx="2" />
     <path d="M16 8V6a2 2 0 0 0-2-2H6a2 2 0 0 0-2 2v8a2 2 0 0 0 2 2h2" />
+  </svg>
+);
+
+export const Undo = (p: IconProps) => (
+  <svg {...base} {...p}>
+    <path d="M9 14 4 9l5-5" />
+    <path d="M4 9h11a5 5 0 0 1 5 5 5 5 0 0 1-5 5H9" />
+  </svg>
+);
+
+export const Chart = (p: IconProps) => (
+  <svg {...base} {...p}>
+    <path d="M3 3v18h18" />
+    <path d="M7 15v-3M12 15V8M17 15v-6" />
+  </svg>
+);
+
+export const Bell = (p: IconProps) => (
+  <svg {...base} {...p}>
+    <path d="M18 8a6 6 0 0 0-12 0c0 7-3 9-3 9h18s-3-2-3-9" />
+    <path d="M13.7 21a2 2 0 0 1-3.4 0" />
   </svg>
 );
