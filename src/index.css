@@ -1,5 +1,11 @@
 @import "tailwindcss";
 
+/* Drive the `dark:` variant off the manual `.dark` class instead of Tailwind v4's
+   default `@media (prefers-color-scheme: dark)`. Without this, utility-based dark
+   styles follow the OS setting while the CSS-variable tokens follow the toggle,
+   leaving the UI half light / half dark whenever the two disagree. */
+@custom-variant dark (&:where(.dark, .dark *));
+
 @theme {
   --font-sans: "IBM Plex Sans Thai", ui-sans-serif, system-ui, sans-serif;
   --font-display: "Sora", "IBM Plex Sans Thai", ui-sans-serif, system-ui, sans-serif;
