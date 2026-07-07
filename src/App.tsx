@@ -71,6 +71,7 @@ export default function App() {
 
   const selectDate = (d: string) => {
     setActiveDate(d);
+    setTab("day");
     setMenuOpen(false);
   };
 
@@ -211,6 +212,15 @@ export default function App() {
         />
 
         <main className="mx-auto w-full max-w-3xl flex-1 px-4 py-6 sm:px-6">
+          {tab === "week" && (
+            <WeekView store={store} onSelectDay={openDay} />
+          )}
+
+          {tab === "all" && (
+            <TimelineView days={daysWithNotes} onSelectDay={openDay} />
+          )}
+
+          {tab === "day" && (
           <div className="flex flex-col gap-6">
             <QuickAdd
               ref={quickAddRef}
@@ -263,6 +273,7 @@ export default function App() {
 
             <FreeNote value={day.reflection} onChange={setReflection} />
           </div>
+          )}
 
           <footer className="mt-10 pb-6 text-center text-xs text-ink-faint">
             เก็บข้อมูลไว้ในเครื่องของคุณเท่านั้น · ร่างต้นแบบ (draft)
@@ -273,7 +284,7 @@ export default function App() {
       {searchOpen && (
         <SearchModal
           store={store}
-          onSelectDate={selectDate}
+          onSelectDate={openDay}
           onClose={() => setSearchOpen(false)}
         />
       )}
