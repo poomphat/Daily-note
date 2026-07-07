@@ -1,9 +1,13 @@
-import type { AppSettings, DayNote, NotesStore } from "./types";
+import type { AppSettings, DayNote, Habit, NotesStore } from "./types";
 
 const STORAGE_KEY = "daily-note:v1";
 const SETTINGS_KEY = "daily-note:settings";
+const HABITS_KEY = "daily-note:habits";
 
-const DEFAULT_SETTINGS: AppSettings = { darkMode: false };
+const DEFAULT_SETTINGS: AppSettings = {
+  darkMode: false,
+  reminder: { enabled: false, time: "20:00" },
+};
 
 export function loadStore(): NotesStore {
   try {
@@ -39,6 +43,25 @@ export function loadSettings(): AppSettings {
 export function saveSettings(settings: AppSettings): void {
   try {
     localStorage.setItem(SETTINGS_KEY, JSON.stringify(settings));
+  } catch {
+    // ignore
+  }
+}
+
+export function loadHabits(): Habit[] {
+  try {
+    const raw = localStorage.getItem(HABITS_KEY);
+    if (!raw) return [];
+    const parsed = JSON.parse(raw) as Habit[];
+    return Array.isArray(parsed) ? parsed : [];
+  } catch {
+    return [];
+  }
+}
+
+export function saveHabits(habits: Habit[]): void {
+  try {
+    localStorage.setItem(HABITS_KEY, JSON.stringify(habits));
   } catch {
     // ignore
   }

@@ -55,6 +55,59 @@ export function exportAllJson(store: NotesStore): void {
   );
 }
 
+export interface ImportResult {
+  store: NotesStore;
+  count: number;
+}
+
+function isValidDay(d: unknown): d is DayNote {
+  if (!d || typeof d !== "object") return false;
+  const day = d as Record<string, unknown>;
+  return (
+    typeof day.date === "string" &&
+    /^\d{4}-\d{2}-\d{2}$/.test(day.date) &&
+    Array.isArray(day.entries)
+  );
+}
+
+function normalizeDay(d: DayNote): DayNote {
+  return {
+    ...d,
+    entries: Array.isArray(d.entries) ? d.entries : [],
+    reflection: typeof d.reflection === "string" ? d.reflection : "",
+    mood: d.mood ?? null,
+    updatedAt: typeof d.updatedAt === "number" ? d.updatedAt : Date.now(),
+  };
+}
+
+/** Parse an exported JSON file (either a DayNote[] or a NotesStore map). */
+export async function importFromJson(file: File): Promise<ImportResult> {
+  const text = await file.text();
+  let parsed: unknown;
+  try {
+    parsed = JSON.parse(text);
+  } catch {
+    throw new Error("ไฟล์นี้ไม่ใช่ JSON ที่อ่านได้");
+  }
+
+  const days: DayNote[] = [];
+  if (Array.isArray(parsed)) {
+    for (const d of parsed) if (isValidDay(d)) days.push(normalizeDay(d));
+  } else if (parsed && typeof parsed === "object") {
+    for (const d of Object.values(parsed as Record<string, unknown>)) {
+      if (isValidDay(d)) days.push(normalizeDay(d));
+    }
+  }
+
+  if (days.length === 0) {
+    throw new Error("ไม่พบข้อมูลบันทึกที่นำเข้าได้ในไฟล์นี้");
+  }
+
+  const store: NotesStore = {};
+  for (const d of days) store[d.date] = d;
+  return { store, count: days.length };
+}
+
 function downloadFile(filename: string, content: string, mime: string): void {
   const blob = new Blob([content], { type: mime });
   const url = URL.createObjectURL(blob);

@@ -10,6 +10,7 @@ import {
 import type { DayNote, NotesStore } from "../lib/types";
 import type { SaveState } from "../hooks/useNotes";
 import {
+  Bell,
   Calendar,
   ChevronLeft,
   ChevronRight,
@@ -37,6 +38,10 @@ interface Props {
   onOpenMenu: () => void;
   onOpenSearch: () => void;
   onOpenShortcuts: () => void;
+  onOpenReminder: () => void;
+  reminderOn: boolean;
+  onImport: (store: NotesStore, mode: "merge" | "replace") => void;
+  onMessage: (message: string) => void;
 }
 
 function SaveBadge({ state }: { state: SaveState }) {
@@ -74,6 +79,10 @@ export default function Header({
   onOpenMenu,
   onOpenSearch,
   onOpenShortcuts,
+  onOpenReminder,
+  reminderOn,
+  onImport,
+  onMessage,
 }: Props) {
   const dateInput = useRef<HTMLInputElement>(null);
   const rel = relativeLabel(activeDate);
@@ -109,7 +118,24 @@ export default function Header({
             <Search className="h-5 w-5" />
           </button>
 
-          <ExportMenu day={day} store={store} />
+          <ExportMenu
+            day={day}
+            store={store}
+            onImport={onImport}
+            onMessage={onMessage}
+          />
+
+          <button
+            onClick={onOpenReminder}
+            className="relative grid h-10 w-10 shrink-0 place-items-center rounded-xl text-ink-soft ring-1 ring-line transition hover:bg-elevated hover:text-ink"
+            aria-label="ตั้งค่าแจ้งเตือน"
+            title="แจ้งเตือน"
+          >
+            <Bell className="h-5 w-5" />
+            {reminderOn && (
+              <span className="absolute right-2 top-2 h-2 w-2 rounded-full bg-brand ring-2 ring-paper" />
+            )}
+          </button>
 
           <button
             onClick={onToggleDarkMode}

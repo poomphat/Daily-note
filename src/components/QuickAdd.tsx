@@ -2,7 +2,7 @@ import { forwardRef, useEffect, useImperativeHandle, useRef, useState } from "re
 import type { CategoryId } from "../lib/types";
 import { CATEGORIES, CATEGORY_MAP } from "../lib/categories";
 import { DAY_TEMPLATES } from "../lib/templates";
-import { Copy, Plus } from "./icons";
+import { Copy, Plus, Undo } from "./icons";
 
 export interface QuickAddHandle {
   submit: () => void;
@@ -14,11 +14,21 @@ interface Props {
   onAddMany: (items: { category: CategoryId; text: string }[]) => void;
   onCopyYesterday?: () => void;
   canCopyYesterday?: boolean;
+  onCarryOver?: () => void;
+  carryOverCount?: number;
   autoFocus?: boolean;
 }
 
 const QuickAdd = forwardRef<QuickAddHandle, Props>(function QuickAdd(
-  { onAdd, onAddMany, onCopyYesterday, canCopyYesterday, autoFocus },
+  {
+    onAdd,
+    onAddMany,
+    onCopyYesterday,
+    canCopyYesterday,
+    onCarryOver,
+    carryOverCount,
+    autoFocus,
+  },
   ref,
 ) {
   const [category, setCategory] = useState<CategoryId>("main");
@@ -105,15 +115,26 @@ const QuickAdd = forwardRef<QuickAddHandle, Props>(function QuickAdd(
             {t.label}
           </button>
         ))}
-        {canCopyYesterday && onCopyYesterday && (
-          <button
-            onClick={onCopyYesterday}
-            className="ml-auto inline-flex items-center gap-1 rounded-full bg-brand-soft px-2.5 py-1 text-xs font-medium text-brand ring-1 ring-brand/20 transition hover:bg-brand/10"
-          >
-            <Copy className="h-3.5 w-3.5" />
-            คัดลอกจากเมื่อวาน
-          </button>
-        )}
+        <div className="ml-auto flex items-center gap-2">
+          {Boolean(carryOverCount) && onCarryOver && (
+            <button
+              onClick={onCarryOver}
+              className="inline-flex items-center gap-1 rounded-full bg-amber-50 px-2.5 py-1 text-xs font-medium text-amber-700 ring-1 ring-amber-200 transition hover:bg-amber-100 dark:bg-amber-950/40 dark:text-amber-300 dark:ring-amber-800 dark:hover:bg-amber-900/50"
+            >
+              <Undo className="h-3.5 w-3.5" />
+              ยกงานค้างมา ({carryOverCount})
+            </button>
+          )}
+          {canCopyYesterday && onCopyYesterday && (
+            <button
+              onClick={onCopyYesterday}
+              className="inline-flex items-center gap-1 rounded-full bg-brand-soft px-2.5 py-1 text-xs font-medium text-brand ring-1 ring-brand/20 transition hover:bg-brand/10"
+            >
+              <Copy className="h-3.5 w-3.5" />
+              คัดลอกจากเมื่อวาน
+            </button>
+          )}
+        </div>
       </div>
     </div>
   );
