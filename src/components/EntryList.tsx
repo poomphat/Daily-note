@@ -59,7 +59,7 @@ function EntryRow({
       onDragOver={(e) => onDragOver(e, index)}
       onDrop={() => onDrop(index)}
       onDragEnd={onDragEnd}
-      className={`group animate-rise flex items-center gap-2 rounded-xl px-2 py-2 transition hover:bg-paper-2/50 sm:gap-3 ${
+      className={`group animate-rise flex items-center gap-2.5 rounded-xl px-2.5 py-3 transition hover:bg-paper-2/50 sm:gap-3 ${
         isDragging ? "opacity-40" : ""
       } ${dragOver ? "bg-brand-soft/50 ring-1 ring-brand/30" : ""}`}
     >
@@ -74,7 +74,7 @@ function EntryRow({
 
       <button
         onClick={() => onToggle(entry.id)}
-        className={`grid h-6 w-6 shrink-0 place-items-center rounded-md border transition ${
+        className={`grid h-8 w-8 shrink-0 place-items-center rounded-md border transition ${
           entry.done
             ? "border-success bg-success text-on-brand"
             : "border-line bg-elevated text-transparent hover:border-brand"
@@ -85,7 +85,7 @@ function EntryRow({
       </button>
 
       <span
-        className={`grid h-6 w-6 shrink-0 place-items-center rounded-md text-sm ring-1 ${cat.tint}`}
+        className={`grid h-8 w-8 shrink-0 place-items-center rounded-md text-base ring-1 ${cat.tint}`}
         title={cat.label}
       >
         {cat.emoji}
@@ -105,12 +105,12 @@ function EntryRow({
               inputRef.current?.blur();
             }
           }}
-          className="flex-1 rounded-md bg-elevated px-2 py-1 text-[15px] text-ink outline-none ring-2 ring-brand/40"
+          className="flex-1 rounded-md bg-elevated px-2.5 py-1.5 text-base text-ink outline-none ring-2 ring-brand/40"
         />
       ) : (
         <button
           onClick={() => setEditing(true)}
-          className={`flex-1 text-left text-[15px] leading-snug transition ${
+          className={`flex-1 text-left text-base leading-snug transition ${
             entry.done ? "text-ink-faint line-through" : "text-ink"
           }`}
         >
@@ -120,7 +120,7 @@ function EntryRow({
 
       <button
         onClick={() => onRemove(entry.id)}
-        className="hover-danger grid h-8 w-8 shrink-0 place-items-center rounded-lg text-ink-faint opacity-0 transition focus:opacity-100 group-hover:opacity-100"
+        className="hover-danger tap-target grid h-9 w-9 shrink-0 place-items-center rounded-lg text-ink-faint opacity-0 transition focus:opacity-100 group-hover:opacity-100"
         aria-label="ลบรายการ"
       >
         <Trash className="h-4 w-4" />
@@ -151,8 +151,8 @@ export default function EntryList({
   return (
     <div>
       <div className="mb-1 flex items-center justify-between px-2">
-        <h2 className="text-sm font-semibold text-ink-soft">กิจกรรมวันนี้</h2>
-        <span className="text-xs font-medium text-ink-faint">
+        <h2 className="text-base font-semibold text-ink-soft">กิจกรรมวันนี้</h2>
+        <span className="text-sm font-medium text-ink-faint">
           {done}/{entries.length} เสร็จแล้ว
         </span>
       </div>

@@ -22,9 +22,9 @@ interface Props {
 
 function Stat({ label, value }: { label: string; value: string | number }) {
   return (
-    <div className="surface surface-ring rounded-xl px-3 py-2.5 text-center shadow-sm">
+    <div className="surface surface-ring rounded-xl px-3 py-3 text-center shadow-sm sm:px-4">
       <div className="font-display text-lg font-semibold text-ink">{value}</div>
-      <div className="mt-0.5 text-[11px] text-ink-faint">{label}</div>
+      <div className="mt-0.5 text-xs text-ink-faint">{label}</div>
     </div>
   );
 }
@@ -46,7 +46,7 @@ function WeekCell({
   return (
     <button
       onClick={() => onSelect(dateKey)}
-      className={`group flex items-start gap-3 rounded-2xl border p-3 text-left transition ${
+      className={`group flex items-start gap-3 rounded-2xl border p-4 text-left transition ${
         empty
           ? "surface-muted border-dashed hover:bg-surface"
           : "surface surface-ring shadow-sm hover:-translate-y-0.5 hover:shadow-md"
@@ -61,7 +61,7 @@ function WeekCell({
               : "bg-paper-2 text-ink-soft"
         }`}
       >
-        <span className="text-[10px] font-medium opacity-80">
+        <span className="text-xs font-medium opacity-80">
           {formatWeekday(dateKey)}
         </span>
         <span className="font-display text-lg font-semibold">
@@ -71,12 +71,12 @@ function WeekCell({
 
       <div className="min-w-0 flex-1 pt-0.5">
         <div className="flex items-center gap-1.5">
-          <span className="text-sm font-semibold text-ink">
+          <span className="text-base font-semibold text-ink">
             {empty ? (future ? "—" : "ว่าง") : `${day.entries.length} รายการ`}
           </span>
-          {day.mood && <span className="text-sm">{MOOD_MAP[day.mood].emoji}</span>}
+          {day.mood && <span className="text-base">{MOOD_MAP[day.mood].emoji}</span>}
           {!empty && day.entries.length > 0 && (
-            <span className="ml-auto text-[11px] font-medium text-ink-faint">
+            <span className="ml-auto text-xs font-medium text-ink-faint">
               {done}/{day.entries.length}
             </span>
           )}
@@ -85,7 +85,7 @@ function WeekCell({
         {!empty && day.entries.length > 0 && (
           <ul className="mt-1 flex flex-col gap-0.5">
             {day.entries.slice(0, 2).map((e) => (
-              <li key={e.id} className="flex items-center gap-1.5 text-xs">
+              <li key={e.id} className="flex items-center gap-1.5 text-sm">
                 <span
                   className={`h-1.5 w-1.5 shrink-0 rounded-full ${CATEGORY_MAP[e.category].dot}`}
                 />
@@ -99,7 +99,7 @@ function WeekCell({
               </li>
             ))}
             {day.entries.length > 2 && (
-              <li className="pl-3 text-[11px] text-ink-faint">
+              <li className="pl-3 text-xs text-ink-faint">
                 + อีก {day.entries.length - 2}
               </li>
             )}
@@ -107,7 +107,7 @@ function WeekCell({
         )}
 
         {!empty && day.entries.length === 0 && day.reflection && (
-          <p className="mt-1 line-clamp-2 text-xs text-ink-faint">
+          <p className="mt-1 line-clamp-2 text-sm text-ink-faint">
             {day.reflection}
           </p>
         )}
@@ -138,14 +138,14 @@ export default function WeekView({ store, onSelectDay }: Props) {
           <h2 className="font-display text-lg font-semibold text-ink">
             {isThisWeek ? "สัปดาห์นี้" : "ภาพรวมสัปดาห์"}
           </h2>
-          <p className="text-xs text-ink-faint">
+          <p className="text-sm text-ink-faint">
             {formatShort(anchor)} – {formatShort(end)}
           </p>
         </div>
         <div className="flex shrink-0 items-center gap-1">
           <button
             onClick={() => setAnchor(addDays(anchor, -7))}
-            className="grid h-9 w-9 place-items-center rounded-xl text-ink-soft ring-1 ring-line transition hover:bg-elevated hover:text-ink"
+            className="tap-target grid h-11 w-11 place-items-center rounded-xl text-ink-soft ring-1 ring-line transition hover:bg-elevated hover:text-ink"
             aria-label="สัปดาห์ก่อนหน้า"
           >
             <ChevronLeft className="h-5 w-5" />
@@ -153,7 +153,7 @@ export default function WeekView({ store, onSelectDay }: Props) {
           {!isThisWeek && (
             <button
               onClick={() => setAnchor(startOfWeek(todayKey()))}
-              className="rounded-xl px-3 py-2 text-sm font-medium text-brand ring-1 ring-line transition hover:bg-elevated"
+              className="rounded-xl px-3 py-2.5 text-base font-medium text-brand ring-1 ring-line transition hover:bg-elevated"
             >
               สัปดาห์นี้
             </button>
@@ -161,7 +161,7 @@ export default function WeekView({ store, onSelectDay }: Props) {
           <button
             onClick={() => !nextDisabled && setAnchor(addDays(anchor, 7))}
             disabled={nextDisabled}
-            className="grid h-9 w-9 place-items-center rounded-xl text-ink-soft ring-1 ring-line transition enabled:hover:bg-elevated enabled:hover:text-ink disabled:opacity-30"
+            className="tap-target grid h-11 w-11 place-items-center rounded-xl text-ink-soft ring-1 ring-line transition enabled:hover:bg-elevated enabled:hover:text-ink disabled:opacity-30"
             aria-label="สัปดาห์ถัดไป"
           >
             <ChevronRight className="h-5 w-5" />

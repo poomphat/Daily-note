@@ -52,13 +52,13 @@ export default function ExportMenu({ day, store, onImport, onMessage }: Props) {
   };
 
   const menuItem =
-    "flex w-full px-3 py-2 text-left text-sm text-ink transition hover:bg-elevated";
+    "flex w-full px-3 py-2.5 text-left text-base text-ink transition hover:bg-elevated";
 
   return (
     <div className="relative" ref={ref}>
       <button
         onClick={() => setOpen((o) => !o)}
-        className="grid h-10 w-10 place-items-center rounded-xl text-ink-soft ring-1 ring-line transition hover:bg-elevated hover:text-ink"
+        className="tap-target grid h-11 w-11 place-items-center rounded-xl text-ink-soft ring-1 ring-line transition hover:bg-elevated hover:text-ink"
         aria-label="นำเข้า / ส่งออกข้อมูล"
         title="นำเข้า / ส่งออก"
       >
@@ -67,7 +67,7 @@ export default function ExportMenu({ day, store, onImport, onMessage }: Props) {
 
       {open && (
         <div className="animate-rise surface absolute right-0 top-full z-30 mt-1.5 min-w-[200px] overflow-hidden rounded-xl py-1 shadow-xl">
-          <div className="px-3 pb-1 pt-1.5 text-[11px] font-semibold uppercase tracking-wide text-ink-faint">
+          <div className="px-3 pb-1 pt-1.5 text-xs font-semibold uppercase tracking-wide text-ink-faint">
             ส่งออก
           </div>
           <button
@@ -99,7 +99,7 @@ export default function ExportMenu({ day, store, onImport, onMessage }: Props) {
           </button>
 
           <div className="my-1 border-t border-line/70" />
-          <div className="px-3 pb-1 pt-0.5 text-[11px] font-semibold uppercase tracking-wide text-ink-faint">
+          <div className="px-3 pb-1 pt-0.5 text-xs font-semibold uppercase tracking-wide text-ink-faint">
             นำเข้า
           </div>
           <button
@@ -127,35 +127,35 @@ export default function ExportMenu({ day, store, onImport, onMessage }: Props) {
             onClick={() => setPending(null)}
           />
           <div className="animate-rise surface relative w-full max-w-sm rounded-2xl p-5 shadow-2xl">
-            <h2 className="font-display text-lg font-semibold text-ink">
+            <h2 className="font-display text-xl font-semibold text-ink">
               นำเข้าข้อมูล
             </h2>
-            <p className="mt-1.5 text-sm text-ink-soft">
+            <p className="mt-2 text-base text-ink-soft">
               พบ <strong className="text-ink">{pending.count}</strong> วันในไฟล์นี้
               ต้องการนำเข้าแบบไหน?
             </p>
             <div className="mt-4 flex flex-col gap-2">
               <button
                 onClick={() => confirmImport("merge")}
-                className="rounded-xl bg-brand px-4 py-2.5 text-sm font-medium text-on-brand transition hover:bg-brand/90"
+                className="rounded-xl bg-brand px-4 py-3 text-base font-medium text-on-brand transition hover:bg-brand/90"
               >
                 รวมกับข้อมูลเดิม (แนะนำ)
-                <span className="block text-xs font-normal text-on-brand/80">
+                <span className="block text-sm font-normal text-on-brand/80">
                   วันที่ซ้ำจะถูกแทนที่ด้วยข้อมูลจากไฟล์
                 </span>
               </button>
               <button
                 onClick={() => confirmImport("replace")}
-                className="btn-danger-outline rounded-xl px-4 py-2.5 text-sm font-medium transition"
+                className="btn-danger-outline rounded-xl px-4 py-3 text-base font-medium transition"
               >
                 แทนที่ทั้งหมด
-                <span className="block text-xs font-normal opacity-80">
+                <span className="block text-sm font-normal opacity-80">
                   ลบข้อมูลเดิมทั้งหมดแล้วใช้ข้อมูลจากไฟล์
                 </span>
               </button>
               <button
                 onClick={() => setPending(null)}
-                className="mt-1 rounded-xl px-4 py-2 text-sm text-ink-soft transition hover:bg-elevated"
+                className="mt-1 rounded-xl px-4 py-2.5 text-base text-ink-soft transition hover:bg-elevated"
               >
                 ยกเลิก
               </button>
