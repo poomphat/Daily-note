@@ -58,7 +58,7 @@ function SaveBadge({ state }: { state: SaveState }) {
         ? "bg-success"
         : "bg-ink-faint/50";
   return (
-    <span className="inline-flex items-center gap-1.5 rounded-full bg-surface px-2.5 py-1 text-xs font-medium text-ink-soft ring-1 ring-line">
+    <span className="inline-flex items-center gap-1.5 rounded-full bg-surface px-2.5 py-1 text-sm font-medium text-ink-soft ring-1 ring-line">
       <span className={`h-1.5 w-1.5 rounded-full ${dot}`} />
       {label}
     </span>
@@ -95,7 +95,7 @@ export default function Header({
         <div className="flex items-center gap-2 sm:gap-3">
           <button
             onClick={onOpenMenu}
-            className="grid h-10 w-10 shrink-0 place-items-center rounded-xl text-ink-soft ring-1 ring-line transition hover:bg-elevated hover:text-ink lg:hidden"
+            className="tap-target grid h-11 w-11 shrink-0 place-items-center rounded-xl text-ink-soft ring-1 ring-line transition hover:bg-elevated hover:text-ink lg:hidden"
             aria-label="เปิดเมนูวันที่"
           >
             <Menu className="h-5 w-5" />
@@ -111,7 +111,7 @@ export default function Header({
 
           <button
             onClick={onOpenSearch}
-            className="grid h-10 w-10 shrink-0 place-items-center rounded-xl text-ink-soft ring-1 ring-line transition hover:bg-elevated hover:text-ink"
+            className="tap-target grid h-11 w-11 shrink-0 place-items-center rounded-xl text-ink-soft ring-1 ring-line transition hover:bg-elevated hover:text-ink"
             aria-label="ค้นหา"
             title="ค้นหา (⌘K)"
           >
@@ -127,7 +127,7 @@ export default function Header({
 
           <button
             onClick={onOpenReminder}
-            className="relative grid h-10 w-10 shrink-0 place-items-center rounded-xl text-ink-soft ring-1 ring-line transition hover:bg-elevated hover:text-ink"
+            className="relative tap-target grid h-11 w-11 shrink-0 place-items-center rounded-xl text-ink-soft ring-1 ring-line transition hover:bg-elevated hover:text-ink"
             aria-label="ตั้งค่าแจ้งเตือน"
             title="แจ้งเตือน"
           >
@@ -139,7 +139,7 @@ export default function Header({
 
           <button
             onClick={onToggleDarkMode}
-            className="grid h-10 w-10 shrink-0 place-items-center rounded-xl text-ink-soft ring-1 ring-line transition hover:bg-elevated hover:text-ink"
+            className="tap-target grid h-11 w-11 shrink-0 place-items-center rounded-xl text-ink-soft ring-1 ring-line transition hover:bg-elevated hover:text-ink"
             aria-label={darkMode ? "โหมดสว่าง" : "โหมดมืด"}
           >
             {darkMode ? <Sun className="h-5 w-5" /> : <Moon className="h-5 w-5" />}
@@ -147,7 +147,7 @@ export default function Header({
 
           <button
             onClick={onOpenShortcuts}
-            className="hidden h-10 w-10 shrink-0 place-items-center rounded-xl text-ink-soft ring-1 ring-line transition hover:bg-elevated hover:text-ink sm:grid"
+            className="hidden tap-target h-11 w-11 shrink-0 place-items-center rounded-xl text-ink-soft ring-1 ring-line transition hover:bg-elevated hover:text-ink sm:grid"
             aria-label="คีย์ลัด"
             title="คีย์ลัด (?)"
           >
@@ -161,7 +161,7 @@ export default function Header({
             <div className="flex items-center gap-1">
               <button
                 onClick={() => setActiveDate(addDays(activeDate, -1))}
-                className="grid h-10 w-10 place-items-center rounded-xl text-ink-soft ring-1 ring-line transition hover:bg-elevated hover:text-ink"
+                className="tap-target grid h-11 w-11 place-items-center rounded-xl text-ink-soft ring-1 ring-line transition hover:bg-elevated hover:text-ink"
                 aria-label="วันก่อนหน้า"
               >
                 <ChevronLeft className="h-5 w-5" />
@@ -169,7 +169,7 @@ export default function Header({
               <button
                 onClick={() => canGoNext && setActiveDate(addDays(activeDate, 1))}
                 disabled={!canGoNext}
-                className="grid h-10 w-10 place-items-center rounded-xl text-ink-soft ring-1 ring-line transition enabled:hover:bg-elevated enabled:hover:text-ink disabled:opacity-30"
+                className="tap-target grid h-11 w-11 place-items-center rounded-xl text-ink-soft ring-1 ring-line transition enabled:hover:bg-elevated enabled:hover:text-ink disabled:opacity-30"
                 aria-label="วันถัดไป"
               >
                 <ChevronRight className="h-5 w-5" />
@@ -178,12 +178,12 @@ export default function Header({
 
             <div className="min-w-0 flex-1">
               <div className="flex items-center gap-2">
-                <h1 className="truncate font-display text-base font-semibold text-ink sm:text-lg">
+                <h1 className="truncate font-display text-lg font-semibold text-ink sm:text-xl">
                   {formatFull(activeDate)}
                 </h1>
                 {rel && (
                   <span
-                    className={`shrink-0 rounded-full px-2 py-0.5 text-xs font-semibold ${
+                    className={`shrink-0 rounded-full px-2.5 py-0.5 text-sm font-semibold ${
                       isToday(activeDate)
                         ? "bg-brand text-on-brand"
                         : "bg-brand-soft text-brand"
@@ -193,7 +193,7 @@ export default function Header({
                   </span>
                 )}
                 {streak > 0 && (
-                  <span className="chip-warning shrink-0 rounded-full px-2 py-0.5 text-[10px] font-semibold">
+                  <span className="chip-warning shrink-0 rounded-full px-2.5 py-0.5 text-xs font-semibold">
                     🔥 {streak} วันติด
                   </span>
                 )}
@@ -203,7 +203,7 @@ export default function Header({
             {!isToday(activeDate) && (
               <button
                 onClick={() => setActiveDate(todayKey())}
-                className="hidden items-center gap-1.5 rounded-xl bg-ink px-3 py-2 text-sm font-medium text-paper transition hover:bg-ink/90 sm:inline-flex dark:bg-elevated dark:text-ink dark:hover:bg-surface-muted"
+                className="hidden items-center gap-1.5 rounded-xl bg-ink px-3.5 py-2.5 text-base font-medium text-paper transition hover:bg-ink/90 sm:inline-flex dark:bg-elevated dark:text-ink dark:hover:bg-surface-muted"
               >
                 <Cloud className="h-4 w-4" />
                 วันนี้
@@ -213,7 +213,7 @@ export default function Header({
             <div className="relative shrink-0">
               <button
                 onClick={() => dateInput.current?.showPicker?.()}
-                className="grid h-10 w-10 place-items-center rounded-xl text-ink-soft ring-1 ring-line transition hover:bg-elevated hover:text-ink"
+                className="tap-target grid h-11 w-11 place-items-center rounded-xl text-ink-soft ring-1 ring-line transition hover:bg-elevated hover:text-ink"
                 aria-label="เลือกวันที่"
               >
                 <Calendar className="h-5 w-5" />

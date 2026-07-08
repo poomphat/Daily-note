@@ -37,21 +37,21 @@ export default function SearchModal({ store, onSelectDate, onClose }: Props) {
         role="dialog"
         aria-label="ค้นหาบันทึก"
       >
-        <div className="flex items-center gap-2 border-b border-line px-4 py-3">
+        <div className="flex items-center gap-2 border-b border-line px-4 py-3.5">
           <Search className="h-5 w-5 shrink-0 text-ink-faint" />
           <input
             ref={inputRef}
             value={query}
             onChange={(e) => setQuery(e.target.value)}
             placeholder="ค้นหารายการหรือบันทึกอิสระ…"
-            className="flex-1 bg-transparent text-[15px] text-ink outline-none placeholder:text-ink-faint"
+            className="flex-1 bg-transparent text-base text-ink outline-none placeholder:text-ink-faint"
           />
-          <kbd className="hidden rounded-md bg-paper-2 px-1.5 py-0.5 text-[10px] font-medium text-ink-faint sm:inline">
+          <kbd className="hidden rounded-md bg-paper-2 px-1.5 py-0.5 text-xs font-medium text-ink-faint sm:inline">
             Esc
           </kbd>
           <button
             onClick={onClose}
-            className="grid h-8 w-8 place-items-center rounded-lg text-ink-faint transition hover:bg-paper-2 hover:text-ink"
+            className="tap-target grid h-9 w-9 place-items-center rounded-lg text-ink-faint transition hover:bg-paper-2 hover:text-ink"
             aria-label="ปิด"
           >
             <X className="h-4 w-4" />
@@ -60,17 +60,17 @@ export default function SearchModal({ store, onSelectDate, onClose }: Props) {
 
         <div className="max-h-[50vh] overflow-y-auto p-2">
           {query.trim() === "" ? (
-            <p className="px-3 py-8 text-center text-sm text-ink-faint">
+            <p className="px-3 py-8 text-center text-base text-ink-faint">
               พิมพ์เพื่อค้นหาทุกวัน · <kbd className="rounded bg-paper-2 px-1">⌘K</kbd>
             </p>
           ) : hits.length === 0 ? (
-            <p className="px-3 py-8 text-center text-sm text-ink-faint">ไม่พบผลลัพธ์</p>
+            <p className="px-3 py-8 text-center text-base text-ink-faint">ไม่พบผลลัพธ์</p>
           ) : (
             Array.from(grouped.entries()).map(([date, dateHits]) => {
               const rel = relativeLabel(date);
               return (
                 <div key={date} className="mb-2">
-                  <div className="px-2 py-1.5 text-xs font-semibold text-ink-faint">
+                  <div className="px-2 py-1.5 text-sm font-semibold text-ink-faint">
                     {rel ?? formatFull(date)}
                   </div>
                   <ul>
@@ -81,7 +81,7 @@ export default function SearchModal({ store, onSelectDate, onClose }: Props) {
                             onSelectDate(date);
                             onClose();
                           }}
-                          className="flex w-full items-start gap-2 rounded-xl px-2.5 py-2 text-left transition hover:bg-elevated"
+                          className="flex w-full items-start gap-2 rounded-xl px-2.5 py-3 text-left transition hover:bg-elevated"
                         >
                           {hit.type === "entry" && hit.category ? (
                             <span className="text-base leading-none">
@@ -90,7 +90,7 @@ export default function SearchModal({ store, onSelectDate, onClose }: Props) {
                           ) : (
                             <span className="text-base leading-none">📝</span>
                           )}
-                          <span className="line-clamp-2 text-sm text-ink">{hit.text}</span>
+                          <span className="line-clamp-2 text-base text-ink">{hit.text}</span>
                         </button>
                       </li>
                     ))}

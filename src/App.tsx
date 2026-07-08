@@ -234,7 +234,7 @@ export default function App() {
           onMessage={setMessage}
         />
 
-        <main className="mx-auto w-full max-w-3xl flex-1 px-4 py-6 sm:px-6">
+        <main className="mx-auto w-full max-w-3xl flex-1 px-5 py-7 sm:px-8">
           {tab === "week" && (
             <WeekView store={store} onSelectDay={openDay} />
           )}
@@ -248,7 +248,7 @@ export default function App() {
           )}
 
           {tab === "day" && (
-          <div className="flex flex-col gap-6">
+          <div className="flex flex-col gap-7 sm:gap-8">
             <QuickAdd
               ref={quickAddRef}
               onAdd={addEntry}
@@ -261,7 +261,7 @@ export default function App() {
             />
 
             {copyConfirm && (
-              <div className="animate-rise chip-warning flex items-center justify-between gap-3 rounded-xl px-4 py-3 text-sm">
+              <div className="animate-rise chip-warning flex items-center justify-between gap-3 rounded-xl px-4 py-3.5 text-base">
                 <span>คัดลอกรายการจากเมื่อวานมาเพิ่มในวันนี้?</span>
                 <div className="flex gap-2">
                   <button
@@ -284,7 +284,7 @@ export default function App() {
               <EmptyState activeDate={activeDate} yesterdayPreview={yesterdayPreview} />
             ) : (
               day.entries.length > 0 && (
-                <div className="surface surface-ring rounded-2xl p-2 shadow-sm sm:p-3">
+                <div className="surface surface-ring rounded-2xl p-3 shadow-sm sm:p-4">
                   <EntryList
                     entries={day.entries}
                     onToggle={toggleEntry}
@@ -296,7 +296,7 @@ export default function App() {
               )
             )}
 
-            <div className="surface surface-ring rounded-2xl p-4 shadow-sm">
+            <div className="surface surface-ring rounded-2xl p-4 shadow-sm sm:p-5">
               <MoodPicker mood={day.mood} onChange={setMood} />
             </div>
 
@@ -313,7 +313,7 @@ export default function App() {
           </div>
           )}
 
-          <footer className="mt-10 pb-6 text-center text-xs text-ink-faint">
+          <footer className="mt-10 pb-6 text-center text-sm text-ink-faint">
             เก็บข้อมูลไว้ในเครื่องของคุณเท่านั้น · ร่างต้นแบบ (draft)
           </footer>
         </main>

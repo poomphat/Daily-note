@@ -20,10 +20,10 @@ export default function TimelineView({ days, onSelectDay }: Props) {
         <div className="mb-3 grid h-14 w-14 place-items-center rounded-2xl bg-brand-soft text-3xl">
           🗂️
         </div>
-        <h3 className="font-display text-lg font-semibold text-ink">
+        <h3 className="font-display text-xl font-semibold text-ink">
           ยังไม่มีบันทึก
         </h3>
-        <p className="mt-1 max-w-xs text-sm text-ink-faint">
+        <p className="mt-1 max-w-xs text-base text-ink-faint">
           เริ่มบันทึกกิจกรรมในแท็บ “วันนี้” แล้วบันทึกทั้งหมดจะมารวมกันที่นี่
         </p>
       </div>
@@ -48,7 +48,7 @@ export default function TimelineView({ days, onSelectDay }: Props) {
     <div className="flex flex-col gap-6">
       <div>
         <h2 className="font-display text-lg font-semibold text-ink">ทั้งหมด</h2>
-        <p className="text-xs text-ink-faint">
+        <p className="text-sm text-ink-faint">
           บันทึก {days.length} วัน · {totalEntries} กิจกรรม
         </p>
       </div>
@@ -56,10 +56,10 @@ export default function TimelineView({ days, onSelectDay }: Props) {
       {groups.map((g) => (
         <section key={g.key}>
           <div className="mb-2.5 flex items-center gap-3">
-            <h3 className="shrink-0 text-xs font-semibold uppercase tracking-wide text-ink-faint">
+            <h3 className="shrink-0 text-sm font-semibold uppercase tracking-wide text-ink-faint">
               {g.label}
             </h3>
-            <span className="shrink-0 text-xs text-ink-faint">
+            <span className="shrink-0 text-sm text-ink-faint">
               · {g.days.length} วัน
             </span>
             <div className="h-px flex-1 bg-line" />

@@ -38,7 +38,7 @@ export default function ShortcutsModal({ onClose }: Props) {
           <h2 className="font-display text-lg font-semibold text-ink">คีย์ลัด</h2>
           <button
             onClick={onClose}
-            className="grid h-8 w-8 place-items-center rounded-lg text-ink-faint transition hover:bg-paper-2 hover:text-ink"
+            className="tap-target grid h-9 w-9 place-items-center rounded-lg text-ink-faint transition hover:bg-paper-2 hover:text-ink"
             aria-label="ปิด"
           >
             <X className="h-4 w-4" />
@@ -47,12 +47,12 @@ export default function ShortcutsModal({ onClose }: Props) {
         <ul className="flex flex-col gap-2.5">
           {SHORTCUTS.map((s) => (
             <li key={s.desc} className="flex items-center justify-between gap-3">
-              <span className="text-sm text-ink-soft">{s.desc}</span>
+              <span className="text-base text-ink-soft">{s.desc}</span>
               <span className="flex shrink-0 gap-1">
                 {s.keys.map((k) => (
                   <kbd
                     key={k}
-                    className="rounded-md bg-paper-2 px-2 py-0.5 text-xs font-medium text-ink ring-1 ring-line"
+                    className="rounded-md bg-paper-2 px-2 py-0.5 text-sm font-medium text-ink ring-1 ring-line"
                   >
                     {k}
                   </kbd>
@@ -61,7 +61,7 @@ export default function ShortcutsModal({ onClose }: Props) {
             </li>
           ))}
         </ul>
-        <p className="mt-4 text-xs text-ink-faint">
+        <p className="mt-4 text-sm text-ink-faint">
           คีย์ลัดทำงานเมื่อไม่ได้พิมพ์ในช่องกรอกข้อมูล
         </p>
       </div>
