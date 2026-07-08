@@ -37,7 +37,7 @@ export default function Tabs({ value, onChange }: Props) {
       role="tablist"
       aria-label="เลือกมุมมอง"
       onKeyDown={onKeyDown}
-      className="inline-flex items-center gap-1 rounded-xl bg-paper-2/70 p-1 ring-1 ring-line"
+      className="inline-flex items-center gap-1 rounded-xl bg-surface-muted p-1 ring-1 ring-line"
     >
       {TABS.map((t) => {
         const on = t.id === value;

@@ -38,14 +38,14 @@ function DayItem({
   return (
     <div
       className={`group flex w-full items-start gap-1 rounded-xl transition ${
-        active ? "bg-elevated shadow-sm ring-1 ring-line" : "hover:bg-elevated/60"
+        active ? "bg-elevated shadow-sm ring-1 ring-line" : "hover:bg-surface-muted"
       }`}
     >
       <button onClick={onSelect} className="flex min-w-0 flex-1 items-start gap-3 px-2.5 py-2.5 text-left">
         <div
           className={`grid h-11 w-11 shrink-0 flex-col place-items-center rounded-xl leading-none ${
             active || isToday(day.date)
-              ? "bg-brand text-white"
+              ? "bg-brand text-on-brand"
               : "bg-paper-2 text-ink-soft"
           }`}
         >
@@ -98,7 +98,7 @@ export default function Sidebar({ days, activeDate, onSelect, onTogglePin, onClo
       <div className="flex items-center justify-between px-5 pb-3 pt-5">
         <div>
           <div className="flex items-center gap-2">
-            <span className="grid h-8 w-8 place-items-center rounded-xl bg-brand text-white shadow-sm">
+            <span className="grid h-8 w-8 place-items-center rounded-xl bg-brand text-on-brand shadow-sm">
               📓
             </span>
             <h2 className="font-display text-lg font-semibold tracking-tight text-ink">Daily Note</h2>

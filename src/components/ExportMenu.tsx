@@ -66,7 +66,7 @@ export default function ExportMenu({ day, store, onImport, onMessage }: Props) {
       </button>
 
       {open && (
-        <div className="animate-rise absolute right-0 top-full z-30 mt-1.5 min-w-[200px] overflow-hidden rounded-xl border border-line bg-paper py-1 shadow-xl ring-1 ring-black/5 dark:ring-white/5">
+        <div className="animate-rise surface absolute right-0 top-full z-30 mt-1.5 min-w-[200px] overflow-hidden rounded-xl py-1 shadow-xl">
           <div className="px-3 pb-1 pt-1.5 text-[11px] font-semibold uppercase tracking-wide text-ink-faint">
             ส่งออก
           </div>
@@ -126,7 +126,7 @@ export default function ExportMenu({ day, store, onImport, onMessage }: Props) {
             className="absolute inset-0 bg-ink/30 backdrop-blur-sm"
             onClick={() => setPending(null)}
           />
-          <div className="animate-rise relative w-full max-w-sm rounded-2xl border border-line bg-paper p-5 shadow-2xl">
+          <div className="animate-rise surface relative w-full max-w-sm rounded-2xl p-5 shadow-2xl">
             <h2 className="font-display text-lg font-semibold text-ink">
               นำเข้าข้อมูล
             </h2>
@@ -137,19 +137,19 @@ export default function ExportMenu({ day, store, onImport, onMessage }: Props) {
             <div className="mt-4 flex flex-col gap-2">
               <button
                 onClick={() => confirmImport("merge")}
-                className="rounded-xl bg-brand px-4 py-2.5 text-sm font-medium text-white transition hover:bg-brand/90"
+                className="rounded-xl bg-brand px-4 py-2.5 text-sm font-medium text-on-brand transition hover:bg-brand/90"
               >
                 รวมกับข้อมูลเดิม (แนะนำ)
-                <span className="block text-xs font-normal text-white/80">
+                <span className="block text-xs font-normal text-on-brand/80">
                   วันที่ซ้ำจะถูกแทนที่ด้วยข้อมูลจากไฟล์
                 </span>
               </button>
               <button
                 onClick={() => confirmImport("replace")}
-                className="rounded-xl px-4 py-2.5 text-sm font-medium text-rose-600 ring-1 ring-rose-200 transition hover:bg-rose-50 dark:text-rose-300 dark:ring-rose-900/60 dark:hover:bg-rose-950/40"
+                className="btn-danger-outline rounded-xl px-4 py-2.5 text-sm font-medium transition"
               >
                 แทนที่ทั้งหมด
-                <span className="block text-xs font-normal text-rose-500/80 dark:text-rose-300/70">
+                <span className="block text-xs font-normal opacity-80">
                   ลบข้อมูลเดิมทั้งหมดแล้วใช้ข้อมูลจากไฟล์
                 </span>
               </button>

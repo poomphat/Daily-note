@@ -19,6 +19,15 @@
   --color-brand: #4f46e5;
   --color-brand-soft: #eef2ff;
   --color-elevated: #ffffff;
+  --color-surface: #ffffff;
+  --color-surface-muted: #f3f2ed;
+  --color-success: #059669;
+  --color-success-soft: #ecfdf5;
+  --color-warning: #b45309;
+  --color-warning-soft: #fffbeb;
+  --color-danger: #be123c;
+  --color-danger-soft: #fff1f2;
+  --color-on-brand: #ffffff;
 }
 
 :root {
@@ -37,6 +46,15 @@
   --color-brand: #818cf8;
   --color-brand-soft: #1e1b4b;
   --color-elevated: #1e2128;
+  --color-surface: #1e2128;
+  --color-surface-muted: #161920;
+  --color-success: #6ee7b7;
+  --color-success-soft: #142820;
+  --color-warning: #fbbf24;
+  --color-warning-soft: #2a2318;
+  --color-danger: #fda4af;
+  --color-danger-soft: #2a181c;
+  --color-on-brand: #f0f0ff;
 }
 
 html {
@@ -58,9 +76,64 @@ body {
 
 :root.dark body {
   background:
-    radial-gradient(1200px 600px at 100% -10%, color-mix(in srgb, var(--color-paper-2) 60%, var(--color-brand)) 0%, transparent 55%),
+    radial-gradient(1200px 600px at 100% -10%, color-mix(in srgb, var(--color-paper-2) 70%, var(--color-paper)) 0%, transparent 55%),
     radial-gradient(900px 500px at -10% 110%, var(--color-paper-2) 0%, transparent 60%),
     var(--color-paper);
+}
+
+/* Shared surface + semantic chip utilities */
+.surface {
+  background: var(--color-surface);
+  border: 1px solid var(--color-line);
+}
+
+.surface-muted {
+  background: var(--color-surface-muted);
+  border: 1px solid var(--color-line);
+}
+
+.surface-ring {
+  box-shadow:
+    0 1px 2px 0 rgb(0 0 0 / 0.05),
+    inset 0 0 0 1px rgb(0 0 0 / 0.02);
+}
+
+:root.dark .surface-ring {
+  box-shadow:
+    0 1px 2px 0 rgb(0 0 0 / 0.25),
+    inset 0 0 0 1px rgb(255 255 255 / 0.04);
+}
+
+.chip-warning {
+  background: var(--color-warning-soft);
+  color: var(--color-warning);
+  border: 1px solid color-mix(in srgb, var(--color-warning) 25%, var(--color-line));
+}
+
+.chip-success {
+  background: var(--color-success-soft);
+  color: var(--color-success);
+  border: 1px solid color-mix(in srgb, var(--color-success) 25%, var(--color-line));
+}
+
+.chip-danger {
+  background: var(--color-danger-soft);
+  color: var(--color-danger);
+  border: 1px solid color-mix(in srgb, var(--color-danger) 25%, var(--color-line));
+}
+
+.hover-danger:hover {
+  background: var(--color-danger-soft);
+  color: var(--color-danger);
+}
+
+.btn-danger-outline {
+  color: var(--color-danger);
+  border: 1px solid color-mix(in srgb, var(--color-danger) 30%, var(--color-line));
+}
+
+.btn-danger-outline:hover {
+  background: var(--color-danger-soft);
 }
 
 /* Subtle, tasteful scrollbars */

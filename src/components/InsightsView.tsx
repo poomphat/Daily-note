@@ -13,7 +13,7 @@ interface Props {
 
 function StatCard({ label, value, hint }: { label: string; value: string; hint?: string }) {
   return (
-    <div className="rounded-2xl border border-line bg-elevated/60 p-4 shadow-sm ring-1 ring-black/[0.02] dark:ring-white/[0.04]">
+    <div className="surface surface-ring rounded-2xl p-4 shadow-sm">
       <div className="text-2xl font-semibold text-ink">{value}</div>
       <div className="mt-0.5 text-xs text-ink-soft">{label}</div>
       {hint && <div className="mt-0.5 text-[11px] text-ink-faint">{hint}</div>}
@@ -37,7 +37,7 @@ export default function InsightsView({ store, habits, onSelectDay }: Props) {
 
   if (insights.daysLogged === 0) {
     return (
-      <div className="grid place-items-center rounded-2xl border border-dashed border-line bg-elevated/40 py-16 text-center">
+      <div className="surface-muted grid place-items-center rounded-2xl border-dashed py-16 text-center">
         <div className="text-4xl">📊</div>
         <p className="mt-3 text-ink-soft">ยังไม่มีข้อมูลสำหรับสรุป</p>
         <p className="mt-1 text-sm text-ink-faint">เริ่มบันทึกกิจกรรมแล้วกลับมาดูสถิติได้เลย</p>
@@ -63,7 +63,7 @@ export default function InsightsView({ store, habits, onSelectDay }: Props) {
       </div>
 
       {/* Activity heatmap */}
-      <section className="rounded-2xl border border-line bg-elevated/60 p-4 shadow-sm ring-1 ring-black/[0.02] dark:ring-white/[0.04]">
+      <section className="surface surface-ring rounded-2xl p-4 shadow-sm">
         <div className="mb-3 flex items-center justify-between">
           <h3 className="font-display text-sm font-semibold text-ink">ความสม่ำเสมอ</h3>
           <div className="flex items-center gap-1 text-[11px] text-ink-faint">
@@ -105,7 +105,7 @@ export default function InsightsView({ store, habits, onSelectDay }: Props) {
       </section>
 
       {/* Category breakdown */}
-      <section className="rounded-2xl border border-line bg-elevated/60 p-4 shadow-sm ring-1 ring-black/[0.02] dark:ring-white/[0.04]">
+      <section className="surface surface-ring rounded-2xl p-4 shadow-sm">
         <h3 className="mb-3 font-display text-sm font-semibold text-ink">สัดส่วนหมวดหมู่</h3>
         <div className="flex flex-col gap-2.5">
           {CATEGORIES.map((c) => {
@@ -134,7 +134,7 @@ export default function InsightsView({ store, habits, onSelectDay }: Props) {
 
       {/* Mood distribution */}
       {insights.moodTotal > 0 && (
-        <section className="rounded-2xl border border-line bg-elevated/60 p-4 shadow-sm ring-1 ring-black/[0.02] dark:ring-white/[0.04]">
+        <section className="surface surface-ring rounded-2xl p-4 shadow-sm">
           <h3 className="mb-3 font-display text-sm font-semibold text-ink">อารมณ์ที่ผ่านมา</h3>
           <div className="flex items-end justify-between gap-2">
             {MOODS.map((m) => {
@@ -159,7 +159,7 @@ export default function InsightsView({ store, habits, onSelectDay }: Props) {
 
       {/* Habit consistency */}
       {habits.length > 0 && (
-        <section className="rounded-2xl border border-line bg-elevated/60 p-4 shadow-sm ring-1 ring-black/[0.02] dark:ring-white/[0.04]">
+        <section className="surface surface-ring rounded-2xl p-4 shadow-sm">
           <h3 className="mb-3 font-display text-sm font-semibold text-ink">
             นิสัย (30 วันล่าสุด)
           </h3>
@@ -175,7 +175,7 @@ export default function InsightsView({ store, habits, onSelectDay }: Props) {
                   </div>
                   <div className="h-2.5 flex-1 overflow-hidden rounded-full bg-paper-2">
                     <div
-                      className="h-full rounded-full bg-emerald-500"
+                      className="h-full rounded-full bg-success"
                       style={{ width: `${rate}%` }}
                     />
                   </div>

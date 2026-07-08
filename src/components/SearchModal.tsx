@@ -33,7 +33,7 @@ export default function SearchModal({ store, onSelectDate, onClose }: Props) {
   return (
     <div className="fixed inset-0 z-50 flex items-start justify-center bg-ink/40 p-4 pt-[12vh] backdrop-blur-sm">
       <div
-        className="animate-rise w-full max-w-lg overflow-hidden rounded-2xl border border-line bg-paper shadow-2xl ring-1 ring-black/5 dark:ring-white/5"
+        className="animate-rise surface w-full max-w-lg overflow-hidden rounded-2xl shadow-2xl"
         role="dialog"
         aria-label="ค้นหาบันทึก"
       >

@@ -53,7 +53,7 @@ const QuickAdd = forwardRef<QuickAddHandle, Props>(function QuickAdd(
   const active = CATEGORY_MAP[category];
 
   return (
-    <div className="rounded-2xl border border-line bg-elevated/80 p-3 shadow-sm ring-1 ring-black/[0.02] dark:ring-white/[0.04] sm:p-4">
+    <div className="surface surface-ring rounded-2xl p-3 shadow-sm sm:p-4">
       <div className="mb-3 flex flex-wrap gap-2">
         {CATEGORIES.map((c) => {
           const on = c.id === category;
@@ -96,7 +96,7 @@ const QuickAdd = forwardRef<QuickAddHandle, Props>(function QuickAdd(
         <button
           onClick={submit}
           disabled={!text.trim()}
-          className="grid h-[46px] w-[46px] shrink-0 place-items-center rounded-xl bg-brand text-white shadow-sm transition enabled:hover:bg-brand/90 enabled:active:scale-95 disabled:opacity-40"
+          className="grid h-[46px] w-[46px] shrink-0 place-items-center rounded-xl bg-brand text-on-brand shadow-sm transition enabled:hover:bg-brand/90 enabled:active:scale-95 disabled:opacity-40"
           aria-label="เพิ่มรายการ"
         >
           <Plus className="h-5 w-5" />
@@ -119,7 +119,7 @@ const QuickAdd = forwardRef<QuickAddHandle, Props>(function QuickAdd(
           {Boolean(carryOverCount) && onCarryOver && (
             <button
               onClick={onCarryOver}
-              className="inline-flex items-center gap-1 rounded-full bg-amber-50 px-2.5 py-1 text-xs font-medium text-amber-700 ring-1 ring-amber-200 transition hover:bg-amber-100 dark:bg-amber-950/40 dark:text-amber-300 dark:ring-amber-800 dark:hover:bg-amber-900/50"
+              className="chip-warning inline-flex items-center gap-1 rounded-full px-2.5 py-1 text-xs font-medium transition hover:opacity-90"
             >
               <Undo className="h-3.5 w-3.5" />
               ยกงานค้างมา ({carryOverCount})

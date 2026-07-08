@@ -42,7 +42,7 @@ export default function ReminderModal({ reminder, onChange, onClose }: Props) {
   return (
     <div className="fixed inset-0 z-50 grid place-items-center p-4">
       <div className="absolute inset-0 bg-ink/30 backdrop-blur-sm" onClick={onClose} />
-      <div className="animate-rise relative w-full max-w-sm rounded-2xl border border-line bg-paper p-5 shadow-2xl">
+      <div className="animate-rise surface relative w-full max-w-sm rounded-2xl p-5 shadow-2xl">
         <div className="mb-4 flex items-center justify-between">
           <h2 className="flex items-center gap-2 font-display text-lg font-semibold text-ink">
             <Bell className="h-5 w-5 text-brand" />
@@ -79,7 +79,7 @@ export default function ReminderModal({ reminder, onChange, onClose }: Props) {
                 }`}
               >
                 <span
-                  className={`absolute top-0.5 h-5 w-5 rounded-full bg-white shadow transition ${
+                  className={`absolute top-0.5 h-5 w-5 rounded-full bg-elevated shadow transition ${
                     reminder.enabled ? "left-[22px]" : "left-0.5"
                   }`}
                 />
@@ -97,7 +97,7 @@ export default function ReminderModal({ reminder, onChange, onClose }: Props) {
             </label>
 
             {denied && (
-              <p className="rounded-xl bg-rose-50 px-3 py-2 text-xs text-rose-700 ring-1 ring-rose-200 dark:bg-rose-950/40 dark:text-rose-300 dark:ring-rose-900/60">
+              <p className="chip-danger rounded-xl px-3 py-2 text-xs">
                 การแจ้งเตือนถูกปิดในเบราว์เซอร์ — เปิดสิทธิ์ในการตั้งค่าเว็บไซต์ก่อน
               </p>
             )}
