@@ -29,7 +29,7 @@ export default function ShortcutsModal({ onClose }: Props) {
       onClick={onClose}
     >
       <div
-        className="animate-rise w-full max-w-sm rounded-2xl border border-line bg-paper p-5 shadow-2xl"
+        className="animate-rise surface w-full max-w-sm rounded-2xl p-5 shadow-2xl"
         role="dialog"
         aria-label="คีย์ลัด"
         onClick={(e) => e.stopPropagation()}

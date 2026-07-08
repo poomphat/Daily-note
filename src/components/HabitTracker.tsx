@@ -37,7 +37,7 @@ export default function HabitTracker({
   };
 
   return (
-    <div className="rounded-2xl border border-line bg-elevated/60 p-4 shadow-sm ring-1 ring-black/[0.02] dark:ring-white/[0.04]">
+    <div className="surface surface-ring rounded-2xl p-4 shadow-sm">
       <div className="mb-3 flex items-center justify-between">
         <span className="text-sm font-medium text-ink-soft">นิสัยประจำวัน</span>
         <button
@@ -67,7 +67,7 @@ export default function HabitTracker({
                 onClick={() => onToggle(h.id)}
                 className={`inline-flex items-center gap-2 rounded-full px-3 py-1.5 text-sm font-medium ring-1 transition ${
                   done
-                    ? "bg-emerald-50 text-emerald-700 ring-emerald-200 dark:bg-emerald-950/50 dark:text-emerald-300 dark:ring-emerald-800/60"
+                    ? "chip-success"
                     : "bg-paper-2/60 text-ink-soft ring-line hover:bg-elevated"
                 }`}
               >
@@ -75,7 +75,7 @@ export default function HabitTracker({
                 {h.name}
                 {done && <Check className="h-3.5 w-3.5" />}
                 {streak > 0 && (
-                  <span className="text-[11px] font-semibold text-amber-600 dark:text-amber-400">
+                  <span className="text-[11px] font-semibold text-warning">
                     🔥{streak}
                   </span>
                 )}
@@ -91,7 +91,7 @@ export default function HabitTracker({
             className="absolute inset-0 bg-ink/30 backdrop-blur-sm"
             onClick={() => setManage(false)}
           />
-          <div className="animate-rise relative w-full max-w-sm rounded-2xl border border-line bg-paper p-5 shadow-2xl">
+          <div className="animate-rise surface relative w-full max-w-sm rounded-2xl p-5 shadow-2xl">
             <div className="mb-4 flex items-center justify-between">
               <h2 className="font-display text-lg font-semibold text-ink">
                 จัดการนิสัย
@@ -116,7 +116,7 @@ export default function HabitTracker({
                     <span className="flex-1 text-sm text-ink">{h.name}</span>
                     <button
                       onClick={() => onRemove(h.id)}
-                      className="grid h-7 w-7 place-items-center rounded-lg text-ink-faint transition hover:bg-rose-50 hover:text-rose-600 dark:hover:bg-rose-950/40 dark:hover:text-rose-300"
+                      className="hover-danger grid h-7 w-7 place-items-center rounded-lg text-ink-faint transition"
                       aria-label="ลบนิสัย"
                     >
                       <Trash className="h-4 w-4" />
@@ -158,7 +158,7 @@ export default function HabitTracker({
                 <button
                   onClick={submitNew}
                   disabled={!name.trim()}
-                  className="grid h-[42px] w-[42px] shrink-0 place-items-center rounded-xl bg-brand text-white transition enabled:hover:bg-brand/90 disabled:opacity-40"
+                  className="grid h-[42px] w-[42px] shrink-0 place-items-center rounded-xl bg-brand text-on-brand transition enabled:hover:bg-brand/90 disabled:opacity-40"
                   aria-label="เพิ่มนิสัย"
                 >
                   <Plus className="h-5 w-5" />

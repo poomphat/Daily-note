@@ -16,7 +16,7 @@ interface MonthGroup {
 export default function TimelineView({ days, onSelectDay }: Props) {
   if (days.length === 0) {
     return (
-      <div className="animate-rise flex flex-col items-center justify-center rounded-2xl border border-dashed border-line bg-elevated/40 px-6 py-12 text-center dark:bg-elevated/20">
+      <div className="surface-muted animate-rise flex flex-col items-center justify-center rounded-2xl border-dashed px-6 py-12 text-center">
         <div className="mb-3 grid h-14 w-14 place-items-center rounded-2xl bg-brand-soft text-3xl">
           🗂️
         </div>

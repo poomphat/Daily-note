@@ -4,7 +4,7 @@
     <meta charset="UTF-8" />
     <link rel="icon" type="image/svg+xml" href="/note.svg" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0" />
-    <meta name="theme-color" content="#f8f7f4" />
+    <meta name="theme-color" content="#f7f6f2" />
     <title>Daily Program Note · บันทึกประจำวัน</title>
     <link rel="preconnect" href="https://fonts.googleapis.com" />
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
@@ -16,7 +16,10 @@
       // Apply the persisted theme before first paint to avoid a flash of the wrong theme.
       try {
         var s = JSON.parse(localStorage.getItem("daily-note:settings") || "{}");
-        if (s && s.darkMode) document.documentElement.classList.add("dark");
+        var dark = s && s.darkMode;
+        if (dark) document.documentElement.classList.add("dark");
+        var meta = document.querySelector('meta[name="theme-color"]');
+        if (meta) meta.setAttribute("content", dark ? "#0f1115" : "#f7f6f2");
       } catch (e) {}
     </script>
   </head>

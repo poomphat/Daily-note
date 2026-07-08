@@ -8,6 +8,9 @@ export function useSettings() {
   useEffect(() => {
     saveSettings(settings);
     document.documentElement.classList.toggle("dark", settings.darkMode);
+    document
+      .querySelector('meta[name="theme-color"]')
+      ?.setAttribute("content", settings.darkMode ? "#0f1115" : "#f7f6f2");
   }, [settings]);
 
   const toggleDarkMode = useCallback(() => {

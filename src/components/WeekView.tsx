@@ -22,7 +22,7 @@ interface Props {
 
 function Stat({ label, value }: { label: string; value: string | number }) {
   return (
-    <div className="rounded-xl border border-line bg-elevated/60 px-3 py-2.5 text-center shadow-sm ring-1 ring-black/[0.02] dark:ring-white/[0.04]">
+    <div className="surface surface-ring rounded-xl px-3 py-2.5 text-center shadow-sm">
       <div className="font-display text-lg font-semibold text-ink">{value}</div>
       <div className="mt-0.5 text-[11px] text-ink-faint">{label}</div>
     </div>
@@ -48,14 +48,14 @@ function WeekCell({
       onClick={() => onSelect(dateKey)}
       className={`group flex items-start gap-3 rounded-2xl border p-3 text-left transition ${
         empty
-          ? "border-dashed border-line bg-elevated/30 hover:bg-elevated/60 dark:bg-elevated/10 dark:hover:bg-elevated/20"
-          : "border-line bg-elevated/70 shadow-sm ring-1 ring-black/[0.02] hover:-translate-y-0.5 hover:bg-elevated hover:shadow-md dark:ring-white/[0.04] dark:hover:bg-elevated/90"
+          ? "surface-muted border-dashed hover:bg-surface"
+          : "surface surface-ring shadow-sm hover:-translate-y-0.5 hover:shadow-md"
       }`}
     >
       <div
         className={`grid h-12 w-12 shrink-0 place-items-center rounded-xl leading-none ${
           today
-            ? "bg-brand text-white"
+            ? "bg-brand text-on-brand"
             : empty
               ? "bg-paper-2/60 text-ink-faint"
               : "bg-paper-2 text-ink-soft"

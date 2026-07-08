@@ -53,12 +53,12 @@ function SaveBadge({ state }: { state: SaveState }) {
         : "บันทึกอัตโนมัติ";
   const dot =
     state.status === "saving"
-      ? "bg-amber-400 animate-pulse"
+      ? "bg-warning animate-pulse"
       : state.status === "saved"
-        ? "bg-emerald-500"
+        ? "bg-success"
         : "bg-ink-faint/50";
   return (
-    <span className="inline-flex items-center gap-1.5 rounded-full bg-elevated/70 px-2.5 py-1 text-xs font-medium text-ink-soft ring-1 ring-line">
+    <span className="inline-flex items-center gap-1.5 rounded-full bg-surface px-2.5 py-1 text-xs font-medium text-ink-soft ring-1 ring-line">
       <span className={`h-1.5 w-1.5 rounded-full ${dot}`} />
       {label}
     </span>
@@ -185,7 +185,7 @@ export default function Header({
                   <span
                     className={`shrink-0 rounded-full px-2 py-0.5 text-xs font-semibold ${
                       isToday(activeDate)
-                        ? "bg-brand text-white"
+                        ? "bg-brand text-on-brand"
                         : "bg-brand-soft text-brand"
                     }`}
                   >
@@ -193,7 +193,7 @@ export default function Header({
                   </span>
                 )}
                 {streak > 0 && (
-                  <span className="shrink-0 rounded-full bg-amber-50 px-2 py-0.5 text-[10px] font-semibold text-amber-700 ring-1 ring-amber-200 dark:bg-amber-950/40 dark:text-amber-300 dark:ring-amber-800">
+                  <span className="chip-warning shrink-0 rounded-full px-2 py-0.5 text-[10px] font-semibold">
                     🔥 {streak} วันติด
                   </span>
                 )}
@@ -203,7 +203,7 @@ export default function Header({
             {!isToday(activeDate) && (
               <button
                 onClick={() => setActiveDate(todayKey())}
-                className="hidden items-center gap-1.5 rounded-xl bg-ink px-3 py-2 text-sm font-medium text-paper transition hover:bg-ink/90 sm:inline-flex dark:bg-elevated dark:text-ink dark:hover:bg-elevated/80"
+                className="hidden items-center gap-1.5 rounded-xl bg-ink px-3 py-2 text-sm font-medium text-paper transition hover:bg-ink/90 sm:inline-flex dark:bg-elevated dark:text-ink dark:hover:bg-surface-muted"
               >
                 <Cloud className="h-4 w-4" />
                 วันนี้

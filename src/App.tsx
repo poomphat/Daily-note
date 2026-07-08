@@ -261,18 +261,18 @@ export default function App() {
             />
 
             {copyConfirm && (
-              <div className="animate-rise flex items-center justify-between gap-3 rounded-xl bg-amber-50 px-4 py-3 text-sm text-amber-900 ring-1 ring-amber-200 dark:bg-amber-950/40 dark:text-amber-200 dark:ring-amber-800">
+              <div className="animate-rise chip-warning flex items-center justify-between gap-3 rounded-xl px-4 py-3 text-sm">
                 <span>คัดลอกรายการจากเมื่อวานมาเพิ่มในวันนี้?</span>
                 <div className="flex gap-2">
                   <button
                     onClick={() => setCopyConfirm(false)}
-                    className="rounded-lg px-2.5 py-1 text-amber-800 transition hover:bg-amber-100 dark:text-amber-200 dark:hover:bg-amber-900/50"
+                    className="rounded-lg px-2.5 py-1 transition hover:bg-warning-soft/80"
                   >
                     ยกเลิก
                   </button>
                   <button
                     onClick={handleCopyYesterday}
-                    className="rounded-lg bg-amber-600 px-2.5 py-1 font-medium text-white transition hover:bg-amber-700"
+                    className="rounded-lg bg-brand px-2.5 py-1 font-medium text-on-brand transition hover:bg-brand/90"
                   >
                     ยืนยัน
                   </button>
@@ -284,7 +284,7 @@ export default function App() {
               <EmptyState activeDate={activeDate} yesterdayPreview={yesterdayPreview} />
             ) : (
               day.entries.length > 0 && (
-                <div className="rounded-2xl border border-line bg-elevated/60 p-2 shadow-sm ring-1 ring-black/[0.02] dark:ring-white/[0.04] sm:p-3">
+                <div className="surface surface-ring rounded-2xl p-2 shadow-sm sm:p-3">
                   <EntryList
                     entries={day.entries}
                     onToggle={toggleEntry}
@@ -296,7 +296,7 @@ export default function App() {
               )
             )}
 
-            <div className="rounded-2xl border border-line bg-elevated/60 p-4 shadow-sm ring-1 ring-black/[0.02] dark:ring-white/[0.04]">
+            <div className="surface surface-ring rounded-2xl p-4 shadow-sm">
               <MoodPicker mood={day.mood} onChange={setMood} />
             </div>
 

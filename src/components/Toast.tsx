@@ -22,19 +22,19 @@ export default function Toast({
   }, [onDismiss, durationMs]);
 
   return (
-    <div className="animate-rise fixed bottom-6 left-1/2 z-50 flex -translate-x-1/2 items-center gap-3 rounded-2xl bg-ink px-4 py-3 text-sm text-paper shadow-2xl ring-1 ring-line dark:bg-elevated dark:text-ink dark:ring-white/10">
+    <div className="animate-rise surface fixed bottom-6 left-1/2 z-50 flex -translate-x-1/2 items-center gap-3 rounded-2xl px-4 py-3 text-sm shadow-2xl">
       <span>{message}</span>
       {actionLabel && onAction && (
         <button
           onClick={onAction}
-          className="rounded-lg bg-paper/15 px-2.5 py-1 font-semibold transition hover:bg-paper/25 dark:bg-ink/10 dark:hover:bg-ink/20"
+          className="rounded-lg bg-brand/10 px-2.5 py-1 font-semibold text-brand transition hover:bg-brand/20"
         >
           {actionLabel}
         </button>
       )}
       <button
         onClick={onDismiss}
-        className="grid h-7 w-7 place-items-center rounded-lg text-paper/70 transition hover:bg-paper/10 hover:text-paper dark:text-ink-faint dark:hover:bg-ink/10 dark:hover:text-ink"
+        className="grid h-7 w-7 place-items-center rounded-lg text-ink-faint transition hover:bg-surface-muted hover:text-ink"
         aria-label="ปิด"
       >
         <X className="h-4 w-4" />
