@@ -1,7 +1,8 @@
 import { useEffect, useRef, useState, type DragEvent } from "react";
 import type { Entry } from "../lib/types";
 import { CATEGORY_MAP } from "../lib/categories";
-import { Check, Grip, Trash } from "./icons";
+import { copyEntriesForJira } from "../lib/clipboard";
+import { Check, Copy, Grip, Trash } from "./icons";
 
 interface Props {
   entries: Entry[];
@@ -9,6 +10,8 @@ interface Props {
   onEdit: (id: string, text: string) => void;
   onRemove: (id: string) => void;
   onReorder: (from: number, to: number) => void;
+  onCopied?: () => void;
+  onCopyError?: (message: string) => void;
 }
 
 function EntryRow({
@@ -135,6 +138,8 @@ export default function EntryList({
   onEdit,
   onRemove,
   onReorder,
+  onCopied,
+  onCopyError,
 }: Props) {
   const done = entries.filter((e) => e.done).length;
   const [dragIndex, setDragIndex] = useState<number | null>(null);
@@ -148,11 +153,34 @@ export default function EntryList({
     setOverIndex(null);
   };
 
+  const handleCopyForJira = async () => {
+    try {
+      const ok = await copyEntriesForJira(entries);
+      if (ok) onCopied?.();
+    } catch (err) {
+      onCopyError?.(
+        err instanceof Error ? err.message : "ไม่สามารถคัดลอกได้",
+      );
+    }
+  };
+
   return (
     <div>
-      <div className="mb-1 flex items-center justify-between px-2">
-        <h2 className="text-base font-semibold text-ink-soft">กิจกรรมวันนี้</h2>
-        <span className="text-sm font-medium text-ink-faint">
+      <div className="mb-1 flex items-center justify-between gap-2 px-2">
+        <div className="flex min-w-0 items-center gap-1.5">
+          <h2 className="text-base font-semibold text-ink-soft">กิจกรรมวันนี้</h2>
+          <button
+            type="button"
+            onClick={handleCopyForJira}
+            disabled={entries.length === 0}
+            className="tap-target-sm grid h-9 w-9 shrink-0 place-items-center rounded-lg text-ink-faint transition enabled:hover:bg-elevated enabled:hover:text-brand disabled:opacity-30"
+            aria-label="คัดลอกเป็น bullet สำหรับ Jira"
+            title="คัดลอกเป็น bullet สำหรับ Jira"
+          >
+            <Copy className="h-4 w-4" />
+          </button>
+        </div>
+        <span className="shrink-0 text-sm font-medium text-ink-faint">
           {done}/{entries.length} เสร็จแล้ว
         </span>
       </div>
