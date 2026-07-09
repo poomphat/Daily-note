@@ -291,6 +291,8 @@ export default function App() {
                     onEdit={editEntry}
                     onRemove={handleRemove}
                     onReorder={reorderEntries}
+                    onCopied={() => setMessage("คัดลอก bullet สำหรับ Jira แล้ว")}
+                    onCopyError={setMessage}
                   />
                 </div>
               )
