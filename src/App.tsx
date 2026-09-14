@@ -248,7 +248,7 @@ export default function App() {
           )}
 
           {tab === "day" && (
-          <div className="flex flex-col gap-8 sm:gap-10">
+          <div className="flex flex-col gap-7 sm:gap-9">
             <section aria-label="เพิ่มกิจกรรม">
               <QuickAdd
                 ref={quickAddRef}
@@ -300,7 +300,7 @@ export default function App() {
               )}
             </section>
 
-            <section className="flex flex-col gap-6 border-t border-line/60 pt-6" aria-label="สรุปวัน">
+            <section className="flex flex-col gap-5 border-t border-line/50 pt-5 sm:gap-6 sm:pt-6" aria-label="สรุปวัน">
               <MoodPicker mood={day.mood} onChange={setMood} />
               <HabitTracker
                 habits={activeHabits}

@@ -167,23 +167,23 @@ export default function EntryList({
 
   return (
     <div>
-      <div className="mb-2 flex items-baseline justify-between gap-2">
-        <div className="flex min-w-0 items-baseline gap-2">
-          <h2 className="section-label">กิจกรรม</h2>
+      <div className="mb-1.5 flex items-baseline justify-between gap-2">
+        <h2 className="section-label">กิจกรรม</h2>
+        <div className="flex shrink-0 items-baseline gap-2.5 text-sm text-ink-faint">
           <button
             type="button"
             onClick={handleCopyForJira}
             disabled={entries.length === 0}
-            className="text-sm font-medium text-ink-faint transition enabled:hover:text-brand disabled:opacity-30"
+            className="transition enabled:hover:text-ink disabled:opacity-30"
             aria-label="คัดลอกเป็น bullet สำหรับ Jira"
             title="คัดลอกเป็น bullet สำหรับ Jira"
           >
             คัดลอก
           </button>
+          <span>
+            {done}/{entries.length}
+          </span>
         </div>
-        <span className="shrink-0 text-sm text-ink-faint">
-          {done}/{entries.length}
-        </span>
       </div>
       <ul className="flex flex-col divide-y divide-line/50">
         {entries.map((e, i) => (

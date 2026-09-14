@@ -61,6 +61,14 @@ const shortFmt = new Intl.DateTimeFormat("th-TH", {
   month: "short",
 });
 
+/** Compact header date for narrow screens — e.g. "พุธ 8 ก.ค. 2569" */
+const compactFmt = new Intl.DateTimeFormat("th-TH", {
+  weekday: "short",
+  day: "numeric",
+  month: "short",
+  year: "numeric",
+});
+
 const weekdayFmt = new Intl.DateTimeFormat("th-TH", { weekday: "short" });
 const dayNumFmt = new Intl.DateTimeFormat("th-TH", { day: "numeric" });
 const monthFmt = new Intl.DateTimeFormat("th-TH", {
@@ -71,6 +79,11 @@ const monthFmt = new Intl.DateTimeFormat("th-TH", {
 /** e.g. "วันพุธที่ 8 กรกฎาคม 2569" */
 export function formatFull(key: string): string {
   return fullFmt.format(fromKey(key)).replace("พ.ศ. ", "");
+}
+
+/** e.g. "พุธ 8 ก.ค. 2569" — fits mobile header without wrapping mid-phrase */
+export function formatCompact(key: string): string {
+  return compactFmt.format(fromKey(key)).replace("พ.ศ. ", "");
 }
 
 /** e.g. "8 ก.ค." */

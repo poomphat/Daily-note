@@ -106,10 +106,25 @@ body {
   color: var(--color-ink);
 }
 
+.icon-btn-sm {
+  display: grid;
+  place-items: center;
+  min-height: 2.25rem;
+  min-width: 2.25rem;
+  border-radius: 0.5rem;
+  color: var(--color-ink-soft);
+  transition: background-color 0.15s ease, color 0.15s ease;
+}
+
+.icon-btn-sm:hover {
+  background: var(--color-elevated);
+  color: var(--color-ink);
+}
+
 .section-label {
   font-size: var(--text-sm);
   font-weight: 600;
-  letter-spacing: 0.01em;
+  letter-spacing: 0.02em;
   color: var(--color-ink-faint);
 }
 

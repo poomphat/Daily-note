@@ -38,11 +38,11 @@ export default function HabitTracker({
 
   return (
     <div>
-      <div className="mb-2.5 flex items-center justify-between gap-2">
+      <div className="mb-2 flex items-center justify-between gap-2">
         <span className="section-label">นิสัยประจำวัน</span>
         <button
           onClick={() => setManage(true)}
-          className="text-sm font-medium text-ink-faint transition hover:text-brand"
+          className="text-sm text-ink-faint transition hover:text-ink"
         >
           จัดการ
         </button>
@@ -51,13 +51,13 @@ export default function HabitTracker({
       {habits.length === 0 ? (
         <button
           onClick={() => setManage(true)}
-          className="inline-flex items-center gap-1.5 text-sm text-ink-faint transition hover:text-brand"
+          className="inline-flex items-center gap-1.5 text-sm text-ink-faint transition hover:text-ink"
         >
           <Plus className="h-4 w-4" />
           เพิ่มนิสัย
         </button>
       ) : (
-        <div className="flex flex-wrap gap-1.5">
+        <div className="flex flex-wrap gap-1">
           {habits.map((h) => {
             const done = Boolean(habitLog?.[h.id]);
             const streak = habitStreak(store, h.id);
@@ -65,10 +65,10 @@ export default function HabitTracker({
               <button
                 key={h.id}
                 onClick={() => onToggle(h.id)}
-                className={`inline-flex items-center gap-1.5 rounded-lg px-2.5 py-1.5 text-sm font-medium transition ${
+                className={`inline-flex items-center gap-1.5 rounded-lg px-2.5 py-1.5 text-sm transition ${
                   done
-                    ? "chip-success"
-                    : "text-ink-soft hover:bg-surface-muted"
+                    ? "chip-success font-medium"
+                    : "text-ink-faint hover:bg-surface-muted/80 hover:text-ink-soft"
                 }`}
               >
                 <span className="leading-none" aria-hidden>

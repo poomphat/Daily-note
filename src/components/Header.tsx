@@ -1,6 +1,7 @@
 import { useRef } from "react";
 import {
   addDays,
+  formatCompact,
   formatFull,
   isFuture,
   isToday,
@@ -9,13 +10,7 @@ import {
 } from "../lib/date";
 import type { DayNote, NotesStore } from "../lib/types";
 import type { SaveState } from "../hooks/useNotes";
-import {
-  Calendar,
-  ChevronLeft,
-  ChevronRight,
-  Menu,
-  Search,
-} from "./icons";
+import { ChevronLeft, ChevronRight, Menu, Search } from "./icons";
 import Tabs, { type TabId } from "./Tabs";
 import ToolsMenu from "./ToolsMenu";
 
@@ -91,12 +86,15 @@ export default function Header({
   const rel = relativeLabel(activeDate);
   const canGoNext = !isFuture(addDays(activeDate, 1));
 
+  const openPicker = () => dateInput.current?.showPicker?.();
+
   return (
     <header className="sticky top-0 z-20 border-b border-line/60 bg-paper/85 backdrop-blur-xl">
-      <div className="mx-auto flex max-w-3xl flex-col gap-2.5 px-4 py-2.5 sm:px-6 sm:py-3">
+      <div className="mx-auto flex max-w-3xl flex-col gap-2 px-4 py-2.5 sm:gap-2.5 sm:px-6 sm:py-3">
         {/* Top row: tabs + primary actions only */}
         <div className="flex items-center gap-2">
           <button
+            type="button"
             onClick={onOpenMenu}
             className="icon-btn shrink-0 lg:hidden"
             aria-label="เปิดเมนูวันที่"
@@ -108,9 +106,10 @@ export default function Header({
             <Tabs value={tab} onChange={setTab} />
           </div>
 
-          <div className="flex shrink-0 items-center gap-1">
+          <div className="flex shrink-0 items-center gap-0.5">
             <SaveBadge state={saveState} />
             <button
+              type="button"
               onClick={onOpenSearch}
               className="icon-btn"
               aria-label="ค้นหา"
@@ -132,61 +131,55 @@ export default function Header({
           </div>
         </div>
 
-        {/* Day navigation — quieter, reading-first */}
+        {/* Day navigation — date is primary; chevrons are one quiet cluster */}
         {tab === "day" && (
-          <div className="flex items-center gap-1.5 sm:gap-2">
-            <button
-              onClick={() => setActiveDate(addDays(activeDate, -1))}
-              className="icon-btn"
-              aria-label="วันก่อนหน้า"
-            >
-              <ChevronLeft className="h-5 w-5" />
-            </button>
-            <button
-              onClick={() => canGoNext && setActiveDate(addDays(activeDate, 1))}
-              disabled={!canGoNext}
-              className="icon-btn disabled:opacity-30"
-              aria-label="วันถัดไป"
-            >
-              <ChevronRight className="h-5 w-5" />
-            </button>
-
-            <div className="min-w-0 flex-1 px-1">
-              <h1 className="font-display text-base font-semibold leading-snug tracking-tight text-ink sm:text-xl">
-                {formatFull(activeDate)}
-              </h1>
-              <div className="mt-0.5 flex flex-wrap items-center gap-x-2 gap-y-0.5 text-sm">
-                {rel && (
-                  <span
-                    className={`font-medium ${
-                      isToday(activeDate) ? "text-brand" : "text-ink-faint"
-                    }`}
-                  >
-                    {rel}
-                  </span>
-                )}
-                {streak > 0 && (
-                  <span className="text-ink-faint">{streak} วันติด</span>
-                )}
-              </div>
+          <div className="flex items-center gap-2 sm:gap-3">
+            <div className="flex shrink-0 items-center rounded-lg bg-surface-muted/60 p-0.5">
+              <button
+                type="button"
+                onClick={() => setActiveDate(addDays(activeDate, -1))}
+                className="icon-btn-sm"
+                aria-label="วันก่อนหน้า"
+              >
+                <ChevronLeft className="h-[1.125rem] w-[1.125rem]" />
+              </button>
+              <button
+                type="button"
+                onClick={() => canGoNext && setActiveDate(addDays(activeDate, 1))}
+                disabled={!canGoNext}
+                className="icon-btn-sm disabled:opacity-30"
+                aria-label="วันถัดไป"
+              >
+                <ChevronRight className="h-[1.125rem] w-[1.125rem]" />
+              </button>
             </div>
 
-            {!isToday(activeDate) && (
+            <div className="relative min-w-0 flex-1">
               <button
-                onClick={() => setActiveDate(todayKey())}
-                className="shrink-0 rounded-lg px-2.5 py-1.5 text-sm font-medium text-brand transition hover:bg-brand-soft"
+                type="button"
+                onClick={openPicker}
+                className="block w-full min-w-0 rounded-lg py-0.5 text-left transition hover:bg-surface-muted/40 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-brand/30"
+                aria-label={`เลือกวันที่ · ${formatFull(activeDate)}`}
+                title="เลือกวันที่"
               >
-                วันนี้
-              </button>
-            )}
-
-            <div className="relative shrink-0">
-              <button
-                onClick={() => dateInput.current?.showPicker?.()}
-                className="icon-btn"
-                aria-label="เลือกวันที่"
-              >
-                <Calendar className="h-5 w-5" />
+                <h1 className="truncate font-display text-[1.0625rem] font-semibold leading-snug tracking-tight text-ink sm:text-xl">
+                  <span className="sm:hidden">{formatCompact(activeDate)}</span>
+                  <span className="hidden sm:inline">{formatFull(activeDate)}</span>
+                </h1>
+                <div className="mt-0.5 flex flex-wrap items-center gap-x-2 gap-y-0.5 text-sm">
+                  {rel && (
+                    <span
+                      className={`font-medium ${
+                        isToday(activeDate) ? "text-brand" : "text-ink-faint"
+                      }`}
+                    >
+                      {rel}
+                    </span>
+                  )}
+                  {streak > 0 && (
+                    <span className="text-ink-faint">{streak} วันติด</span>
+                  )}
+                </div>
               </button>
               <input
                 ref={dateInput}
@@ -196,8 +189,19 @@ export default function Header({
                 onChange={(e) => e.target.value && setActiveDate(e.target.value)}
                 className="pointer-events-none absolute inset-0 h-full w-full opacity-0"
                 tabIndex={-1}
+                aria-hidden
               />
             </div>
+
+            {!isToday(activeDate) && (
+              <button
+                type="button"
+                onClick={() => setActiveDate(todayKey())}
+                className="shrink-0 px-1.5 py-1 text-sm font-medium text-brand/90 transition hover:text-brand"
+              >
+                วันนี้
+              </button>
+            )}
           </div>
         )}
       </div>
