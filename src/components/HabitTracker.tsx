@@ -37,12 +37,12 @@ export default function HabitTracker({
   };
 
   return (
-    <div className="surface surface-ring rounded-2xl p-4 shadow-sm sm:p-5">
-      <div className="mb-3 flex items-center justify-between">
-        <span className="text-base font-medium text-ink-soft">นิสัยประจำวัน</span>
+    <div>
+      <div className="mb-2 flex items-center justify-between gap-2">
+        <span className="section-label">นิสัยประจำวัน</span>
         <button
           onClick={() => setManage(true)}
-          className="tap-target-sm rounded-lg px-2.5 py-1.5 text-sm font-medium text-brand transition hover:bg-brand-soft"
+          className="text-sm text-ink-faint transition hover:text-ink"
         >
           จัดการ
         </button>
@@ -51,13 +51,13 @@ export default function HabitTracker({
       {habits.length === 0 ? (
         <button
           onClick={() => setManage(true)}
-          className="flex w-full items-center justify-center gap-1.5 rounded-xl border border-dashed border-line py-3.5 text-base text-ink-faint transition hover:border-brand/40 hover:text-brand"
+          className="inline-flex items-center gap-1.5 text-sm text-ink-faint transition hover:text-ink"
         >
           <Plus className="h-4 w-4" />
-          เพิ่มนิสัยที่อยากทำทุกวัน
+          เพิ่มนิสัย
         </button>
       ) : (
-        <div className="flex flex-wrap gap-2">
+        <div className="flex flex-wrap gap-1">
           {habits.map((h) => {
             const done = Boolean(habitLog?.[h.id]);
             const streak = habitStreak(store, h.id);
@@ -65,19 +65,19 @@ export default function HabitTracker({
               <button
                 key={h.id}
                 onClick={() => onToggle(h.id)}
-                className={`inline-flex items-center gap-2 rounded-full px-3.5 py-2 text-base font-medium ring-1 transition ${
+                className={`inline-flex items-center gap-1.5 rounded-lg px-2.5 py-1.5 text-sm transition ${
                   done
-                    ? "chip-success"
-                    : "bg-paper-2/60 text-ink-soft ring-line hover:bg-elevated"
+                    ? "chip-success font-medium"
+                    : "text-ink-faint hover:bg-surface-muted/80 hover:text-ink-soft"
                 }`}
               >
-                <span className="text-base leading-none">{h.emoji}</span>
+                <span className="leading-none" aria-hidden>
+                  {h.emoji}
+                </span>
                 {h.name}
-                {done && <Check className="h-4 w-4" />}
+                {done && <Check className="h-3.5 w-3.5" />}
                 {streak > 0 && (
-                  <span className="text-xs font-semibold text-warning">
-                    🔥{streak}
-                  </span>
+                  <span className="text-xs text-warning">{streak}</span>
                 )}
               </button>
             );

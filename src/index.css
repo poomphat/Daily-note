@@ -19,8 +19,8 @@
   --color-paper: #f7f6f2;
   --color-paper-2: #efeee8;
   --color-ink: #23232a;
-  --color-ink-soft: #55555f;
-  --color-ink-faint: #8b8b93;
+  --color-ink-soft: #4f4f59;
+  --color-ink-faint: #7c7c86;
   --color-line: #e7e5dd;
   --color-brand: #4f46e5;
   --color-brand-soft: #eef2ff;
@@ -70,14 +70,11 @@ html {
 
 body {
   margin: 0;
-  background:
-    radial-gradient(1200px 600px at 100% -10%, color-mix(in srgb, var(--color-paper) 80%, white) 0%, transparent 55%),
-    radial-gradient(900px 500px at -10% 110%, var(--color-paper-2) 0%, transparent 60%),
-    var(--color-paper);
+  background: var(--color-paper);
   color: var(--color-ink);
   font-family: var(--font-sans);
   font-size: var(--text-base);
-  line-height: 1.6;
+  line-height: 1.65;
   -webkit-font-smoothing: antialiased;
   text-rendering: optimizeLegibility;
   min-height: 100dvh;
@@ -93,11 +90,42 @@ body {
   min-width: 2.25rem;
 }
 
-:root.dark body {
-  background:
-    radial-gradient(1200px 600px at 100% -10%, color-mix(in srgb, var(--color-paper-2) 70%, var(--color-paper)) 0%, transparent 55%),
-    radial-gradient(900px 500px at -10% 110%, var(--color-paper-2) 0%, transparent 60%),
-    var(--color-paper);
+/* Quiet icon buttons — avoid a wall of ringed chrome in the header */
+.icon-btn {
+  display: grid;
+  place-items: center;
+  min-height: 2.5rem;
+  min-width: 2.5rem;
+  border-radius: 0.625rem;
+  color: var(--color-ink-soft);
+  transition: background-color 0.15s ease, color 0.15s ease;
+}
+
+.icon-btn:hover {
+  background: var(--color-surface-muted);
+  color: var(--color-ink);
+}
+
+.icon-btn-sm {
+  display: grid;
+  place-items: center;
+  min-height: 2.25rem;
+  min-width: 2.25rem;
+  border-radius: 0.5rem;
+  color: var(--color-ink-soft);
+  transition: background-color 0.15s ease, color 0.15s ease;
+}
+
+.icon-btn-sm:hover {
+  background: var(--color-elevated);
+  color: var(--color-ink);
+}
+
+.section-label {
+  font-size: var(--text-sm);
+  font-weight: 600;
+  letter-spacing: 0.02em;
+  color: var(--color-ink-faint);
 }
 
 /* Shared surface + semantic chip utilities */
@@ -113,8 +141,8 @@ body {
 
 .surface-ring {
   box-shadow:
-    0 1px 2px 0 rgb(0 0 0 / 0.05),
-    inset 0 0 0 1px rgb(0 0 0 / 0.02);
+    0 1px 2px 0 rgb(0 0 0 / 0.04),
+    inset 0 0 0 1px rgb(0 0 0 / 0.015);
 }
 
 :root.dark .surface-ring {

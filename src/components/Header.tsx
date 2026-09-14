@@ -1,6 +1,7 @@
 import { useRef } from "react";
 import {
   addDays,
+  formatCompact,
   formatFull,
   isFuture,
   isToday,
@@ -9,20 +10,9 @@ import {
 } from "../lib/date";
 import type { DayNote, NotesStore } from "../lib/types";
 import type { SaveState } from "../hooks/useNotes";
-import {
-  Bell,
-  Calendar,
-  ChevronLeft,
-  ChevronRight,
-  Cloud,
-  Help,
-  Menu,
-  Moon,
-  Search,
-  Sun,
-} from "./icons";
-import ExportMenu from "./ExportMenu";
+import { ChevronLeft, ChevronRight, Menu, Search } from "./icons";
 import Tabs, { type TabId } from "./Tabs";
+import ToolsMenu from "./ToolsMenu";
 
 interface Props {
   tab: TabId;
@@ -58,9 +48,17 @@ function SaveBadge({ state }: { state: SaveState }) {
         ? "bg-success"
         : "bg-ink-faint/50";
   return (
-    <span className="inline-flex items-center gap-1.5 rounded-full bg-surface px-2.5 py-1 text-sm font-medium text-ink-soft ring-1 ring-line">
-      <span className={`h-1.5 w-1.5 rounded-full ${dot}`} />
-      {label}
+    <span
+      className="inline-flex items-center gap-1.5 text-sm text-ink-faint"
+      role="status"
+      aria-live="polite"
+      aria-label={label}
+      title={label}
+    >
+      <span className={`h-1.5 w-1.5 rounded-full ${dot}`} aria-hidden />
+      <span className="hidden sm:inline" aria-hidden>
+        {label}
+      </span>
     </span>
   );
 }
@@ -88,14 +86,17 @@ export default function Header({
   const rel = relativeLabel(activeDate);
   const canGoNext = !isFuture(addDays(activeDate, 1));
 
+  const openPicker = () => dateInput.current?.showPicker?.();
+
   return (
-    <header className="sticky top-0 z-20 border-b border-line/70 bg-paper/80 backdrop-blur-xl">
-      <div className="mx-auto flex max-w-3xl flex-col gap-3 px-4 py-3 sm:px-6">
-        {/* Top row: navigation tabs + global actions */}
-        <div className="flex items-center gap-2 sm:gap-3">
+    <header className="sticky top-0 z-20 border-b border-line/60 bg-paper/85 backdrop-blur-xl">
+      <div className="mx-auto flex max-w-3xl flex-col gap-2 px-4 py-2.5 sm:gap-2.5 sm:px-6 sm:py-3">
+        {/* Top row: tabs + primary actions only */}
+        <div className="flex items-center gap-2">
           <button
+            type="button"
             onClick={onOpenMenu}
-            className="tap-target grid h-11 w-11 shrink-0 place-items-center rounded-xl text-ink-soft ring-1 ring-line transition hover:bg-elevated hover:text-ink lg:hidden"
+            className="icon-btn shrink-0 lg:hidden"
             aria-label="เปิดเมนูวันที่"
           >
             <Menu className="h-5 w-5" />
@@ -105,118 +106,80 @@ export default function Header({
             <Tabs value={tab} onChange={setTab} />
           </div>
 
-          <div className="hidden sm:block">
+          <div className="flex shrink-0 items-center gap-0.5">
             <SaveBadge state={saveState} />
+            <button
+              type="button"
+              onClick={onOpenSearch}
+              className="icon-btn"
+              aria-label="ค้นหา"
+              title="ค้นหา (⌘K)"
+            >
+              <Search className="h-5 w-5" />
+            </button>
+            <ToolsMenu
+              day={day}
+              store={store}
+              darkMode={darkMode}
+              reminderOn={reminderOn}
+              onToggleDarkMode={onToggleDarkMode}
+              onOpenReminder={onOpenReminder}
+              onOpenShortcuts={onOpenShortcuts}
+              onImport={onImport}
+              onMessage={onMessage}
+            />
           </div>
-
-          <button
-            onClick={onOpenSearch}
-            className="tap-target grid h-11 w-11 shrink-0 place-items-center rounded-xl text-ink-soft ring-1 ring-line transition hover:bg-elevated hover:text-ink"
-            aria-label="ค้นหา"
-            title="ค้นหา (⌘K)"
-          >
-            <Search className="h-5 w-5" />
-          </button>
-
-          <ExportMenu
-            day={day}
-            store={store}
-            onImport={onImport}
-            onMessage={onMessage}
-          />
-
-          <button
-            onClick={onOpenReminder}
-            className="relative tap-target grid h-11 w-11 shrink-0 place-items-center rounded-xl text-ink-soft ring-1 ring-line transition hover:bg-elevated hover:text-ink"
-            aria-label="ตั้งค่าแจ้งเตือน"
-            title="แจ้งเตือน"
-          >
-            <Bell className="h-5 w-5" />
-            {reminderOn && (
-              <span className="absolute right-2 top-2 h-2 w-2 rounded-full bg-brand ring-2 ring-paper" />
-            )}
-          </button>
-
-          <button
-            onClick={onToggleDarkMode}
-            className="tap-target grid h-11 w-11 shrink-0 place-items-center rounded-xl text-ink-soft ring-1 ring-line transition hover:bg-elevated hover:text-ink"
-            aria-label={darkMode ? "โหมดสว่าง" : "โหมดมืด"}
-          >
-            {darkMode ? <Sun className="h-5 w-5" /> : <Moon className="h-5 w-5" />}
-          </button>
-
-          <button
-            onClick={onOpenShortcuts}
-            className="hidden tap-target h-11 w-11 shrink-0 place-items-center rounded-xl text-ink-soft ring-1 ring-line transition hover:bg-elevated hover:text-ink sm:grid"
-            aria-label="คีย์ลัด"
-            title="คีย์ลัด (?)"
-          >
-            <Help className="h-5 w-5" />
-          </button>
         </div>
 
-        {/* Second row: day navigation (only in the day view) */}
+        {/* Day navigation — date is primary; chevrons are one quiet cluster */}
         {tab === "day" && (
           <div className="flex items-center gap-2 sm:gap-3">
-            <div className="flex items-center gap-1">
+            <div className="flex shrink-0 items-center rounded-lg bg-surface-muted/60 p-0.5">
               <button
+                type="button"
                 onClick={() => setActiveDate(addDays(activeDate, -1))}
-                className="tap-target grid h-11 w-11 place-items-center rounded-xl text-ink-soft ring-1 ring-line transition hover:bg-elevated hover:text-ink"
+                className="icon-btn-sm"
                 aria-label="วันก่อนหน้า"
               >
-                <ChevronLeft className="h-5 w-5" />
+                <ChevronLeft className="h-[1.125rem] w-[1.125rem]" />
               </button>
               <button
+                type="button"
                 onClick={() => canGoNext && setActiveDate(addDays(activeDate, 1))}
                 disabled={!canGoNext}
-                className="tap-target grid h-11 w-11 place-items-center rounded-xl text-ink-soft ring-1 ring-line transition enabled:hover:bg-elevated enabled:hover:text-ink disabled:opacity-30"
+                className="icon-btn-sm disabled:opacity-30"
                 aria-label="วันถัดไป"
               >
-                <ChevronRight className="h-5 w-5" />
+                <ChevronRight className="h-[1.125rem] w-[1.125rem]" />
               </button>
             </div>
 
-            <div className="min-w-0 flex-1">
-              <div className="flex items-center gap-2">
-                <h1 className="truncate font-display text-lg font-semibold text-ink sm:text-xl">
-                  {formatFull(activeDate)}
+            <div className="relative min-w-0 flex-1">
+              <button
+                type="button"
+                onClick={openPicker}
+                className="block w-full min-w-0 rounded-lg py-0.5 text-left transition hover:bg-surface-muted/40 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-brand/30"
+                aria-label={`เลือกวันที่ · ${formatFull(activeDate)}`}
+                title="เลือกวันที่"
+              >
+                <h1 className="truncate font-display text-[1.0625rem] font-semibold leading-snug tracking-tight text-ink sm:text-xl">
+                  <span className="sm:hidden">{formatCompact(activeDate)}</span>
+                  <span className="hidden sm:inline">{formatFull(activeDate)}</span>
                 </h1>
-                {rel && (
-                  <span
-                    className={`shrink-0 rounded-full px-2.5 py-0.5 text-sm font-semibold ${
-                      isToday(activeDate)
-                        ? "bg-brand text-on-brand"
-                        : "bg-brand-soft text-brand"
-                    }`}
-                  >
-                    {rel}
-                  </span>
-                )}
-                {streak > 0 && (
-                  <span className="chip-warning shrink-0 rounded-full px-2.5 py-0.5 text-xs font-semibold">
-                    🔥 {streak} วันติด
-                  </span>
-                )}
-              </div>
-            </div>
-
-            {!isToday(activeDate) && (
-              <button
-                onClick={() => setActiveDate(todayKey())}
-                className="hidden items-center gap-1.5 rounded-xl bg-ink px-3.5 py-2.5 text-base font-medium text-paper transition hover:bg-ink/90 sm:inline-flex dark:bg-elevated dark:text-ink dark:hover:bg-surface-muted"
-              >
-                <Cloud className="h-4 w-4" />
-                วันนี้
-              </button>
-            )}
-
-            <div className="relative shrink-0">
-              <button
-                onClick={() => dateInput.current?.showPicker?.()}
-                className="tap-target grid h-11 w-11 place-items-center rounded-xl text-ink-soft ring-1 ring-line transition hover:bg-elevated hover:text-ink"
-                aria-label="เลือกวันที่"
-              >
-                <Calendar className="h-5 w-5" />
+                <div className="mt-0.5 flex flex-wrap items-center gap-x-2 gap-y-0.5 text-sm">
+                  {rel && (
+                    <span
+                      className={`font-medium ${
+                        isToday(activeDate) ? "text-brand" : "text-ink-faint"
+                      }`}
+                    >
+                      {rel}
+                    </span>
+                  )}
+                  {streak > 0 && (
+                    <span className="text-ink-faint">{streak} วันติด</span>
+                  )}
+                </div>
               </button>
               <input
                 ref={dateInput}
@@ -226,8 +189,19 @@ export default function Header({
                 onChange={(e) => e.target.value && setActiveDate(e.target.value)}
                 className="pointer-events-none absolute inset-0 h-full w-full opacity-0"
                 tabIndex={-1}
+                aria-hidden
               />
             </div>
+
+            {!isToday(activeDate) && (
+              <button
+                type="button"
+                onClick={() => setActiveDate(todayKey())}
+                className="shrink-0 px-1.5 py-1 text-sm font-medium text-brand/90 transition hover:text-brand"
+              >
+                วันนี้
+              </button>
+            )}
           </div>
         )}
       </div>

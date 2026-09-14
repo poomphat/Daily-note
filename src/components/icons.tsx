@@ -175,3 +175,11 @@ export const Bell = (p: IconProps) => (
     <path d="M13.7 21a2 2 0 0 1-3.4 0" />
   </svg>
 );
+
+export const MoreHorizontal = (p: IconProps) => (
+  <svg {...base} {...p}>
+    <circle cx="5" cy="12" r="1.2" fill="currentColor" stroke="none" />
+    <circle cx="12" cy="12" r="1.2" fill="currentColor" stroke="none" />
+    <circle cx="19" cy="12" r="1.2" fill="currentColor" stroke="none" />
+  </svg>
+);

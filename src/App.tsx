@@ -234,7 +234,7 @@ export default function App() {
           onMessage={setMessage}
         />
 
-        <main className="mx-auto w-full max-w-3xl flex-1 px-5 py-7 sm:px-8">
+        <main className="mx-auto w-full max-w-2xl flex-1 px-4 py-6 sm:px-6 sm:py-8">
           {tab === "week" && (
             <WeekView store={store} onSelectDay={openDay} />
           )}
@@ -248,25 +248,27 @@ export default function App() {
           )}
 
           {tab === "day" && (
-          <div className="flex flex-col gap-7 sm:gap-8">
-            <QuickAdd
-              ref={quickAddRef}
-              onAdd={addEntry}
-              onAddMany={addEntries}
-              onCopyYesterday={handleCopyYesterday}
-              canCopyYesterday={yesterdayHasEntries}
-              onCarryOver={handleCarryOver}
-              carryOverCount={isToday(activeDate) ? carryOver.count : 0}
-              autoFocus={autoFocus}
-            />
+          <div className="flex flex-col gap-7 sm:gap-9">
+            <section aria-label="เพิ่มกิจกรรม">
+              <QuickAdd
+                ref={quickAddRef}
+                onAdd={addEntry}
+                onAddMany={addEntries}
+                onCopyYesterday={handleCopyYesterday}
+                canCopyYesterday={yesterdayHasEntries}
+                onCarryOver={handleCarryOver}
+                carryOverCount={isToday(activeDate) ? carryOver.count : 0}
+                autoFocus={autoFocus}
+              />
+            </section>
 
             {copyConfirm && (
-              <div className="animate-rise chip-warning flex items-center justify-between gap-3 rounded-xl px-4 py-3.5 text-base">
+              <div className="animate-rise flex items-center justify-between gap-3 rounded-xl bg-warning-soft/80 px-4 py-3 text-base text-warning">
                 <span>คัดลอกรายการจากเมื่อวานมาเพิ่มในวันนี้?</span>
-                <div className="flex gap-2">
+                <div className="flex gap-1">
                   <button
                     onClick={() => setCopyConfirm(false)}
-                    className="rounded-lg px-2.5 py-1 transition hover:bg-warning-soft/80"
+                    className="rounded-lg px-2.5 py-1 transition hover:bg-warning-soft"
                   >
                     ยกเลิก
                   </button>
@@ -280,11 +282,11 @@ export default function App() {
               </div>
             )}
 
-            {showEmpty ? (
-              <EmptyState activeDate={activeDate} yesterdayPreview={yesterdayPreview} />
-            ) : (
-              day.entries.length > 0 && (
-                <div className="surface surface-ring rounded-2xl p-3 shadow-sm sm:p-4">
+            <section aria-label="รายการวันนี้">
+              {showEmpty ? (
+                <EmptyState activeDate={activeDate} yesterdayPreview={yesterdayPreview} />
+              ) : (
+                day.entries.length > 0 && (
                   <EntryList
                     entries={day.entries}
                     onToggle={toggleEntry}
@@ -294,28 +296,26 @@ export default function App() {
                     onCopied={() => setMessage("คัดลอก bullet สำหรับ Jira แล้ว")}
                     onCopyError={setMessage}
                   />
-                </div>
-              )
-            )}
+                )
+              )}
+            </section>
 
-            <div className="surface surface-ring rounded-2xl p-4 shadow-sm sm:p-5">
+            <section className="flex flex-col gap-5 border-t border-line/50 pt-5 sm:gap-6 sm:pt-6" aria-label="สรุปวัน">
               <MoodPicker mood={day.mood} onChange={setMood} />
-            </div>
-
-            <HabitTracker
-              habits={activeHabits}
-              habitLog={day.habitLog}
-              store={store}
-              onToggle={toggleHabit}
-              onAdd={addHabit}
-              onRemove={removeHabit}
-            />
-
-            <FreeNote value={day.reflection} onChange={setReflection} />
+              <HabitTracker
+                habits={activeHabits}
+                habitLog={day.habitLog}
+                store={store}
+                onToggle={toggleHabit}
+                onAdd={addHabit}
+                onRemove={removeHabit}
+              />
+              <FreeNote value={day.reflection} onChange={setReflection} />
+            </section>
           </div>
           )}
 
-          <footer className="mt-10 pb-6 text-center text-sm text-ink-faint">
+          <footer className="mt-12 pb-6 text-center text-sm text-ink-faint">
             เก็บข้อมูลไว้ในเครื่องของคุณเท่านั้น · ร่างต้นแบบ (draft)
           </footer>
         </main>

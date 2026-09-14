@@ -8,21 +8,23 @@ interface Props {
 
 export default function MoodPicker({ mood, onChange }: Props) {
   return (
-    <div className="flex flex-wrap items-center gap-3">
-      <span className="text-base font-medium text-ink-soft">วันนี้เป็นยังไง?</span>
-      <div className="flex gap-2">
+    <div className="flex flex-wrap items-center gap-x-3 gap-y-1.5">
+      <span className="section-label">อารมณ์</span>
+      <div className="flex gap-0.5" role="group" aria-label="อารมณ์วันนี้">
         {MOODS.map((m) => {
           const on = mood === m.id;
           return (
             <button
               key={m.id}
+              type="button"
               onClick={() => onChange(on ? null : m.id)}
               title={m.label}
               aria-label={m.label}
-              className={`tap-target grid h-11 w-11 place-items-center rounded-full text-xl transition ${
+              aria-pressed={on}
+              className={`grid h-9 w-9 place-items-center rounded-lg text-base transition ${
                 on
-                  ? "scale-110 bg-brand-soft ring-2 ring-brand/50"
-                  : "opacity-60 ring-1 ring-line hover:bg-elevated hover:opacity-100"
+                  ? "bg-brand-soft ring-1 ring-brand/35"
+                  : "opacity-45 hover:bg-surface-muted/80 hover:opacity-100"
               }`}
             >
               {m.emoji}

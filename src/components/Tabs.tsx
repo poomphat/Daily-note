@@ -6,14 +6,15 @@ export type TabId = "day" | "week" | "all" | "insights";
 interface TabMeta {
   id: TabId;
   label: string;
+  short: string;
   Icon: (p: SVGProps<SVGSVGElement>) => ReactElement;
 }
 
 export const TABS: TabMeta[] = [
-  { id: "day", label: "วันนี้", Icon: Sun },
-  { id: "week", label: "สัปดาห์นี้", Icon: CalendarRange },
-  { id: "all", label: "ทั้งหมด", Icon: Layers },
-  { id: "insights", label: "สรุป", Icon: Chart },
+  { id: "day", label: "วันนี้", short: "วัน", Icon: Sun },
+  { id: "week", label: "สัปดาห์นี้", short: "สัปดาห์", Icon: CalendarRange },
+  { id: "all", label: "ทั้งหมด", short: "ทั้งหมด", Icon: Layers },
+  { id: "insights", label: "สรุป", short: "สรุป", Icon: Chart },
 ];
 
 interface Props {
@@ -37,7 +38,7 @@ export default function Tabs({ value, onChange }: Props) {
       role="tablist"
       aria-label="เลือกมุมมอง"
       onKeyDown={onKeyDown}
-      className="inline-flex items-center gap-1 rounded-xl bg-surface-muted p-1 ring-1 ring-line"
+      className="inline-flex max-w-full items-center gap-0.5 rounded-lg bg-surface-muted/80 p-0.5"
     >
       {TABS.map((t) => {
         const on = t.id === value;
@@ -48,14 +49,15 @@ export default function Tabs({ value, onChange }: Props) {
             aria-selected={on}
             tabIndex={on ? 0 : -1}
             onClick={() => onChange(t.id)}
-            className={`inline-flex items-center gap-1.5 rounded-lg px-3 py-2 text-base font-medium transition sm:px-3.5 ${
+            className={`inline-flex items-center gap-1.5 rounded-md px-2.5 py-1.5 text-sm font-medium transition sm:px-3 sm:text-base ${
               on
-                ? "bg-elevated text-ink shadow-sm ring-1 ring-line"
-                : "text-ink-soft hover:text-ink"
+                ? "bg-elevated text-ink shadow-sm"
+                : "text-ink-faint hover:text-ink"
             }`}
           >
-            <t.Icon className="h-4 w-4 shrink-0" />
-            <span className="whitespace-nowrap">{t.label}</span>
+            <t.Icon className="hidden h-4 w-4 shrink-0 sm:block" />
+            <span className="whitespace-nowrap sm:hidden">{t.short}</span>
+            <span className="hidden whitespace-nowrap sm:inline">{t.label}</span>
           </button>
         );
       })}
