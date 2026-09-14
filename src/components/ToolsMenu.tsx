@@ -68,6 +68,15 @@ export default function ToolsMenu({
     };
   }, [open]);
 
+  useEffect(() => {
+    if (!pending) return;
+    const onKey = (e: KeyboardEvent) => {
+      if (e.key === "Escape") setPending(null);
+    };
+    document.addEventListener("keydown", onKey);
+    return () => document.removeEventListener("keydown", onKey);
+  }, [pending]);
+
   const handleFile = async (e: React.ChangeEvent<HTMLInputElement>) => {
     const file = e.target.files?.[0];
     e.target.value = "";
@@ -96,10 +105,14 @@ export default function ToolsMenu({
   return (
     <div className="relative" ref={ref}>
       <button
+        type="button"
         onClick={() => setOpen((o) => !o)}
         className="icon-btn relative"
-        aria-label="เครื่องมือเพิ่มเติม"
+        aria-label={
+          reminderOn ? "เครื่องมือเพิ่มเติม · แจ้งเตือนเปิดอยู่" : "เครื่องมือเพิ่มเติม"
+        }
         aria-expanded={open}
+        aria-haspopup="menu"
         title="เพิ่มเติม"
       >
         <MoreHorizontal className="h-5 w-5" />

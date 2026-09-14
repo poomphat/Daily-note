@@ -53,9 +53,17 @@ function SaveBadge({ state }: { state: SaveState }) {
         ? "bg-success"
         : "bg-ink-faint/50";
   return (
-    <span className="inline-flex items-center gap-1.5 text-sm text-ink-faint">
-      <span className={`h-1.5 w-1.5 rounded-full ${dot}`} />
-      <span className="hidden sm:inline">{label}</span>
+    <span
+      className="inline-flex items-center gap-1.5 text-sm text-ink-faint"
+      role="status"
+      aria-live="polite"
+      aria-label={label}
+      title={label}
+    >
+      <span className={`h-1.5 w-1.5 rounded-full ${dot}`} aria-hidden />
+      <span className="hidden sm:inline" aria-hidden>
+        {label}
+      </span>
     </span>
   );
 }
