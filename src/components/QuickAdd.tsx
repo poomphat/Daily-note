@@ -69,11 +69,13 @@ const QuickAdd = forwardRef<QuickAddHandle, Props>(function QuickAdd(
                   ? "bg-ink text-paper dark:bg-elevated dark:text-ink dark:ring-1 dark:ring-line"
                   : "text-ink-soft hover:bg-surface-muted hover:text-ink"
               }`}
+              aria-label={c.label}
+              title={c.label}
             >
               <span className="leading-none" aria-hidden>
                 {c.emoji}
               </span>
-              {c.label}
+              <span className="hidden sm:inline">{c.label}</span>
             </button>
           );
         })}

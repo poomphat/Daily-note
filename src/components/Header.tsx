@@ -144,13 +144,13 @@ export default function Header({
             </button>
 
             <div className="min-w-0 flex-1 px-1">
-              <div className="flex flex-wrap items-baseline gap-x-2 gap-y-0.5">
-                <h1 className="truncate font-display text-lg font-semibold tracking-tight text-ink sm:text-xl">
-                  {formatFull(activeDate)}
-                </h1>
+              <h1 className="font-display text-base font-semibold leading-snug tracking-tight text-ink sm:text-xl">
+                {formatFull(activeDate)}
+              </h1>
+              <div className="mt-0.5 flex flex-wrap items-center gap-x-2 gap-y-0.5 text-sm">
                 {rel && (
                   <span
-                    className={`text-sm font-medium ${
+                    className={`font-medium ${
                       isToday(activeDate) ? "text-brand" : "text-ink-faint"
                     }`}
                   >
@@ -158,9 +158,7 @@ export default function Header({
                   </span>
                 )}
                 {streak > 0 && (
-                  <span className="text-sm text-ink-faint">
-                    {streak} วันติด
-                  </span>
+                  <span className="text-ink-faint">{streak} วันติด</span>
                 )}
               </div>
             </div>
