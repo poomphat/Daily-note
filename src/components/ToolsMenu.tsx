@@ -7,16 +7,46 @@ import {
   importFromJson,
   type ImportResult,
 } from "../lib/export";
-import { Download, Upload } from "./icons";
+import {
+  Bell,
+  Download,
+  Help,
+  Moon,
+  MoreHorizontal,
+  Sun,
+  Upload,
+} from "./icons";
 
 interface Props {
   day: DayNote;
   store: NotesStore;
+  darkMode: boolean;
+  reminderOn: boolean;
+  onToggleDarkMode: () => void;
+  onOpenReminder: () => void;
+  onOpenShortcuts: () => void;
   onImport: (store: NotesStore, mode: "merge" | "replace") => void;
   onMessage: (message: string) => void;
 }
 
-export default function ExportMenu({ day, store, onImport, onMessage }: Props) {
+const itemClass =
+  "flex w-full items-center gap-2.5 px-3.5 py-2.5 text-left text-base text-ink transition hover:bg-elevated";
+
+/**
+ * Single overflow menu for secondary header tools so the top bar
+ * stays scannable (search + day nav) instead of a row of icon buttons.
+ */
+export default function ToolsMenu({
+  day,
+  store,
+  darkMode,
+  reminderOn,
+  onToggleDarkMode,
+  onOpenReminder,
+  onOpenShortcuts,
+  onImport,
+  onMessage,
+}: Props) {
   const [open, setOpen] = useState(false);
   const [pending, setPending] = useState<ImportResult | null>(null);
   const ref = useRef<HTMLDivElement>(null);
@@ -27,8 +57,15 @@ export default function ExportMenu({ day, store, onImport, onMessage }: Props) {
     const onClick = (e: MouseEvent) => {
       if (ref.current && !ref.current.contains(e.target as Node)) setOpen(false);
     };
+    const onKey = (e: KeyboardEvent) => {
+      if (e.key === "Escape") setOpen(false);
+    };
     document.addEventListener("mousedown", onClick);
-    return () => document.removeEventListener("mousedown", onClick);
+    document.addEventListener("keydown", onKey);
+    return () => {
+      document.removeEventListener("mousedown", onClick);
+      document.removeEventListener("keydown", onKey);
+    };
   }, [open]);
 
   const handleFile = async (e: React.ChangeEvent<HTMLInputElement>) => {
@@ -51,63 +88,96 @@ export default function ExportMenu({ day, store, onImport, onMessage }: Props) {
     setPending(null);
   };
 
-  const menuItem =
-    "flex w-full px-3 py-2.5 text-left text-base text-ink transition hover:bg-elevated";
+  const closeAnd = (fn: () => void) => {
+    setOpen(false);
+    fn();
+  };
 
   return (
     <div className="relative" ref={ref}>
       <button
         onClick={() => setOpen((o) => !o)}
-        className="tap-target grid h-11 w-11 place-items-center rounded-xl text-ink-soft ring-1 ring-line transition hover:bg-elevated hover:text-ink"
-        aria-label="นำเข้า / ส่งออกข้อมูล"
-        title="นำเข้า / ส่งออก"
+        className="icon-btn relative"
+        aria-label="เครื่องมือเพิ่มเติม"
+        aria-expanded={open}
+        title="เพิ่มเติม"
       >
-        <Download className="h-5 w-5" />
+        <MoreHorizontal className="h-5 w-5" />
+        {reminderOn && (
+          <span className="absolute right-1.5 top-1.5 h-1.5 w-1.5 rounded-full bg-brand" />
+        )}
       </button>
 
       {open && (
-        <div className="animate-rise surface absolute right-0 top-full z-30 mt-1.5 min-w-[200px] overflow-hidden rounded-xl py-1 shadow-xl">
-          <div className="px-3 pb-1 pt-1.5 text-xs font-semibold uppercase tracking-wide text-ink-faint">
-            ส่งออก
+        <div className="animate-rise surface absolute right-0 top-full z-30 mt-1.5 w-[min(18rem,calc(100vw-2rem))] overflow-hidden rounded-xl py-1.5 shadow-xl">
+          <button
+            onClick={() => closeAnd(onToggleDarkMode)}
+            className={itemClass}
+          >
+            {darkMode ? <Sun className="h-4 w-4 text-ink-soft" /> : <Moon className="h-4 w-4 text-ink-soft" />}
+            {darkMode ? "โหมดสว่าง" : "โหมดมืด"}
+          </button>
+          <button
+            onClick={() => closeAnd(onOpenReminder)}
+            className={itemClass}
+          >
+            <Bell className="h-4 w-4 text-ink-soft" />
+            แจ้งเตือน
+            {reminderOn && (
+              <span className="ml-auto rounded-full bg-brand-soft px-2 py-0.5 text-xs font-medium text-brand">
+                เปิด
+              </span>
+            )}
+          </button>
+          <button
+            onClick={() => closeAnd(onOpenShortcuts)}
+            className={itemClass}
+          >
+            <Help className="h-4 w-4 text-ink-soft" />
+            คีย์ลัด
+            <span className="ml-auto text-sm text-ink-faint">?</span>
+          </button>
+
+          <div className="my-1.5 border-t border-line/70" />
+          <div className="px-3.5 pb-1 pt-0.5 text-xs font-semibold uppercase tracking-wide text-ink-faint">
+            สำรองข้อมูล
           </div>
           <button
             onClick={() => {
               exportDayMarkdown(day);
               setOpen(false);
             }}
-            className={menuItem}
+            className={itemClass}
           >
-            วันนี้ (.md)
+            <Download className="h-4 w-4 text-ink-soft" />
+            ส่งออกวันนี้ (.md)
           </button>
           <button
             onClick={() => {
               exportAllMarkdown(store);
               setOpen(false);
             }}
-            className={menuItem}
+            className={itemClass}
           >
-            ทั้งหมด (.md)
+            <Download className="h-4 w-4 text-ink-soft" />
+            ส่งออกทั้งหมด (.md)
           </button>
           <button
             onClick={() => {
               exportAllJson(store);
               setOpen(false);
             }}
-            className={menuItem}
+            className={itemClass}
           >
-            ทั้งหมด (.json) — ใช้สำรอง
+            <Download className="h-4 w-4 text-ink-soft" />
+            สำรองทั้งหมด (.json)
           </button>
-
-          <div className="my-1 border-t border-line/70" />
-          <div className="px-3 pb-1 pt-0.5 text-xs font-semibold uppercase tracking-wide text-ink-faint">
-            นำเข้า
-          </div>
           <button
             onClick={() => fileRef.current?.click()}
-            className={`${menuItem} items-center gap-2`}
+            className={itemClass}
           >
             <Upload className="h-4 w-4 text-ink-soft" />
-            เลือกไฟล์ .json
+            นำเข้าไฟล์ .json
           </button>
         </div>
       )}

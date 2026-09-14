@@ -33,6 +33,7 @@ const QuickAdd = forwardRef<QuickAddHandle, Props>(function QuickAdd(
 ) {
   const [category, setCategory] = useState<CategoryId>("main");
   const [text, setText] = useState("");
+  const [showTemplates, setShowTemplates] = useState(false);
   const inputRef = useRef<HTMLInputElement>(null);
 
   const submit = () => {
@@ -51,33 +52,37 @@ const QuickAdd = forwardRef<QuickAddHandle, Props>(function QuickAdd(
   }, [autoFocus]);
 
   const active = CATEGORY_MAP[category];
+  const hasHelpers =
+    Boolean(carryOverCount) || Boolean(canCopyYesterday) || showTemplates;
 
   return (
-    <div className="surface surface-ring rounded-2xl p-4 shadow-sm sm:p-5">
-      <div className="mb-4 flex flex-wrap gap-2">
+    <div className="flex flex-col gap-3">
+      <div className="flex flex-wrap gap-1.5">
         {CATEGORIES.map((c) => {
           const on = c.id === category;
           return (
             <button
               key={c.id}
               onClick={() => setCategory(c.id)}
-              className={`tap-target-sm inline-flex items-center gap-1.5 rounded-full px-3.5 py-2 text-base font-medium ring-1 transition ${
+              className={`inline-flex items-center gap-1.5 rounded-lg px-2.5 py-1.5 text-sm font-medium transition ${
                 on
-                  ? `${c.tint} scale-[1.02] shadow-sm`
-                  : "bg-paper-2/60 text-ink-soft ring-line hover:bg-elevated"
+                  ? "bg-ink text-paper dark:bg-elevated dark:text-ink dark:ring-1 dark:ring-line"
+                  : "text-ink-soft hover:bg-surface-muted hover:text-ink"
               }`}
             >
-              <span className="text-lg leading-none">{c.emoji}</span>
+              <span className="leading-none" aria-hidden>
+                {c.emoji}
+              </span>
               {c.label}
             </button>
           );
         })}
       </div>
 
-      <div className="flex items-end gap-2.5">
+      <div className="flex items-center gap-2">
         <div className="relative flex-1">
           <span
-            className={`pointer-events-none absolute left-3.5 top-1/2 h-2.5 w-2.5 -translate-y-1/2 rounded-full ${active.dot}`}
+            className={`pointer-events-none absolute left-3.5 top-1/2 h-2 w-2 -translate-y-1/2 rounded-full ${active.dot}`}
           />
           <input
             ref={inputRef}
@@ -89,53 +94,68 @@ const QuickAdd = forwardRef<QuickAddHandle, Props>(function QuickAdd(
                 submit();
               }
             }}
-            placeholder={`เพิ่ม “${active.label}”… แล้วกด Enter`}
-            className="w-full rounded-xl border-0 bg-paper-2/50 py-3.5 pl-8 pr-3.5 text-base text-ink outline-none ring-1 ring-line transition placeholder:text-ink-faint focus:bg-elevated focus:ring-2 focus:ring-brand/40"
+            placeholder={`เพิ่ม${active.label}… Enter เพื่อบันทึก`}
+            className="w-full rounded-xl border-0 bg-elevated py-3 pl-8 pr-3.5 text-base text-ink outline-none ring-1 ring-line/80 transition placeholder:text-ink-faint focus:ring-2 focus:ring-brand/35"
           />
         </div>
         <button
           onClick={submit}
           disabled={!text.trim()}
-          className="tap-target grid h-12 w-12 shrink-0 place-items-center rounded-xl bg-brand text-on-brand shadow-sm transition enabled:hover:bg-brand/90 enabled:active:scale-95 disabled:opacity-40"
+          className="tap-target grid h-11 w-11 shrink-0 place-items-center rounded-xl bg-brand text-on-brand transition enabled:hover:bg-brand/90 enabled:active:scale-[0.97] disabled:opacity-35"
           aria-label="เพิ่มรายการ"
         >
           <Plus className="h-5 w-5" />
         </button>
       </div>
 
-      <div className="mt-4 flex flex-wrap items-center gap-2 border-t border-line/70 pt-4">
-        <span className="text-sm font-medium text-ink-faint">เทมเพลต:</span>
-        {DAY_TEMPLATES.map((t) => (
+      <div className="flex flex-wrap items-center gap-x-3 gap-y-1.5 text-sm">
+        <button
+          type="button"
+          onClick={() => setShowTemplates((v) => !v)}
+          className="font-medium text-ink-faint transition hover:text-ink"
+          aria-expanded={showTemplates}
+        >
+          {showTemplates ? "ซ่อนเทมเพลต" : "เทมเพลต"}
+        </button>
+
+        {Boolean(carryOverCount) && onCarryOver && (
           <button
-            key={t.id}
-            onClick={() => onAddMany(t.entries)}
-            className="tap-target-sm inline-flex items-center gap-1 rounded-full bg-paper-2/80 px-3 py-1.5 text-sm font-medium text-ink-soft ring-1 ring-line transition hover:bg-elevated hover:text-ink"
+            onClick={onCarryOver}
+            className="inline-flex items-center gap-1 font-medium text-warning transition hover:opacity-80"
           >
-            <span>{t.emoji}</span>
-            {t.label}
+            <Undo className="h-3.5 w-3.5" />
+            ยกงานค้างมา ({carryOverCount})
           </button>
-        ))}
-        <div className="ml-auto flex flex-wrap items-center gap-2">
-          {Boolean(carryOverCount) && onCarryOver && (
-            <button
-              onClick={onCarryOver}
-              className="chip-warning tap-target-sm inline-flex items-center gap-1 rounded-full px-3 py-1.5 text-sm font-medium transition hover:opacity-90"
-            >
-              <Undo className="h-4 w-4" />
-              ยกงานค้างมา ({carryOverCount})
-            </button>
-          )}
-          {canCopyYesterday && onCopyYesterday && (
-            <button
-              onClick={onCopyYesterday}
-              className="tap-target-sm inline-flex items-center gap-1 rounded-full bg-brand-soft px-3 py-1.5 text-sm font-medium text-brand ring-1 ring-brand/20 transition hover:bg-brand/10"
-            >
-              <Copy className="h-4 w-4" />
-              คัดลอกจากเมื่อวาน
-            </button>
-          )}
-        </div>
+        )}
+
+        {canCopyYesterday && onCopyYesterday && (
+          <button
+            onClick={onCopyYesterday}
+            className="inline-flex items-center gap-1 font-medium text-ink-faint transition hover:text-ink"
+          >
+            <Copy className="h-3.5 w-3.5" />
+            จากเมื่อวาน
+          </button>
+        )}
       </div>
+
+      {hasHelpers && showTemplates && (
+        <div className="flex flex-wrap gap-1.5">
+          {DAY_TEMPLATES.map((t) => (
+            <button
+              key={t.id}
+              onClick={() => {
+                onAddMany(t.entries);
+                setShowTemplates(false);
+              }}
+              className="inline-flex items-center gap-1 rounded-lg bg-surface-muted px-2.5 py-1.5 text-sm text-ink-soft transition hover:bg-elevated hover:text-ink"
+            >
+              <span aria-hidden>{t.emoji}</span>
+              {t.label}
+            </button>
+          ))}
+        </div>
+      )}
     </div>
   );
 });

@@ -2,7 +2,7 @@ import { useEffect, useRef, useState, type DragEvent } from "react";
 import type { Entry } from "../lib/types";
 import { CATEGORY_MAP } from "../lib/categories";
 import { copyEntriesForJira } from "../lib/clipboard";
-import { Check, Copy, Grip, Trash } from "./icons";
+import { Check, Grip, Trash } from "./icons";
 
 interface Props {
   entries: Entry[];
@@ -62,13 +62,13 @@ function EntryRow({
       onDragOver={(e) => onDragOver(e, index)}
       onDrop={() => onDrop(index)}
       onDragEnd={onDragEnd}
-      className={`group animate-rise flex items-center gap-2.5 rounded-xl px-2.5 py-3 transition hover:bg-paper-2/50 sm:gap-3 ${
+      className={`group animate-rise flex items-center gap-2.5 py-3 transition sm:gap-3 ${
         isDragging ? "opacity-40" : ""
-      } ${dragOver ? "bg-brand-soft/50 ring-1 ring-brand/30" : ""}`}
+      } ${dragOver ? "bg-brand-soft/40" : ""}`}
     >
       <button
         type="button"
-        className="hidden shrink-0 cursor-grab text-ink-faint active:cursor-grabbing sm:grid sm:h-8 sm:w-6 sm:place-items-center"
+        className="hidden shrink-0 cursor-grab text-ink-faint/70 active:cursor-grabbing sm:grid sm:h-7 sm:w-5 sm:place-items-center"
         aria-label="ลากเพื่อจัดเรียง"
         tabIndex={-1}
       >
@@ -77,19 +77,20 @@ function EntryRow({
 
       <button
         onClick={() => onToggle(entry.id)}
-        className={`grid h-8 w-8 shrink-0 place-items-center rounded-md border transition ${
+        className={`grid h-7 w-7 shrink-0 place-items-center rounded-md border transition ${
           entry.done
             ? "border-success bg-success text-on-brand"
-            : "border-line bg-elevated text-transparent hover:border-brand"
+            : "border-line/80 bg-transparent text-transparent hover:border-brand"
         }`}
         aria-label={entry.done ? "ทำเครื่องหมายยังไม่เสร็จ" : "ทำเครื่องหมายเสร็จ"}
       >
-        <Check className="h-4 w-4" />
+        <Check className="h-3.5 w-3.5" />
       </button>
 
       <span
-        className={`grid h-8 w-8 shrink-0 place-items-center rounded-md text-base ring-1 ${cat.tint}`}
+        className="shrink-0 text-base leading-none"
         title={cat.label}
+        aria-hidden
       >
         {cat.emoji}
       </span>
@@ -166,25 +167,25 @@ export default function EntryList({
 
   return (
     <div>
-      <div className="mb-1 flex items-center justify-between gap-2 px-2">
-        <div className="flex min-w-0 items-center gap-1.5">
-          <h2 className="text-base font-semibold text-ink-soft">กิจกรรมวันนี้</h2>
+      <div className="mb-2 flex items-baseline justify-between gap-2">
+        <div className="flex min-w-0 items-baseline gap-2">
+          <h2 className="section-label">กิจกรรม</h2>
           <button
             type="button"
             onClick={handleCopyForJira}
             disabled={entries.length === 0}
-            className="tap-target-sm grid h-9 w-9 shrink-0 place-items-center rounded-lg text-ink-faint transition enabled:hover:bg-elevated enabled:hover:text-brand disabled:opacity-30"
+            className="text-sm font-medium text-ink-faint transition enabled:hover:text-brand disabled:opacity-30"
             aria-label="คัดลอกเป็น bullet สำหรับ Jira"
             title="คัดลอกเป็น bullet สำหรับ Jira"
           >
-            <Copy className="h-4 w-4" />
+            คัดลอก
           </button>
         </div>
-        <span className="shrink-0 text-sm font-medium text-ink-faint">
-          {done}/{entries.length} เสร็จแล้ว
+        <span className="shrink-0 text-sm text-ink-faint">
+          {done}/{entries.length}
         </span>
       </div>
-      <ul className="flex flex-col">
+      <ul className="flex flex-col divide-y divide-line/50">
         {entries.map((e, i) => (
           <EntryRow
             key={e.id}
