@@ -101,9 +101,9 @@ export default function EraConverterModal({ onClose }: Props) {
   };
 
   const handleCopy = async () => {
-    if (!resultText) return;
+    if (target === null) return;
     try {
-      await copyText(resultText);
+      await copyText(String(target));
       setCopied(true);
       setCopyError(null);
     } catch (err) {
@@ -195,7 +195,7 @@ export default function EraConverterModal({ onClose }: Props) {
                 setCopied(false);
                 setCopyError(null);
               }}
-              placeholder={direction === "be-to-ce" ? "2569" : "2026"}
+              placeholder={defaultYear(direction)}
               className={`min-h-11 w-full rounded-xl border-0 bg-paper-2/50 px-3 py-2.5 text-base tabular-nums text-ink outline-none ring-1 placeholder:text-ink-faint focus:bg-elevated focus:ring-2 ${
                 invalid
                   ? "ring-danger/40 focus:ring-danger/40"
@@ -227,7 +227,8 @@ export default function EraConverterModal({ onClose }: Props) {
                   type="button"
                   onClick={handleCopy}
                   className="tap-target-sm inline-flex shrink-0 items-center gap-1.5 rounded-lg px-2.5 text-sm font-medium text-ink-soft transition hover:bg-surface-muted hover:text-ink"
-                  aria-label={copied ? "คัดลอกแล้ว" : "คัดลอกผลลัพธ์"}
+                  aria-label={copied ? "คัดลอกแล้ว" : `คัดลอกปี ${targetEra} ${target}`}
+                  title={`คัดลอก ${target}`}
                 >
                   {copied ? (
                     <Check className="h-3.5 w-3.5 text-brand" />
