@@ -1,4 +1,5 @@
 import { useEffect, useRef, useState } from "react";
+import { createPortal } from "react-dom";
 import type { DayNote, NotesStore } from "../lib/types";
 import {
   exportAllJson,
@@ -125,7 +126,7 @@ export default function ToolsMenu({
       </button>
 
       {open && (
-        <div className="animate-rise surface absolute right-0 top-full z-30 mt-1.5 w-[min(18rem,calc(100vw-2rem))] overflow-hidden rounded-xl py-1.5 shadow-xl">
+        <div className="animate-rise surface absolute right-0 top-full z-40 mt-1.5 max-h-[min(24rem,calc(100dvh-5rem))] w-[min(18rem,calc(100vw-2rem))] overflow-y-auto rounded-xl py-1.5 shadow-xl">
           <button
             onClick={() => closeAnd(onToggleDarkMode)}
             className={itemClass}
@@ -213,49 +214,51 @@ export default function ToolsMenu({
         className="hidden"
       />
 
-      {pending && (
-        <div className="fixed inset-0 z-50 grid place-items-center p-4">
-          <div
-            className="absolute inset-0 bg-ink/30 backdrop-blur-sm"
-            onClick={() => setPending(null)}
-          />
-          <div className="animate-rise surface relative w-full max-w-sm rounded-2xl p-5 shadow-2xl">
-            <h2 className="font-display text-xl font-semibold text-ink">
-              นำเข้าข้อมูล
-            </h2>
-            <p className="mt-2 text-base text-ink-soft">
-              พบ <strong className="text-ink">{pending.count}</strong> วันในไฟล์นี้
-              ต้องการนำเข้าแบบไหน?
-            </p>
-            <div className="mt-4 flex flex-col gap-2">
-              <button
-                onClick={() => confirmImport("merge")}
-                className="rounded-xl bg-brand px-4 py-3 text-base font-medium text-on-brand transition hover:bg-brand/90"
-              >
-                รวมกับข้อมูลเดิม (แนะนำ)
-                <span className="block text-sm font-normal text-on-brand/80">
-                  วันที่ซ้ำจะถูกแทนที่ด้วยข้อมูลจากไฟล์
-                </span>
-              </button>
-              <button
-                onClick={() => confirmImport("replace")}
-                className="btn-danger-outline rounded-xl px-4 py-3 text-base font-medium transition"
-              >
-                แทนที่ทั้งหมด
-                <span className="block text-sm font-normal opacity-80">
-                  ลบข้อมูลเดิมทั้งหมดแล้วใช้ข้อมูลจากไฟล์
-                </span>
-              </button>
-              <button
-                onClick={() => setPending(null)}
-                className="mt-1 rounded-xl px-4 py-2.5 text-base text-ink-soft transition hover:bg-elevated"
-              >
-                ยกเลิก
-              </button>
+      {pending &&
+        createPortal(
+          <div className="fixed inset-0 z-50 grid place-items-center p-4">
+            <div
+              className="absolute inset-0 bg-ink/30 backdrop-blur-sm"
+              onClick={() => setPending(null)}
+            />
+            <div className="animate-rise surface relative max-h-[calc(100dvh-2rem)] w-full max-w-sm overflow-y-auto rounded-2xl p-5 shadow-2xl">
+              <h2 className="font-display text-xl font-semibold text-ink">
+                นำเข้าข้อมูล
+              </h2>
+              <p className="mt-2 text-base text-ink-soft">
+                พบ <strong className="text-ink">{pending.count}</strong> วันในไฟล์นี้
+                ต้องการนำเข้าแบบไหน?
+              </p>
+              <div className="mt-4 flex flex-col gap-2">
+                <button
+                  onClick={() => confirmImport("merge")}
+                  className="rounded-xl bg-brand px-4 py-3 text-base font-medium text-on-brand transition hover:bg-brand/90"
+                >
+                  รวมกับข้อมูลเดิม (แนะนำ)
+                  <span className="block text-sm font-normal text-on-brand/80">
+                    วันที่ซ้ำจะถูกแทนที่ด้วยข้อมูลจากไฟล์
+                  </span>
+                </button>
+                <button
+                  onClick={() => confirmImport("replace")}
+                  className="btn-danger-outline rounded-xl px-4 py-3 text-base font-medium transition"
+                >
+                  แทนที่ทั้งหมด
+                  <span className="block text-sm font-normal opacity-80">
+                    ลบข้อมูลเดิมทั้งหมดแล้วใช้ข้อมูลจากไฟล์
+                  </span>
+                </button>
+                <button
+                  onClick={() => setPending(null)}
+                  className="mt-1 rounded-xl px-4 py-2.5 text-base text-ink-soft transition hover:bg-elevated"
+                >
+                  ยกเลิก
+                </button>
+              </div>
             </div>
-          </div>
-        </div>
-      )}
+          </div>,
+          document.body,
+        )}
     </div>
   );
 }

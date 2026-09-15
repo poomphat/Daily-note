@@ -9,7 +9,7 @@ interface Props {
 export default function FreeNote({ value, onChange, className, fill }: Props) {
   return (
     <div
-      className={`${fill ? "lg:flex lg:min-h-0 lg:flex-1 lg:flex-col" : ""} ${className ?? ""}`.trim()}
+      className={`${fill ? "lg:flex lg:min-h-[8.5rem] lg:flex-1 lg:flex-col lg:border-t lg:border-line/40 lg:pt-4" : ""} ${className ?? ""}`.trim()}
     >
       <h2 className="section-label mb-2 shrink-0">บันทึกอิสระ</h2>
       <textarea

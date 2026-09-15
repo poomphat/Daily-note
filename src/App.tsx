@@ -24,6 +24,8 @@ import InsightsView from "./components/InsightsView";
 import type { TabId } from "./components/Tabs";
 import type { Entry } from "./lib/types";
 
+const FOOTER_COPY = "เก็บข้อมูลไว้ในเครื่องของคุณเท่านั้น · ร่างต้นแบบ (draft)";
+
 function isTypingTarget(el: EventTarget | null): boolean {
   if (!(el instanceof HTMLElement)) return false;
   const tag = el.tagName;
@@ -74,6 +76,7 @@ export default function App() {
 
   const quickAddRef = useRef<QuickAddHandle>(null);
   const mainRef = useRef<HTMLElement>(null);
+  const dayPaneRef = useRef<HTMLDivElement>(null);
 
   const yesterdayHasEntries = Boolean(
     store[addDays(activeDate, -1)]?.entries.length,
@@ -99,6 +102,7 @@ export default function App() {
     setMenuOpen(false);
     window.scrollTo({ top: 0, behavior: "smooth" });
     mainRef.current?.scrollTo({ top: 0, behavior: "smooth" });
+    dayPaneRef.current?.scrollTo({ top: 0, behavior: "smooth" });
   }, [setActiveDate]);
 
   const handleRemove = useCallback(
@@ -192,7 +196,7 @@ export default function App() {
   const autoFocus = isToday(activeDate) && day.entries.length === 0;
 
   return (
-    <div className="min-h-dvh lg:grid lg:h-dvh lg:grid-cols-[300px_1fr] lg:overflow-hidden">
+    <div className="min-h-dvh lg:grid lg:h-dvh lg:grid-cols-[minmax(15.5rem,16.75rem)_minmax(0,1fr)] lg:overflow-hidden xl:grid-cols-[18rem_minmax(0,1fr)]">
       <div className="hidden min-h-0 border-r border-line/70 bg-paper-2/40 backdrop-blur-sm lg:block lg:h-full lg:overflow-hidden">
         <Sidebar
           days={daysWithNotes}
@@ -244,10 +248,10 @@ export default function App() {
 
         <main
           ref={mainRef}
-          className={`mx-auto w-full max-w-2xl flex-1 px-4 py-6 sm:px-6 sm:py-8 lg:mx-0 lg:max-w-none lg:min-h-0 lg:px-8 lg:py-6 ${
+          className={`mx-auto w-full max-w-2xl flex-1 px-4 py-6 sm:px-6 sm:py-8 lg:mx-0 lg:max-w-none lg:min-h-0 lg:px-6 lg:py-5 xl:px-8 xl:py-6 ${
             tab === "day"
               ? "lg:flex lg:flex-col lg:overflow-hidden"
-              : "lg:overflow-y-auto lg:overscroll-y-contain"
+              : "pane-scroll"
           }`}
         >
           {tab === "week" && (
@@ -263,8 +267,11 @@ export default function App() {
           )}
 
           {tab === "day" && (
-          <div className="flex min-h-0 min-w-0 flex-1 flex-col gap-7 sm:gap-9 lg:grid lg:h-full lg:grid-cols-[minmax(0,1.65fr)_minmax(16rem,1fr)] lg:grid-rows-[minmax(0,1fr)] lg:items-stretch lg:gap-8 lg:overflow-hidden">
-            <div className="flex min-h-0 min-w-0 flex-col gap-5 lg:h-full lg:overflow-y-auto lg:overscroll-y-contain lg:pr-1">
+          <div className="flex min-h-0 min-w-0 flex-1 flex-col gap-7 sm:gap-9 lg:grid lg:h-full lg:grid-cols-[minmax(0,1.2fr)_minmax(17.5rem,1fr)] lg:grid-rows-[minmax(0,1fr)] lg:items-stretch lg:gap-6 lg:overflow-hidden xl:grid-cols-[minmax(0,1.55fr)_minmax(18rem,26rem)] xl:gap-8">
+            <div
+              ref={dayPaneRef}
+              className="pane-scroll flex min-h-0 min-w-0 flex-col gap-5 lg:h-full"
+            >
               <section aria-label="เพิ่มกิจกรรม">
                 <QuickAdd
                   ref={quickAddRef}
@@ -318,7 +325,7 @@ export default function App() {
             </div>
 
             <section
-              className="flex min-h-0 min-w-0 flex-col gap-5 border-t border-line/50 pt-5 sm:gap-6 sm:pt-6 lg:h-full lg:overflow-hidden lg:border-l lg:border-t-0 lg:pl-8 lg:pt-0"
+              className="pane-scroll flex min-h-0 min-w-0 flex-col gap-5 border-t border-line/50 pt-5 sm:gap-6 sm:pt-6 lg:h-full lg:gap-4 lg:border-l lg:border-t-0 lg:pl-5 lg:pt-0 xl:pl-7"
               aria-label="สรุปวัน"
             >
               <div className="shrink-0">
@@ -340,12 +347,12 @@ export default function App() {
           )}
 
           <footer className="mt-8 pb-4 text-center text-sm text-ink-faint lg:hidden">
-            เก็บข้อมูลไว้ในเครื่องของคุณเท่านั้น · ร่างต้นแบบ (draft)
+            {FOOTER_COPY}
           </footer>
         </main>
 
-        <footer className="hidden shrink-0 border-t border-line/50 px-8 py-1.5 text-center text-xs text-ink-faint lg:block">
-          เก็บข้อมูลไว้ในเครื่องของคุณเท่านั้น · ร่างต้นแบบ (draft)
+        <footer className="hidden shrink-0 border-t border-line/50 px-6 py-1.5 text-center text-xs text-ink-faint lg:block xl:px-8">
+          {FOOTER_COPY}
         </footer>
       </div>
 

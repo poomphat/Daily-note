@@ -36,7 +36,7 @@ const CELL_SLOT = 20; // 16px cell + 4px gap
 export default function InsightsView({ store, habits, onSelectDay }: Props) {
   const insights = useMemo(() => computeInsights(store), [store]);
   const heatRef = useRef<HTMLDivElement>(null);
-  const [weeks, setWeeks] = useState(18);
+  const [weeks, setWeeks] = useState(WEEKS_MIN);
 
   useEffect(() => {
     const el = heatRef.current;
@@ -46,7 +46,7 @@ export default function InsightsView({ store, habits, onSelectDay }: Props) {
         WEEKS_MIN,
         Math.min(WEEKS_MAX, Math.floor(el.clientWidth / CELL_SLOT)),
       );
-      setWeeks(next);
+      setWeeks((prev) => (prev === next ? prev : next));
     };
     update();
     const ro = new ResizeObserver(update);
@@ -83,8 +83,8 @@ export default function InsightsView({ store, habits, onSelectDay }: Props) {
         />
       </div>
 
-      <div className="grid gap-6 lg:grid-cols-2">
-        <section className="surface surface-ring rounded-2xl p-4 shadow-sm sm:p-5">
+      <div className="grid min-w-0 gap-6 lg:grid-cols-2 lg:items-start">
+        <section className="surface surface-ring min-w-0 rounded-2xl p-4 shadow-sm sm:p-5">
           <div className="mb-3 flex flex-wrap items-center justify-between gap-2">
             <h3 className="font-display text-base font-semibold text-ink">ความสม่ำเสมอ</h3>
             <div className="flex items-center gap-1 text-xs text-ink-faint">
@@ -97,10 +97,10 @@ export default function InsightsView({ store, habits, onSelectDay }: Props) {
               มาก
             </div>
           </div>
-          <div ref={heatRef} className="overflow-x-auto">
-            <div className="flex gap-1">
+          <div ref={heatRef} className="min-w-0 overflow-x-auto overscroll-x-contain">
+            <div className="flex w-max gap-1">
               {cols.map((col, i) => (
-                <div key={i} className="flex flex-col gap-1">
+                <div key={i} className="flex shrink-0 flex-col gap-1">
                   {col.map((cell) => {
                     const future = isFuture(cell.date);
                     return (
@@ -109,6 +109,7 @@ export default function InsightsView({ store, habits, onSelectDay }: Props) {
                         disabled={future || cell.count === 0}
                         onClick={() => onSelectDay(cell.date)}
                         title={`${formatFull(cell.date)} · ${cell.count} กิจกรรม`}
+                        aria-label={`${formatFull(cell.date)} · ${cell.count} กิจกรรม`}
                         className={`h-4 w-4 rounded-sm transition ${
                           future
                             ? "bg-transparent"
@@ -125,25 +126,25 @@ export default function InsightsView({ store, habits, onSelectDay }: Props) {
           </div>
         </section>
 
-        <section className="surface surface-ring rounded-2xl p-4 shadow-sm sm:p-5">
+        <section className="surface surface-ring min-w-0 rounded-2xl p-4 shadow-sm sm:p-5">
           <h3 className="mb-3 font-display text-base font-semibold text-ink">สัดส่วนหมวดหมู่</h3>
           <div className="flex flex-col gap-2.5">
             {CATEGORIES.map((c) => {
               const count = insights.categoryCounts[c.id];
               const pct = insights.totalEntries > 0 ? (count / insights.totalEntries) * 100 : 0;
               return (
-                <div key={c.id} className="flex items-center gap-3">
-                  <div className="flex w-28 shrink-0 items-center gap-1.5 text-base text-ink-soft">
-                    <span>{c.emoji}</span>
-                    {c.label}
+                <div key={c.id} className="flex min-w-0 items-center gap-3">
+                  <div className="flex w-24 min-w-0 shrink-0 items-center gap-1.5 text-base text-ink-soft sm:w-28">
+                    <span className="shrink-0">{c.emoji}</span>
+                    <span className="truncate">{c.label}</span>
                   </div>
-                  <div className="h-2.5 flex-1 overflow-hidden rounded-full bg-paper-2">
+                  <div className="h-2.5 min-w-0 flex-1 overflow-hidden rounded-full bg-paper-2">
                     <div
                       className={`h-full rounded-full ${c.dot}`}
                       style={{ width: `${pct}%` }}
                     />
                   </div>
-                  <div className="w-14 shrink-0 text-right text-sm tabular-nums text-ink-faint">
+                  <div className="w-[4.5rem] shrink-0 whitespace-nowrap text-right text-sm tabular-nums text-ink-faint sm:w-[4.75rem]">
                     {count} ({Math.round(pct)}%)
                   </div>
                 </div>
@@ -154,9 +155,9 @@ export default function InsightsView({ store, habits, onSelectDay }: Props) {
       </div>
 
       {(insights.moodTotal > 0 || habits.length > 0) && (
-        <div className="grid gap-6 lg:grid-cols-2">
+        <div className="grid min-w-0 gap-6 lg:grid-cols-2 lg:items-start">
           {insights.moodTotal > 0 && (
-            <section className="surface surface-ring rounded-2xl p-4 shadow-sm sm:p-5">
+            <section className="surface surface-ring min-w-0 rounded-2xl p-4 shadow-sm sm:p-5">
               <h3 className="mb-3 font-display text-base font-semibold text-ink">อารมณ์ที่ผ่านมา</h3>
               <div className="flex items-end justify-between gap-2">
                 {MOODS.map((m) => {
@@ -180,7 +181,7 @@ export default function InsightsView({ store, habits, onSelectDay }: Props) {
           )}
 
           {habits.length > 0 && (
-            <section className="surface surface-ring rounded-2xl p-4 shadow-sm sm:p-5">
+            <section className="surface surface-ring min-w-0 rounded-2xl p-4 shadow-sm sm:p-5">
               <h3 className="mb-3 font-display text-base font-semibold text-ink">
                 นิสัย (30 วันล่าสุด)
               </h3>
@@ -189,18 +190,18 @@ export default function InsightsView({ store, habits, onSelectDay }: Props) {
                   const rate = habitRate(store, h.id, 30) * 100;
                   const streak = habitStreak(store, h.id);
                   return (
-                    <div key={h.id} className="flex items-center gap-3">
-                      <div className="flex w-28 shrink-0 items-center gap-1.5 text-base text-ink-soft">
-                        <span>{h.emoji}</span>
+                    <div key={h.id} className="flex min-w-0 items-center gap-3">
+                      <div className="flex w-24 min-w-0 shrink-0 items-center gap-1.5 text-base text-ink-soft sm:w-28">
+                        <span className="shrink-0">{h.emoji}</span>
                         <span className="truncate">{h.name}</span>
                       </div>
-                      <div className="h-2.5 flex-1 overflow-hidden rounded-full bg-paper-2">
+                      <div className="h-2.5 min-w-0 flex-1 overflow-hidden rounded-full bg-paper-2">
                         <div
                           className="h-full rounded-full bg-success"
                           style={{ width: `${rate}%` }}
                         />
                       </div>
-                      <div className="w-16 shrink-0 text-right text-sm tabular-nums text-ink-faint">
+                      <div className="w-[5.5rem] shrink-0 whitespace-nowrap text-right text-sm tabular-nums text-ink-faint">
                         {Math.round(rate)}% · 🔥{streak}
                       </div>
                     </div>

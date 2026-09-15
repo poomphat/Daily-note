@@ -94,8 +94,8 @@ export default function Sidebar({ days, activeDate, onSelect, onTogglePin, onClo
   const regular = days.filter((d) => !d.pinned);
 
   return (
-    <aside className="flex h-full flex-col">
-      <div className="flex items-center justify-between px-5 pb-3 pt-5">
+    <aside className="flex h-full min-h-0 flex-col">
+      <div className="flex shrink-0 items-center justify-between border-b border-line/60 px-4 pb-3 pt-3.5 lg:px-5">
         <div>
           <div className="flex items-center gap-2">
             <span className="grid h-8 w-8 place-items-center rounded-xl bg-brand text-on-brand shadow-sm">
@@ -118,7 +118,7 @@ export default function Sidebar({ days, activeDate, onSelect, onTogglePin, onClo
         )}
       </div>
 
-      <nav className="flex-1 overflow-y-auto px-3 pb-6">
+      <nav className="pane-scroll min-h-0 flex-1 px-3 pb-6">
         {days.length === 0 ? (
           <p className="px-2 py-6 text-center text-base text-ink-faint">บันทึกของคุณจะปรากฏที่นี่ ✨</p>
         ) : (

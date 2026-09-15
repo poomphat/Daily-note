@@ -91,8 +91,8 @@ export default function Header({
   const openPicker = () => dateInput.current?.showPicker?.();
 
   return (
-    <header className="sticky top-0 z-20 shrink-0 border-b border-line/60 bg-paper/85 backdrop-blur-xl">
-      <div className="mx-auto flex w-full max-w-3xl flex-col gap-2 px-4 py-2.5 sm:gap-2.5 sm:px-6 sm:py-3 lg:max-w-none lg:px-8">
+    <header className="sticky top-0 z-30 shrink-0 overflow-visible border-b border-line/60 bg-paper/85 backdrop-blur-xl">
+      <div className="mx-auto flex w-full max-w-3xl flex-col gap-2 px-4 py-2.5 sm:gap-2.5 sm:px-6 sm:py-3 lg:max-w-none lg:px-6 xl:px-8">
         {/* Top row: tabs + primary actions only */}
         <div className="flex items-center gap-2">
           <div className="lg:hidden">
