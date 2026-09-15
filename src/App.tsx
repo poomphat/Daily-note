@@ -129,13 +129,14 @@ export default function App() {
     const onKeyDown = (e: KeyboardEvent) => {
       const typing = isTypingTarget(e.target);
 
-      if (eraOpen) return;
-
       if ((e.metaKey || e.ctrlKey) && e.key === "k") {
         e.preventDefault();
+        setEraOpen(false);
         setSearchOpen(true);
         return;
       }
+
+      if (eraOpen) return;
 
       if ((e.metaKey || e.ctrlKey) && e.key === "Enter") {
         e.preventDefault();
