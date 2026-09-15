@@ -9,6 +9,7 @@ import {
 } from "../lib/export";
 import {
   Bell,
+  Calendar,
   Download,
   Help,
   Moon,
@@ -25,6 +26,7 @@ interface Props {
   onToggleDarkMode: () => void;
   onOpenReminder: () => void;
   onOpenShortcuts: () => void;
+  onOpenEra: () => void;
   onImport: (store: NotesStore, mode: "merge" | "replace") => void;
   onMessage: (message: string) => void;
 }
@@ -44,6 +46,7 @@ export default function ToolsMenu({
   onToggleDarkMode,
   onOpenReminder,
   onOpenShortcuts,
+  onOpenEra,
   onImport,
   onMessage,
 }: Props) {
@@ -149,6 +152,13 @@ export default function ToolsMenu({
             <Help className="h-4 w-4 text-ink-soft" />
             คีย์ลัด
             <span className="ml-auto text-sm text-ink-faint">?</span>
+          </button>
+          <button
+            onClick={() => closeAnd(onOpenEra)}
+            className={itemClass}
+          >
+            <Calendar className="h-4 w-4 text-ink-soft" />
+            แปลง พ.ศ. / ค.ศ.
           </button>
 
           <div className="my-1.5 border-t border-line/70" />

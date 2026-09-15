@@ -16,6 +16,7 @@ import EmptyState from "./components/EmptyState";
 import SearchModal from "./components/SearchModal";
 import ShortcutsModal from "./components/ShortcutsModal";
 import ReminderModal from "./components/ReminderModal";
+import EraConverterModal from "./components/EraConverterModal";
 import Toast from "./components/Toast";
 import WeekView from "./components/WeekView";
 import TimelineView from "./components/TimelineView";
@@ -66,6 +67,7 @@ export default function App() {
   const [searchOpen, setSearchOpen] = useState(false);
   const [shortcutsOpen, setShortcutsOpen] = useState(false);
   const [reminderOpen, setReminderOpen] = useState(false);
+  const [eraOpen, setEraOpen] = useState(false);
   const [copyConfirm, setCopyConfirm] = useState(false);
   const [undo, setUndo] = useState<{ entry: Entry; index: number } | null>(null);
   const [message, setMessage] = useState<string | null>(null);
@@ -127,6 +129,8 @@ export default function App() {
     const onKeyDown = (e: KeyboardEvent) => {
       const typing = isTypingTarget(e.target);
 
+      if (eraOpen) return;
+
       if ((e.metaKey || e.ctrlKey) && e.key === "k") {
         e.preventDefault();
         setSearchOpen(true);
@@ -179,7 +183,7 @@ export default function App() {
 
     window.addEventListener("keydown", onKeyDown);
     return () => window.removeEventListener("keydown", onKeyDown);
-  }, [activeDate, setActiveDate, searchOpen, shortcutsOpen, tab]);
+  }, [activeDate, setActiveDate, searchOpen, shortcutsOpen, eraOpen, tab]);
 
   const showEmpty = isDayEmpty(day);
   const autoFocus = isToday(activeDate) && day.entries.length === 0;
@@ -229,6 +233,7 @@ export default function App() {
           onOpenSearch={() => setSearchOpen(true)}
           onOpenShortcuts={() => setShortcutsOpen(true)}
           onOpenReminder={() => setReminderOpen(true)}
+          onOpenEra={() => setEraOpen(true)}
           reminderOn={settings.reminder.enabled}
           onImport={mergeStore}
           onMessage={setMessage}
@@ -338,6 +343,8 @@ export default function App() {
           onClose={() => setReminderOpen(false)}
         />
       )}
+
+      {eraOpen && <EraConverterModal onClose={() => setEraOpen(false)} />}
 
       {undo && (
         <Toast
