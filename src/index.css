@@ -80,6 +80,24 @@ body {
   min-height: 100dvh;
 }
 
+#root {
+  min-height: 100dvh;
+}
+
+/* Desktop shell: lock the app to the viewport; only inner panes scroll.
+   Keep overflow on #root (not html/body) so fixed overlays and virtual
+   keyboards are less likely to be clipped on tablets at the lg breakpoint. */
+@media (min-width: 1024px) {
+  html,
+  body {
+    height: 100dvh;
+  }
+  #root {
+    height: 100dvh;
+    overflow: hidden;
+  }
+}
+
 .tap-target {
   min-height: 2.75rem;
   min-width: 2.75rem;
@@ -183,6 +201,18 @@ body {
   background: var(--color-danger-soft);
 }
 
+/* Inner panes scroll; keep gutter stable so columns don't jump */
+.pane-scroll {
+  overflow-y: auto;
+  overscroll-behavior-y: contain;
+}
+
+@media (min-width: 1024px) {
+  .pane-scroll {
+    scrollbar-gutter: stable;
+  }
+}
+
 /* Subtle, tasteful scrollbars */
 * {
   scrollbar-width: thin;
@@ -221,4 +251,13 @@ body {
 
 textarea {
   field-sizing: content;
+}
+
+@media (min-width: 1024px) {
+  textarea.free-note-fill {
+    field-sizing: fixed;
+    min-height: 8.5rem;
+    flex: 1 1 auto;
+    overflow-y: auto;
+  }
 }
