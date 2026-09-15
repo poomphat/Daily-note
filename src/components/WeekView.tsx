@@ -132,7 +132,7 @@ export default function WeekView({ store, onSelectDay }: Props) {
   const activeDays = notes.filter((d) => !isDayEmpty(d)).length;
 
   return (
-    <div className="flex flex-col gap-4">
+    <div className="flex min-w-0 flex-col gap-4">
       <div className="flex items-center justify-between gap-2">
         <div className="min-w-0">
           <h2 className="font-display text-lg font-semibold text-ink">
@@ -178,7 +178,7 @@ export default function WeekView({ store, onSelectDay }: Props) {
         />
       </div>
 
-      <div className="grid min-w-0 gap-3 sm:grid-cols-2 lg:grid-cols-4 xl:grid-cols-7 xl:grid-rows-1 xl:items-stretch xl:gap-2">
+      <div className="grid min-w-0 gap-3 overflow-x-auto sm:grid-cols-2 lg:grid-cols-4 xl:grid-cols-7 xl:grid-rows-1 xl:items-stretch xl:gap-2">
         {days.map((k, i) => (
           <WeekCell key={k} dateKey={k} day={notes[i]} onSelect={onSelectDay} />
         ))}

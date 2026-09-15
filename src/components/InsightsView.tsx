@@ -157,7 +157,9 @@ export default function InsightsView({ store, habits, onSelectDay }: Props) {
       {(insights.moodTotal > 0 || habits.length > 0) && (
         <div className="grid min-w-0 gap-6 lg:grid-cols-2 lg:items-start">
           {insights.moodTotal > 0 && (
-            <section className="surface surface-ring min-w-0 rounded-2xl p-4 shadow-sm sm:p-5">
+            <section
+              className={`surface surface-ring min-w-0 rounded-2xl p-4 shadow-sm sm:p-5 ${habits.length === 0 ? "lg:col-span-2" : ""}`}
+            >
               <h3 className="mb-3 font-display text-base font-semibold text-ink">อารมณ์ที่ผ่านมา</h3>
               <div className="flex items-end justify-between gap-2">
                 {MOODS.map((m) => {
