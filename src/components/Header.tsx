@@ -29,6 +29,7 @@ interface Props {
   onOpenSearch: () => void;
   onOpenShortcuts: () => void;
   onOpenReminder: () => void;
+  onOpenEra: () => void;
   reminderOn: boolean;
   onImport: (store: NotesStore, mode: "merge" | "replace") => void;
   onMessage: (message: string) => void;
@@ -78,6 +79,7 @@ export default function Header({
   onOpenSearch,
   onOpenShortcuts,
   onOpenReminder,
+  onOpenEra,
   reminderOn,
   onImport,
   onMessage,
@@ -125,6 +127,7 @@ export default function Header({
               onToggleDarkMode={onToggleDarkMode}
               onOpenReminder={onOpenReminder}
               onOpenShortcuts={onOpenShortcuts}
+              onOpenEra={onOpenEra}
               onImport={onImport}
               onMessage={onMessage}
             />

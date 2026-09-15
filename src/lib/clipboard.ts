@@ -7,12 +7,16 @@ export function formatEntriesForJira(entries: Entry[]): string {
     .join("\n");
 }
 
-export async function copyEntriesForJira(entries: Entry[]): Promise<boolean> {
-  if (entries.length === 0) return false;
+export async function copyText(text: string): Promise<void> {
   try {
-    await navigator.clipboard.writeText(formatEntriesForJira(entries));
-    return true;
+    await navigator.clipboard.writeText(text);
   } catch {
     throw new Error("ไม่สามารถคัดลอกได้ — ลองอนุญาตการเข้าถึง clipboard");
   }
+}
+
+export async function copyEntriesForJira(entries: Entry[]): Promise<boolean> {
+  if (entries.length === 0) return false;
+  await copyText(formatEntriesForJira(entries));
+  return true;
 }
