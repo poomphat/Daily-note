@@ -42,7 +42,7 @@ export default function ReminderModal({ reminder, onChange, onClose }: Props) {
   return (
     <div className="fixed inset-0 z-50 grid place-items-center p-4">
       <div className="absolute inset-0 bg-ink/30 backdrop-blur-sm" onClick={onClose} />
-      <div className="animate-rise surface relative w-full max-w-sm rounded-2xl p-5 shadow-2xl">
+      <div className="animate-rise surface relative max-h-[calc(100dvh-2rem)] w-full max-w-sm overflow-y-auto rounded-2xl p-5 shadow-2xl">
         <div className="mb-4 flex items-center justify-between">
           <h2 className="flex items-center gap-2 font-display text-lg font-semibold text-ink">
             <Bell className="h-5 w-5 text-brand" />

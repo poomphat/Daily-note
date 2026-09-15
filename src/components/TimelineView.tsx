@@ -64,7 +64,7 @@ export default function TimelineView({ days, onSelectDay }: Props) {
             </span>
             <div className="h-px flex-1 bg-line" />
           </div>
-          <div className="flex flex-col gap-2.5">
+          <div className="grid min-w-0 gap-2.5 lg:grid-cols-2">
             {g.days.map((d) => (
               <DayCard key={d.date} day={d} onSelect={onSelectDay} />
             ))}

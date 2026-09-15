@@ -1,4 +1,5 @@
 import { useState } from "react";
+import { createPortal } from "react-dom";
 import type { Habit, NotesStore } from "../lib/types";
 import { habitStreak } from "../lib/habits";
 import { Check, Plus, Trash, X } from "./icons";
@@ -85,13 +86,14 @@ export default function HabitTracker({
         </div>
       )}
 
-      {manage && (
-        <div className="fixed inset-0 z-50 grid place-items-center p-4">
+      {manage &&
+        createPortal(
+          <div className="fixed inset-0 z-50 grid place-items-center p-4">
           <div
             className="absolute inset-0 bg-ink/30 backdrop-blur-sm"
             onClick={() => setManage(false)}
           />
-          <div className="animate-rise surface relative w-full max-w-sm rounded-2xl p-5 shadow-2xl">
+          <div className="animate-rise surface relative max-h-[calc(100dvh-2rem)] w-full max-w-sm overflow-y-auto rounded-2xl p-5 shadow-2xl">
             <div className="mb-4 flex items-center justify-between">
               <h2 className="font-display text-lg font-semibold text-ink">
                 จัดการนิสัย
@@ -166,7 +168,8 @@ export default function HabitTracker({
               </div>
             </div>
           </div>
-        </div>
+        </div>,
+        document.body,
       )}
     </div>
   );

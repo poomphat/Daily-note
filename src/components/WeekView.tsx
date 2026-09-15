@@ -46,14 +46,14 @@ function WeekCell({
   return (
     <button
       onClick={() => onSelect(dateKey)}
-      className={`group flex items-start gap-3 rounded-2xl border p-4 text-left transition ${
+      className={`group flex h-full min-w-0 items-start gap-3 rounded-2xl border p-4 text-left transition lg:min-h-[11rem] lg:flex-col lg:gap-1.5 lg:p-2.5 xl:min-h-[12rem] ${
         empty
           ? "surface-muted border-dashed hover:bg-surface"
           : "surface surface-ring shadow-sm hover:-translate-y-0.5 hover:shadow-md"
       }`}
     >
       <div
-        className={`grid h-12 w-12 shrink-0 place-items-center rounded-xl leading-none ${
+        className={`grid h-12 w-12 shrink-0 place-items-center rounded-xl leading-none lg:flex lg:h-auto lg:w-full lg:flex-col lg:items-start lg:gap-0 lg:rounded-lg lg:px-1.5 lg:py-1 ${
           today
             ? "bg-brand text-on-brand"
             : empty
@@ -64,19 +64,19 @@ function WeekCell({
         <span className="text-xs font-medium opacity-80">
           {formatWeekday(dateKey)}
         </span>
-        <span className="font-display text-lg font-semibold">
+        <span className="font-display text-lg font-semibold lg:text-base">
           {formatDayNum(dateKey)}
         </span>
       </div>
 
-      <div className="min-w-0 flex-1 pt-0.5">
-        <div className="flex items-center gap-1.5">
-          <span className="text-base font-semibold text-ink">
+      <div className="min-w-0 flex-1 pt-0.5 lg:w-full lg:pt-0">
+        <div className="flex min-w-0 flex-wrap items-baseline gap-x-1.5 gap-y-0">
+          <span className="min-w-0 text-base font-semibold leading-snug text-ink lg:text-xs lg:leading-tight">
             {empty ? (future ? "—" : "ว่าง") : `${day.entries.length} รายการ`}
           </span>
-          {day.mood && <span className="text-base">{MOOD_MAP[day.mood].emoji}</span>}
+          {day.mood && <span className="text-base lg:text-sm">{MOOD_MAP[day.mood].emoji}</span>}
           {!empty && day.entries.length > 0 && (
-            <span className="ml-auto text-xs font-medium text-ink-faint">
+            <span className="text-xs font-medium text-ink-faint">
               {done}/{day.entries.length}
             </span>
           )}
@@ -85,12 +85,12 @@ function WeekCell({
         {!empty && day.entries.length > 0 && (
           <ul className="mt-1 flex flex-col gap-0.5">
             {day.entries.slice(0, 2).map((e) => (
-              <li key={e.id} className="flex items-center gap-1.5 text-sm">
+              <li key={e.id} className="flex min-w-0 items-center gap-1.5 text-sm lg:text-xs">
                 <span
                   className={`h-1.5 w-1.5 shrink-0 rounded-full ${CATEGORY_MAP[e.category].dot}`}
                 />
                 <span
-                  className={`truncate ${
+                  className={`min-w-0 truncate ${
                     e.done ? "text-ink-faint line-through" : "text-ink-soft"
                   }`}
                 >
@@ -107,7 +107,7 @@ function WeekCell({
         )}
 
         {!empty && day.entries.length === 0 && day.reflection && (
-          <p className="mt-1 line-clamp-2 text-sm text-ink-faint">
+          <p className="mt-1 line-clamp-2 text-sm text-ink-faint lg:text-xs">
             {day.reflection}
           </p>
         )}
@@ -132,7 +132,7 @@ export default function WeekView({ store, onSelectDay }: Props) {
   const activeDays = notes.filter((d) => !isDayEmpty(d)).length;
 
   return (
-    <div className="flex flex-col gap-4">
+    <div className="flex min-w-0 flex-col gap-4">
       <div className="flex items-center justify-between gap-2">
         <div className="min-w-0">
           <h2 className="font-display text-lg font-semibold text-ink">
@@ -178,7 +178,7 @@ export default function WeekView({ store, onSelectDay }: Props) {
         />
       </div>
 
-      <div className="grid gap-3 sm:grid-cols-2">
+      <div className="grid min-w-0 gap-3 overflow-x-auto sm:grid-cols-2 lg:grid-cols-4 xl:grid-cols-7 xl:grid-rows-1 xl:items-stretch xl:gap-2">
         {days.map((k, i) => (
           <WeekCell key={k} dateKey={k} day={notes[i]} onSelect={onSelectDay} />
         ))}

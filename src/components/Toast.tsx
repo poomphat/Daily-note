@@ -22,7 +22,7 @@ export default function Toast({
   }, [onDismiss, durationMs]);
 
   return (
-    <div className="animate-rise surface fixed bottom-6 left-1/2 z-50 flex -translate-x-1/2 items-center gap-3 rounded-2xl px-5 py-3.5 text-base shadow-2xl">
+    <div className="animate-rise surface fixed bottom-6 left-1/2 z-50 flex -translate-x-1/2 items-center gap-3 rounded-2xl px-5 py-3.5 text-base shadow-2xl lg:bottom-10">
       <span>{message}</span>
       {actionLabel && onAction && (
         <button

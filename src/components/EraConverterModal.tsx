@@ -127,7 +127,7 @@ export default function EraConverterModal({ onClose }: Props) {
         onClick={onClose}
       />
       <div
-        className="animate-rise surface relative w-full max-w-sm rounded-2xl p-5 shadow-2xl"
+        className="animate-rise surface relative max-h-[calc(100dvh-2rem)] w-full max-w-sm overflow-y-auto rounded-2xl p-5 shadow-2xl"
         role="dialog"
         aria-modal="true"
         aria-labelledby={titleId}
