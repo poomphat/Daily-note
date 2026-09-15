@@ -46,14 +46,14 @@ function WeekCell({
   return (
     <button
       onClick={() => onSelect(dateKey)}
-      className={`group flex items-start gap-3 rounded-2xl border p-4 text-left transition ${
+      className={`group flex h-full items-start gap-3 rounded-2xl border p-4 text-left transition xl:min-h-0 xl:flex-col xl:gap-2 xl:p-3 ${
         empty
           ? "surface-muted border-dashed hover:bg-surface"
           : "surface surface-ring shadow-sm hover:-translate-y-0.5 hover:shadow-md"
       }`}
     >
       <div
-        className={`grid h-12 w-12 shrink-0 place-items-center rounded-xl leading-none ${
+        className={`grid h-12 w-12 shrink-0 place-items-center rounded-xl leading-none xl:h-auto xl:w-full xl:flex xl:flex-row xl:items-center xl:justify-between xl:rounded-lg xl:px-1 xl:py-0.5 ${
           today
             ? "bg-brand text-on-brand"
             : empty
@@ -64,14 +64,14 @@ function WeekCell({
         <span className="text-xs font-medium opacity-80">
           {formatWeekday(dateKey)}
         </span>
-        <span className="font-display text-lg font-semibold">
+        <span className="font-display text-lg font-semibold xl:text-base">
           {formatDayNum(dateKey)}
         </span>
       </div>
 
-      <div className="min-w-0 flex-1 pt-0.5">
+      <div className="min-w-0 flex-1 pt-0.5 xl:pt-0">
         <div className="flex items-center gap-1.5">
-          <span className="text-base font-semibold text-ink">
+          <span className="text-base font-semibold text-ink xl:text-sm">
             {empty ? (future ? "—" : "ว่าง") : `${day.entries.length} รายการ`}
           </span>
           {day.mood && <span className="text-base">{MOOD_MAP[day.mood].emoji}</span>}
@@ -178,7 +178,7 @@ export default function WeekView({ store, onSelectDay }: Props) {
         />
       </div>
 
-      <div className="grid gap-3 sm:grid-cols-2">
+      <div className="grid gap-3 sm:grid-cols-2 xl:grid-cols-7 xl:grid-rows-1 xl:items-stretch xl:gap-2">
         {days.map((k, i) => (
           <WeekCell key={k} dateKey={k} day={notes[i]} onSelect={onSelectDay} />
         ))}

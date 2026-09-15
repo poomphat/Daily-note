@@ -73,6 +73,7 @@ export default function App() {
   const [message, setMessage] = useState<string | null>(null);
 
   const quickAddRef = useRef<QuickAddHandle>(null);
+  const mainRef = useRef<HTMLElement>(null);
 
   const yesterdayHasEntries = Boolean(
     store[addDays(activeDate, -1)]?.entries.length,
@@ -97,6 +98,7 @@ export default function App() {
     setTab("day");
     setMenuOpen(false);
     window.scrollTo({ top: 0, behavior: "smooth" });
+    mainRef.current?.scrollTo({ top: 0, behavior: "smooth" });
   }, [setActiveDate]);
 
   const handleRemove = useCallback(
@@ -190,8 +192,8 @@ export default function App() {
   const autoFocus = isToday(activeDate) && day.entries.length === 0;
 
   return (
-    <div className="min-h-dvh lg:grid lg:grid-cols-[300px_1fr]">
-      <div className="sticky top-0 hidden h-dvh border-r border-line/70 bg-paper-2/40 backdrop-blur-sm lg:block">
+    <div className="min-h-dvh lg:grid lg:h-dvh lg:grid-cols-[300px_1fr] lg:overflow-hidden">
+      <div className="hidden min-h-0 border-r border-line/70 bg-paper-2/40 backdrop-blur-sm lg:block lg:h-full lg:overflow-hidden">
         <Sidebar
           days={daysWithNotes}
           activeDate={activeDate}
@@ -218,7 +220,7 @@ export default function App() {
         </div>
       )}
 
-      <div className="flex min-h-dvh flex-col">
+      <div className="flex min-h-dvh flex-col lg:h-full lg:min-h-0 lg:overflow-hidden">
         <Header
           tab={tab}
           setTab={setTab}
@@ -240,7 +242,14 @@ export default function App() {
           onMessage={setMessage}
         />
 
-        <main className="mx-auto w-full max-w-2xl flex-1 px-4 py-6 sm:px-6 sm:py-8">
+        <main
+          ref={mainRef}
+          className={`mx-auto w-full max-w-2xl flex-1 px-4 py-6 sm:px-6 sm:py-8 lg:mx-0 lg:max-w-none lg:min-h-0 lg:px-8 lg:py-6 ${
+            tab === "day"
+              ? "lg:flex lg:flex-col lg:overflow-hidden"
+              : "lg:overflow-y-auto lg:overscroll-y-contain"
+          }`}
+        >
           {tab === "week" && (
             <WeekView store={store} onSelectDay={openDay} />
           )}
@@ -254,77 +263,90 @@ export default function App() {
           )}
 
           {tab === "day" && (
-          <div className="flex flex-col gap-7 sm:gap-9">
-            <section aria-label="เพิ่มกิจกรรม">
-              <QuickAdd
-                ref={quickAddRef}
-                onAdd={addEntry}
-                onAddMany={addEntries}
-                onCopyYesterday={handleCopyYesterday}
-                canCopyYesterday={yesterdayHasEntries}
-                onCarryOver={handleCarryOver}
-                carryOverCount={isToday(activeDate) ? carryOver.count : 0}
-                autoFocus={autoFocus}
-              />
-            </section>
+          <div className="flex min-h-0 min-w-0 flex-1 flex-col gap-7 sm:gap-9 lg:grid lg:h-full lg:grid-cols-[minmax(0,1.65fr)_minmax(16rem,1fr)] lg:grid-rows-[minmax(0,1fr)] lg:items-stretch lg:gap-8 lg:overflow-hidden">
+            <div className="flex min-h-0 min-w-0 flex-col gap-5 lg:h-full lg:overflow-y-auto lg:overscroll-y-contain lg:pr-1">
+              <section aria-label="เพิ่มกิจกรรม">
+                <QuickAdd
+                  ref={quickAddRef}
+                  onAdd={addEntry}
+                  onAddMany={addEntries}
+                  onCopyYesterday={handleCopyYesterday}
+                  canCopyYesterday={yesterdayHasEntries}
+                  onCarryOver={handleCarryOver}
+                  carryOverCount={isToday(activeDate) ? carryOver.count : 0}
+                  autoFocus={autoFocus}
+                />
+              </section>
 
-            {copyConfirm && (
-              <div className="animate-rise flex items-center justify-between gap-3 rounded-xl bg-warning-soft/80 px-4 py-3 text-base text-warning">
-                <span>คัดลอกรายการจากเมื่อวานมาเพิ่มในวันนี้?</span>
-                <div className="flex gap-1">
-                  <button
-                    onClick={() => setCopyConfirm(false)}
-                    className="rounded-lg px-2.5 py-1 transition hover:bg-warning-soft"
-                  >
-                    ยกเลิก
-                  </button>
-                  <button
-                    onClick={handleCopyYesterday}
-                    className="rounded-lg bg-brand px-2.5 py-1 font-medium text-on-brand transition hover:bg-brand/90"
-                  >
-                    ยืนยัน
-                  </button>
+              {copyConfirm && (
+                <div className="animate-rise flex items-center justify-between gap-3 rounded-xl bg-warning-soft/80 px-4 py-3 text-base text-warning">
+                  <span>คัดลอกรายการจากเมื่อวานมาเพิ่มในวันนี้?</span>
+                  <div className="flex gap-1">
+                    <button
+                      onClick={() => setCopyConfirm(false)}
+                      className="rounded-lg px-2.5 py-1 transition hover:bg-warning-soft"
+                    >
+                      ยกเลิก
+                    </button>
+                    <button
+                      onClick={handleCopyYesterday}
+                      className="rounded-lg bg-brand px-2.5 py-1 font-medium text-on-brand transition hover:bg-brand/90"
+                    >
+                      ยืนยัน
+                    </button>
+                  </div>
                 </div>
-              </div>
-            )}
-
-            <section aria-label="รายการวันนี้">
-              {showEmpty ? (
-                <EmptyState activeDate={activeDate} yesterdayPreview={yesterdayPreview} />
-              ) : (
-                day.entries.length > 0 && (
-                  <EntryList
-                    entries={day.entries}
-                    onToggle={toggleEntry}
-                    onEdit={editEntry}
-                    onRemove={handleRemove}
-                    onReorder={reorderEntries}
-                    onCopied={() => setMessage("คัดลอก bullet สำหรับ Jira แล้ว")}
-                    onCopyError={setMessage}
-                  />
-                )
               )}
-            </section>
 
-            <section className="flex flex-col gap-5 border-t border-line/50 pt-5 sm:gap-6 sm:pt-6" aria-label="สรุปวัน">
-              <MoodPicker mood={day.mood} onChange={setMood} />
-              <HabitTracker
-                habits={activeHabits}
-                habitLog={day.habitLog}
-                store={store}
-                onToggle={toggleHabit}
-                onAdd={addHabit}
-                onRemove={removeHabit}
-              />
-              <FreeNote value={day.reflection} onChange={setReflection} />
+              <section aria-label="รายการวันนี้">
+                {showEmpty ? (
+                  <EmptyState activeDate={activeDate} yesterdayPreview={yesterdayPreview} />
+                ) : (
+                  day.entries.length > 0 && (
+                    <EntryList
+                      entries={day.entries}
+                      onToggle={toggleEntry}
+                      onEdit={editEntry}
+                      onRemove={handleRemove}
+                      onReorder={reorderEntries}
+                      onCopied={() => setMessage("คัดลอก bullet สำหรับ Jira แล้ว")}
+                      onCopyError={setMessage}
+                    />
+                  )
+                )}
+              </section>
+            </div>
+
+            <section
+              className="flex min-h-0 min-w-0 flex-col gap-5 border-t border-line/50 pt-5 sm:gap-6 sm:pt-6 lg:h-full lg:overflow-hidden lg:border-l lg:border-t-0 lg:pl-8 lg:pt-0"
+              aria-label="สรุปวัน"
+            >
+              <div className="shrink-0">
+                <MoodPicker mood={day.mood} onChange={setMood} />
+              </div>
+              <div className="shrink-0">
+                <HabitTracker
+                  habits={activeHabits}
+                  habitLog={day.habitLog}
+                  store={store}
+                  onToggle={toggleHabit}
+                  onAdd={addHabit}
+                  onRemove={removeHabit}
+                />
+              </div>
+              <FreeNote fill value={day.reflection} onChange={setReflection} />
             </section>
           </div>
           )}
 
-          <footer className="mt-12 pb-6 text-center text-sm text-ink-faint">
+          <footer className="mt-8 pb-4 text-center text-sm text-ink-faint lg:hidden">
             เก็บข้อมูลไว้ในเครื่องของคุณเท่านั้น · ร่างต้นแบบ (draft)
           </footer>
         </main>
+
+        <footer className="hidden shrink-0 border-t border-line/50 px-8 py-1.5 text-center text-xs text-ink-faint lg:block">
+          เก็บข้อมูลไว้ในเครื่องของคุณเท่านั้น · ร่างต้นแบบ (draft)
+        </footer>
       </div>
 
       {searchOpen && (
