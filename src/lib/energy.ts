@@ -62,6 +62,8 @@ export function energyLevelForScore(score: number): EnergyLevel {
 export function computeDayEnergy(day: DayNote | undefined): EnergyBreakdown {
   const entryCount = day?.entries.length ?? 0;
   const reflectionLength = day?.reflection.trim().length ?? 0;
+  // Counts habitLog truthy keys as-is (including orphaned ids after a habit
+  // was deleted). Enough for a small bonus; wire activeHabitIds later if needed.
   const habitLog = day?.habitLog ?? {};
   const habitsDone = Object.values(habitLog).filter(Boolean).length;
   const hasMood = Boolean(day?.mood);

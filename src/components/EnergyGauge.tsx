@@ -1,5 +1,5 @@
-import { useMemo } from "react";
 import { computeDayEnergy, type EnergyLevel } from "../lib/energy";
+import { formatCompact, isToday } from "../lib/date";
 import type { DayNote } from "../lib/types";
 
 interface Props {
@@ -20,16 +20,18 @@ const TEXT_CLASS: Record<EnergyLevel["id"], string> = {
   full: "text-success",
 };
 
+function energyScopeLabel(date: string): string {
+  return isToday(date) ? "วันนี้" : formatCompact(date);
+}
+
 /** Compact live gauge showing how much the active day has been journaled. */
 export default function EnergyGauge({ day }: Props) {
-  const energy = useMemo(() => computeDayEnergy(day), [day]);
-  const { score, level } = energy;
+  const { score, level } = computeDayEnergy(day);
+  const scope = energyScopeLabel(day.date);
+  const summary = `พลังของ${scope} ${score}% · ${level.label}`;
 
   return (
-    <div
-      className="flex items-center gap-2"
-      title={`พลังของวันนี้ ${score}% · ${level.label}`}
-    >
+    <div className="flex items-center gap-2" title={summary}>
       <span className="shrink-0 text-sm leading-none transition-opacity duration-300" aria-hidden>
         {level.emoji}
       </span>
@@ -39,15 +41,15 @@ export default function EnergyGauge({ day }: Props) {
         aria-valuenow={score}
         aria-valuemin={0}
         aria-valuemax={100}
-        aria-label={`พลังของวันนี้ ${score} เปอร์เซ็นต์ ระดับ${level.label}`}
+        aria-valuetext={`${score}% · ${level.label}`}
+        aria-label={`พลังของ${scope} ${score} เปอร์เซ็นต์ ระดับ${level.label}`}
       >
         <div
           className={`h-full rounded-full transition-[width,background-color] duration-500 ease-out ${BAR_CLASS[level.id]}`}
           style={{ width: `${score}%` }}
         />
       </div>
-      {/* Decorative echo of the progressbar's aria-label above — hidden from
-          assistive tech to avoid announcing the same value twice. */}
+      {/* Decorative echo of the progressbar label — hidden to avoid double announcement. */}
       <span
         aria-hidden
         className={`shrink-0 text-xs font-semibold tabular-nums transition-colors duration-300 ${TEXT_CLASS[level.id]}`}
