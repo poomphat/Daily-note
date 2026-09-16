@@ -30,7 +30,7 @@ export default function EnergyGauge({ day }: Props) {
       className="flex items-center gap-2"
       title={`พลังของวันนี้ ${score}% · ${level.label}`}
     >
-      <span className="shrink-0 text-sm leading-none" aria-hidden>
+      <span className="shrink-0 text-sm leading-none transition-opacity duration-300" aria-hidden>
         {level.emoji}
       </span>
       <div
@@ -42,14 +42,22 @@ export default function EnergyGauge({ day }: Props) {
         aria-label={`พลังของวันนี้ ${score} เปอร์เซ็นต์ ระดับ${level.label}`}
       >
         <div
-          className={`h-full rounded-full transition-all duration-500 ease-out ${BAR_CLASS[level.id]}`}
+          className={`h-full rounded-full transition-[width,background-color] duration-500 ease-out ${BAR_CLASS[level.id]}`}
           style={{ width: `${score}%` }}
         />
       </div>
-      <span className={`shrink-0 text-xs font-semibold tabular-nums ${TEXT_CLASS[level.id]}`}>
+      {/* Decorative echo of the progressbar's aria-label above — hidden from
+          assistive tech to avoid announcing the same value twice. */}
+      <span
+        aria-hidden
+        className={`shrink-0 text-xs font-semibold tabular-nums transition-colors duration-300 ${TEXT_CLASS[level.id]}`}
+      >
         {score}%
       </span>
-      <span className={`hidden shrink-0 text-xs font-medium sm:inline ${TEXT_CLASS[level.id]}`}>
+      <span
+        aria-hidden
+        className={`hidden shrink-0 text-xs font-medium transition-colors duration-300 sm:inline ${TEXT_CLASS[level.id]}`}
+      >
         {level.label}
       </span>
     </div>
