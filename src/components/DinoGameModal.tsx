@@ -179,12 +179,17 @@ export default function DinoGameModal({ onClose }: Props) {
       ctx.fillStyle = ink;
       const baseX = o.x;
       const top = GROUND_Y - o.h;
-      ctx.fillRect(baseX + o.w * 0.35, top, o.w * 0.3, o.h);
-      if (o.h > 28) {
-        ctx.fillRect(baseX, top + 8, o.w * 0.35, 6);
-        ctx.fillRect(baseX, top + 8, 5, 14);
-        ctx.fillRect(baseX + o.w * 0.65, top + 14, o.w * 0.35, 6);
-        ctx.fillRect(baseX + o.w - 5, top + 14, 5, 12);
+      const stemW = Math.max(6, o.w * 0.42);
+      const stemX = baseX + (o.w - stemW) / 2;
+      ctx.fillRect(stemX, top, stemW, o.h);
+      if (o.h > 26) {
+        const armH = 6;
+        const armY = top + Math.max(6, o.h * 0.28);
+        ctx.fillRect(baseX, armY, stemX - baseX + 2, armH);
+        ctx.fillRect(baseX, armY, 5, 14);
+        const rightArmY = top + Math.max(10, o.h * 0.42);
+        ctx.fillRect(stemX + stemW - 2, rightArmY, baseX + o.w - (stemX + stemW) + 2, armH);
+        ctx.fillRect(baseX + o.w - 5, rightArmY, 5, 12);
       }
     };
 
