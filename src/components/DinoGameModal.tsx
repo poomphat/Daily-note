@@ -13,6 +13,8 @@ const GRAVITY = 0.65;
 const JUMP_V = -11.5;
 const BASE_SPEED = 5.2;
 const MAX_SPEED = 11;
+/** Keep the play field tall enough to tap comfortably on narrow phones. */
+const MIN_PLAY_CSS_H = 128;
 
 type Phase = "ready" | "running" | "over";
 
@@ -67,7 +69,14 @@ export default function DinoGameModal({ onClose }: Props) {
   const distance = useRef(0);
   const frame = useRef(0);
   const raf = useRef(0);
-  const colors = useRef({ ink: "#23232a", faint: "#7c7c86", line: "#e7e5dd", brand: "#4f46e5" });
+  const colors = useRef({
+    ink: "#23232a",
+    soft: "#4f4f59",
+    faint: "#7c7c86",
+    line: "#e7e5dd",
+    brand: "#4f46e5",
+    playBg: "#efeee8",
+  });
 
   useEffect(() => {
     phaseRef.current = phase;
@@ -80,9 +89,11 @@ export default function DinoGameModal({ onClose }: Props) {
   const refreshColors = () => {
     colors.current = {
       ink: cssVar("--color-ink", "#23232a"),
+      soft: cssVar("--color-ink-soft", "#4f4f59"),
       faint: cssVar("--color-ink-faint", "#7c7c86"),
       line: cssVar("--color-line", "#e7e5dd"),
       brand: cssVar("--color-brand", "#4f46e5"),
+      playBg: cssVar("--color-paper-2", "#efeee8"),
     };
   };
 
@@ -136,7 +147,7 @@ export default function DinoGameModal({ onClose }: Props) {
       if (!wrap) return;
       const dpr = Math.min(window.devicePixelRatio || 1, 2);
       const cssW = wrap.clientWidth;
-      const cssH = Math.round((cssW / GAME_W) * GAME_H);
+      const cssH = Math.max(MIN_PLAY_CSS_H, Math.round((cssW / GAME_W) * GAME_H));
       canvas.style.width = `${cssW}px`;
       canvas.style.height = `${cssH}px`;
       canvas.width = Math.round(cssW * dpr);
@@ -150,7 +161,7 @@ export default function DinoGameModal({ onClose }: Props) {
     if (wrapRef.current) ro.observe(wrapRef.current);
 
     const drawDino = (x: number, y: number, runFrame: number) => {
-      const { ink } = colors.current;
+      const { ink, playBg } = colors.current;
       ctx.fillStyle = ink;
       // body
       ctx.fillRect(x + 8, y - 28, 28, 22);
@@ -158,8 +169,10 @@ export default function DinoGameModal({ onClose }: Props) {
       ctx.fillRect(x + 28, y - 40, 22, 16);
       // snout
       ctx.fillRect(x + 46, y - 36, 8, 8);
-      // eye
-      ctx.clearRect(x + 42, y - 36, 3, 3);
+      // eye (paint over body — clearRect leaves a hole on translucent wraps)
+      ctx.fillStyle = playBg;
+      ctx.fillRect(x + 42, y - 36, 3, 3);
+      ctx.fillStyle = ink;
       // tail
       ctx.fillRect(x, y - 20, 10, 8);
       // legs (simple run cycle)
@@ -223,11 +236,14 @@ export default function DinoGameModal({ onClose }: Props) {
       frame.current += 1;
       refreshColors();
 
-      const { faint, line, brand } = colors.current;
-      ctx.clearRect(0, 0, GAME_W, GAME_H);
+      const { soft, faint, brand, playBg } = colors.current;
+
+      // Solid playfield so sprites stay readable in both themes
+      ctx.fillStyle = playBg;
+      ctx.fillRect(0, 0, GAME_W, GAME_H);
 
       // ground
-      ctx.strokeStyle = line;
+      ctx.strokeStyle = soft;
       ctx.lineWidth = 2;
       ctx.beginPath();
       ctx.moveTo(0, GROUND_Y);
@@ -235,7 +251,7 @@ export default function DinoGameModal({ onClose }: Props) {
       ctx.stroke();
 
       // ground speckles scroll with distance
-      ctx.fillStyle = line;
+      ctx.fillStyle = faint;
       const scroll = distance.current % GAME_W;
       for (let i = 0; i < 12; i++) {
         const gx = ((i * 55 - scroll * 0.8) % GAME_W + GAME_W) % GAME_W;
@@ -296,7 +312,7 @@ export default function DinoGameModal({ onClose }: Props) {
 
       // HUD on canvas (subtle) — main scores are outside
       if (phaseRef.current === "ready") {
-        ctx.fillStyle = faint;
+        ctx.fillStyle = soft;
         ctx.font = "600 14px Sora, sans-serif";
         ctx.textAlign = "center";
         ctx.fillText("แตะหรือกด Space เพื่อเริ่ม", GAME_W / 2, GAME_H / 2 - 8);
@@ -307,7 +323,7 @@ export default function DinoGameModal({ onClose }: Props) {
         ctx.font = "700 16px Sora, sans-serif";
         ctx.textAlign = "center";
         ctx.fillText("เกมโอเวอร์", GAME_W / 2, GAME_H / 2 - 14);
-        ctx.fillStyle = faint;
+        ctx.fillStyle = soft;
         ctx.font = "500 13px IBM Plex Sans Thai, sans-serif";
         ctx.fillText("กด Space หรือแตะเพื่อเล่นใหม่", GAME_W / 2, GAME_H / 2 + 8);
       }
@@ -346,66 +362,68 @@ export default function DinoGameModal({ onClose }: Props) {
   };
 
   return (
-    <div className="fixed inset-0 z-50 grid place-items-center p-4">
+    <div className="fixed inset-0 z-50 grid place-items-center p-3 sm:p-4">
       <div
         className="absolute inset-0 bg-ink/30 backdrop-blur-sm"
         onClick={onClose}
       />
       <div
-        className="animate-rise surface relative max-h-[calc(100dvh-2rem)] w-full max-w-lg overflow-y-auto rounded-2xl p-5 shadow-2xl"
+        className="animate-rise surface relative flex max-h-[calc(100dvh-1.5rem)] w-full max-w-lg flex-col overflow-hidden rounded-2xl p-5 shadow-2xl sm:max-h-[calc(100dvh-2rem)]"
         role="dialog"
         aria-modal="true"
         aria-labelledby={titleId}
         onClick={(e) => e.stopPropagation()}
       >
-        <div className="mb-3 flex items-center justify-between gap-3">
+        <div className="mb-4 flex shrink-0 items-center justify-between gap-3">
           <h2
             id={titleId}
             className="flex min-w-0 items-center gap-2 font-display text-lg font-semibold leading-snug text-ink"
           >
             <Dino className="h-5 w-5 shrink-0 text-brand" />
-            <span>ไดโนเสาร์โดด</span>
+            <span className="truncate">ไดโนเสาร์โดด</span>
           </h2>
           <button
             type="button"
             onClick={onClose}
-            className="tap-target grid h-9 w-9 shrink-0 place-items-center rounded-lg text-ink-soft transition hover:bg-elevated"
+            className="tap-target grid h-9 w-9 shrink-0 place-items-center rounded-lg text-ink-faint transition hover:bg-paper-2 hover:text-ink"
             aria-label="ปิด"
           >
             <X className="h-4 w-4" />
           </button>
         </div>
 
-        <div className="mb-3 flex flex-wrap items-baseline justify-between gap-2 text-sm">
-          <p className="tabular-nums text-ink">
-            คะแนน{" "}
-            <span className="font-display text-base font-semibold">
-              {Math.floor(score).toString().padStart(4, "0")}
-            </span>
-          </p>
-          <p className="tabular-nums text-ink-soft">
-            สูงสุด{" "}
-            <span className="font-medium text-ink">
-              {highScore.toString().padStart(4, "0")}
-            </span>
+        <div className="min-h-0 flex-1 overflow-y-auto overscroll-contain">
+          <div className="mb-3 flex flex-wrap items-baseline justify-between gap-x-3 gap-y-1 text-sm">
+            <p className="tabular-nums text-ink-soft">
+              คะแนน{" "}
+              <span className="font-display text-base font-semibold text-ink">
+                {Math.floor(score).toString().padStart(4, "0")}
+              </span>
+            </p>
+            <p className="tabular-nums text-ink-faint">
+              สูงสุด{" "}
+              <span className="font-medium text-ink-soft">
+                {highScore.toString().padStart(4, "0")}
+              </span>
+            </p>
+          </div>
+
+          <div
+            ref={wrapRef}
+            className="select-none overflow-hidden rounded-xl bg-paper-2 ring-1 ring-line touch-manipulation"
+            onPointerDown={onPointer}
+            role="application"
+            aria-label="พื้นที่เล่นเกมไดโนเสาร์โดด กดหรือแตะเพื่อกระโดด"
+          >
+            <canvas ref={canvasRef} className="block w-full" />
+          </div>
+
+          <p className="mt-4 text-sm leading-relaxed text-ink-faint">
+            {phase === "ready" && "Space / ↑ / แตะเพื่อเริ่มและกระโดด · Esc ปิด"}
+            {phase === "running" && "กระโดดหลบกระบอง · Space / ↑ / แตะ"}
+            {phase === "over" && "เกมโอเวอร์ — กด Space หรือแตะเพื่อเล่นใหม่"}
           </p>
         </div>
-
-        <div
-          ref={wrapRef}
-          className="select-none overflow-hidden rounded-xl bg-paper-2/60 ring-1 ring-line touch-manipulation"
-          onPointerDown={onPointer}
-          role="application"
-          aria-label="พื้นที่เล่นเกมไดโนเสาร์โดด กดหรือแตะเพื่อกระโดด"
-        >
-          <canvas ref={canvasRef} className="block w-full" />
-        </div>
-
-        <p className="mt-3 text-sm leading-relaxed text-ink-faint">
-          {phase === "ready" && "Space / ↑ / แตะเพื่อเริ่มและกระโดด · Esc ปิด"}
-          {phase === "running" && "กระโดดหลบกระบอง · Space / ↑ / แตะ"}
-          {phase === "over" && "เกมโอเวอร์ — กด Space หรือแตะเพื่อเล่นใหม่"}
-        </p>
       </div>
     </div>
   );

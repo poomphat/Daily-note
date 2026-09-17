@@ -165,11 +165,13 @@ export default function ToolsMenu({
             แปลง พ.ศ. / ค.ศ.
           </button>
           <button
+            type="button"
             onClick={() => closeAnd(onOpenDino)}
             className={itemClass}
+            title="ไดโนเสาร์โดด"
           >
-            <Dino className="h-4 w-4 text-ink-soft" />
-            เกมไดโนเสาร์โดด
+            <Dino className="h-4 w-4 shrink-0 text-ink-soft" aria-hidden />
+            <span className="min-w-0 truncate">ไดโนเสาร์โดด</span>
           </button>
 
           <div className="my-1.5 border-t border-line/70" />

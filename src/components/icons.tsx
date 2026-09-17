@@ -184,11 +184,12 @@ export const MoreHorizontal = (p: IconProps) => (
   </svg>
 );
 
-/** Simple dino silhouette for the jump game menu entry. */
+/** Compact dino silhouette — reads clearly at 16–20px menu/modal sizes. */
 export const Dino = (p: IconProps) => (
   <svg {...base} {...p}>
-    <path d="M5 18v-5.5c0-1.2.8-2.2 1.9-2.4L9 10l1-3h3l1 2h2.5c1.4 0 2.5 1.1 2.5 2.5V14" />
-    <path d="M8 18v2M12 18v2" />
-    <path d="M15 8.5h1.5M10.5 8.2h.01" />
+    <path d="M4.5 17.5V12.8c0-1.3.9-2.3 2.1-2.5L8.8 10l.9-2.8h2.9l.8 1.9H16c1.3 0 2.3 1 2.3 2.3v2.6" />
+    <path d="M7.2 17.5v2.8M11.5 17.5v2.8" />
+    <path d="M4.5 14.2h2.2M14.8 8.2h1.8" />
+    <circle cx="10.4" cy="8" r="0.75" fill="currentColor" stroke="none" />
   </svg>
 );
