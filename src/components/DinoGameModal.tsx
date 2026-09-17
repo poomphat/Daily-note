@@ -5,7 +5,8 @@ interface Props {
   onClose: () => void;
 }
 
-const HIGH_SCORE_KEY = "daily-note-dino-highscore";
+const HIGH_SCORE_KEY = "daily-note:dino-highscore";
+const LEGACY_HIGH_SCORE_KEY = "daily-note-dino-highscore";
 const GAME_W = 600;
 const GAME_H = 180;
 const GROUND_Y = 148;
@@ -24,21 +25,39 @@ interface Obstacle {
   h: number;
 }
 
+function parseScore(raw: string | null): number {
+  if (raw == null) return 0;
+  const n = Number.parseInt(raw, 10);
+  return Number.isFinite(n) && n > 0 ? n : 0;
+}
+
 function readHighScore(): number {
   try {
-    const raw = localStorage.getItem(HIGH_SCORE_KEY);
-    const n = raw ? Number.parseInt(raw, 10) : 0;
-    return Number.isFinite(n) && n > 0 ? n : 0;
+    const current = localStorage.getItem(HIGH_SCORE_KEY);
+    if (current != null) return parseScore(current);
+
+    const legacy = localStorage.getItem(LEGACY_HIGH_SCORE_KEY);
+    if (legacy == null) return 0;
+
+    const migrated = parseScore(legacy);
+    if (migrated > 0) {
+      localStorage.setItem(HIGH_SCORE_KEY, String(migrated));
+    }
+    localStorage.removeItem(LEGACY_HIGH_SCORE_KEY);
+    return migrated;
   } catch {
     return 0;
   }
 }
 
-function writeHighScore(score: number) {
+/** Returns true when the value was written successfully. */
+function writeHighScore(score: number): boolean {
   try {
     localStorage.setItem(HIGH_SCORE_KEY, String(score));
+    return true;
   } catch {
     /* ignore quota / private mode */
+    return false;
   }
 }
 
@@ -51,6 +70,7 @@ function cssVar(name: string, fallback: string): string {
 
 export default function DinoGameModal({ onClose }: Props) {
   const titleId = useId();
+  const closeBtnRef = useRef<HTMLButtonElement>(null);
   const canvasRef = useRef<HTMLCanvasElement>(null);
   const wrapRef = useRef<HTMLDivElement>(null);
   const [phase, setPhase] = useState<Phase>("ready");
@@ -86,6 +106,10 @@ export default function DinoGameModal({ onClose }: Props) {
     highRef.current = highScore;
   }, [highScore]);
 
+  useEffect(() => {
+    closeBtnRef.current?.focus();
+  }, []);
+
   const refreshColors = () => {
     colors.current = {
       ink: cssVar("--color-ink", "#23232a"),
@@ -95,6 +119,19 @@ export default function DinoGameModal({ onClose }: Props) {
       brand: cssVar("--color-brand", "#4f46e5"),
       playBg: cssVar("--color-paper-2", "#efeee8"),
     };
+  };
+
+  const persistHighScoreIfNeeded = () => {
+    const s = Math.floor(scoreRef.current);
+    if (s > highRef.current && writeHighScore(s)) {
+      highRef.current = s;
+      setHighScore(s);
+    }
+  };
+
+  const handleClose = () => {
+    persistHighScoreIfNeeded();
+    onClose();
   };
 
   const resetRun = () => {
@@ -156,9 +193,17 @@ export default function DinoGameModal({ onClose }: Props) {
     };
 
     resize();
-    refreshColors();
     const ro = new ResizeObserver(resize);
     if (wrapRef.current) ro.observe(wrapRef.current);
+
+    // Theme colors come from CSS vars on <html class="dark"> — refresh only when that changes.
+    const themeObserver = new MutationObserver(() => {
+      refreshColors();
+    });
+    themeObserver.observe(document.documentElement, {
+      attributes: true,
+      attributeFilter: ["class"],
+    });
 
     const drawDino = (x: number, y: number, runFrame: number) => {
       const { ink, playBg } = colors.current;
@@ -224,17 +269,15 @@ export default function DinoGameModal({ onClose }: Props) {
       phaseRef.current = "over";
       setPhase("over");
       const s = Math.floor(scoreRef.current);
-      if (s > highRef.current) {
+      if (s > highRef.current && writeHighScore(s)) {
         highRef.current = s;
         setHighScore(s);
-        writeHighScore(s);
       }
     };
 
     const tick = () => {
       raf.current = requestAnimationFrame(tick);
       frame.current += 1;
-      refreshColors();
 
       const { soft, faint, brand, playBg } = colors.current;
 
@@ -334,6 +377,7 @@ export default function DinoGameModal({ onClose }: Props) {
     return () => {
       cancelAnimationFrame(raf.current);
       ro.disconnect();
+      themeObserver.disconnect();
     };
   }, []);
 
@@ -342,7 +386,7 @@ export default function DinoGameModal({ onClose }: Props) {
       if (e.key === "Escape") {
         e.preventDefault();
         e.stopPropagation();
-        onClose();
+        handleClose();
         return;
       }
       if (e.key === " " || e.key === "ArrowUp") {
@@ -365,13 +409,14 @@ export default function DinoGameModal({ onClose }: Props) {
     <div className="fixed inset-0 z-50 grid place-items-center p-3 sm:p-4">
       <div
         className="absolute inset-0 bg-ink/30 backdrop-blur-sm"
-        onClick={onClose}
+        onClick={handleClose}
       />
       <div
         className="animate-rise surface relative flex max-h-[calc(100dvh-1.5rem)] w-full max-w-lg flex-col overflow-hidden rounded-2xl p-5 shadow-2xl sm:max-h-[calc(100dvh-2rem)]"
         role="dialog"
         aria-modal="true"
         aria-labelledby={titleId}
+        tabIndex={-1}
         onClick={(e) => e.stopPropagation()}
       >
         <div className="mb-4 flex shrink-0 items-center justify-between gap-3">
@@ -383,8 +428,9 @@ export default function DinoGameModal({ onClose }: Props) {
             <span className="truncate">ไดโนเสาร์โดด</span>
           </h2>
           <button
+            ref={closeBtnRef}
             type="button"
-            onClick={onClose}
+            onClick={handleClose}
             className="tap-target grid h-9 w-9 shrink-0 place-items-center rounded-lg text-ink-faint transition hover:bg-paper-2 hover:text-ink"
             aria-label="ปิด"
           >
