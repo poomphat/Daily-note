@@ -31,6 +31,7 @@ interface Props {
   onOpenShortcuts: () => void;
   onOpenReminder: () => void;
   onOpenEra: () => void;
+  onOpenDino: () => void;
   reminderOn: boolean;
   onImport: (store: NotesStore, mode: "merge" | "replace") => void;
   onMessage: (message: string) => void;
@@ -81,6 +82,7 @@ export default function Header({
   onOpenShortcuts,
   onOpenReminder,
   onOpenEra,
+  onOpenDino,
   reminderOn,
   onImport,
   onMessage,
@@ -131,6 +133,7 @@ export default function Header({
               onOpenReminder={onOpenReminder}
               onOpenShortcuts={onOpenShortcuts}
               onOpenEra={onOpenEra}
+              onOpenDino={onOpenDino}
               onImport={onImport}
               onMessage={onMessage}
             />

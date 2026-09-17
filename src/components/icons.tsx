@@ -183,3 +183,12 @@ export const MoreHorizontal = (p: IconProps) => (
     <circle cx="19" cy="12" r="1.2" fill="currentColor" stroke="none" />
   </svg>
 );
+
+/** Simple dino silhouette for the jump game menu entry. */
+export const Dino = (p: IconProps) => (
+  <svg {...base} {...p}>
+    <path d="M5 18v-5.5c0-1.2.8-2.2 1.9-2.4L9 10l1-3h3l1 2h2.5c1.4 0 2.5 1.1 2.5 2.5V14" />
+    <path d="M8 18v2M12 18v2" />
+    <path d="M15 8.5h1.5M10.5 8.2h.01" />
+  </svg>
+);
