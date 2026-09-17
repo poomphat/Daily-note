@@ -11,6 +11,7 @@ import {
 import {
   Bell,
   Calendar,
+  Dino,
   Download,
   Help,
   Moon,
@@ -28,6 +29,7 @@ interface Props {
   onOpenReminder: () => void;
   onOpenShortcuts: () => void;
   onOpenEra: () => void;
+  onOpenDino: () => void;
   onImport: (store: NotesStore, mode: "merge" | "replace") => void;
   onMessage: (message: string) => void;
 }
@@ -48,6 +50,7 @@ export default function ToolsMenu({
   onOpenReminder,
   onOpenShortcuts,
   onOpenEra,
+  onOpenDino,
   onImport,
   onMessage,
 }: Props) {
@@ -160,6 +163,15 @@ export default function ToolsMenu({
           >
             <Calendar className="h-4 w-4 text-ink-soft" />
             แปลง พ.ศ. / ค.ศ.
+          </button>
+          <button
+            type="button"
+            onClick={() => closeAnd(onOpenDino)}
+            className={itemClass}
+            title="ไดโนเสาร์โดด"
+          >
+            <Dino className="h-4 w-4 shrink-0 text-ink-soft" aria-hidden />
+            <span className="min-w-0 truncate">ไดโนเสาร์โดด</span>
           </button>
 
           <div className="my-1.5 border-t border-line/70" />

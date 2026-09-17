@@ -183,3 +183,13 @@ export const MoreHorizontal = (p: IconProps) => (
     <circle cx="19" cy="12" r="1.2" fill="currentColor" stroke="none" />
   </svg>
 );
+
+/** Compact dino silhouette — reads clearly at 16–20px menu/modal sizes. */
+export const Dino = (p: IconProps) => (
+  <svg {...base} {...p}>
+    <path d="M4.5 17.5V12.8c0-1.3.9-2.3 2.1-2.5L8.8 10l.9-2.8h2.9l.8 1.9H16c1.3 0 2.3 1 2.3 2.3v2.6" />
+    <path d="M7.2 17.5v2.8M11.5 17.5v2.8" />
+    <path d="M4.5 14.2h2.2M14.8 8.2h1.8" />
+    <circle cx="10.4" cy="8" r="0.75" fill="currentColor" stroke="none" />
+  </svg>
+);

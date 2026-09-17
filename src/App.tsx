@@ -17,6 +17,7 @@ import SearchModal from "./components/SearchModal";
 import ShortcutsModal from "./components/ShortcutsModal";
 import ReminderModal from "./components/ReminderModal";
 import EraConverterModal from "./components/EraConverterModal";
+import DinoGameModal from "./components/DinoGameModal";
 import Toast from "./components/Toast";
 import WeekView from "./components/WeekView";
 import TimelineView from "./components/TimelineView";
@@ -70,6 +71,7 @@ export default function App() {
   const [shortcutsOpen, setShortcutsOpen] = useState(false);
   const [reminderOpen, setReminderOpen] = useState(false);
   const [eraOpen, setEraOpen] = useState(false);
+  const [dinoOpen, setDinoOpen] = useState(false);
   const [copyConfirm, setCopyConfirm] = useState(false);
   const [undo, setUndo] = useState<{ entry: Entry; index: number } | null>(null);
   const [message, setMessage] = useState<string | null>(null);
@@ -138,11 +140,12 @@ export default function App() {
       if ((e.metaKey || e.ctrlKey) && e.key === "k") {
         e.preventDefault();
         setEraOpen(false);
+        setDinoOpen(false);
         setSearchOpen(true);
         return;
       }
 
-      if (eraOpen) return;
+      if (eraOpen || dinoOpen) return;
 
       if ((e.metaKey || e.ctrlKey) && e.key === "Enter") {
         e.preventDefault();
@@ -190,7 +193,7 @@ export default function App() {
 
     window.addEventListener("keydown", onKeyDown);
     return () => window.removeEventListener("keydown", onKeyDown);
-  }, [activeDate, setActiveDate, searchOpen, shortcutsOpen, eraOpen, tab]);
+  }, [activeDate, setActiveDate, searchOpen, shortcutsOpen, eraOpen, dinoOpen, tab]);
 
   const showEmpty = isDayEmpty(day);
   const autoFocus = isToday(activeDate) && day.entries.length === 0;
@@ -241,6 +244,7 @@ export default function App() {
           onOpenShortcuts={() => setShortcutsOpen(true)}
           onOpenReminder={() => setReminderOpen(true)}
           onOpenEra={() => setEraOpen(true)}
+          onOpenDino={() => setDinoOpen(true)}
           reminderOn={settings.reminder.enabled}
           onImport={mergeStore}
           onMessage={setMessage}
@@ -375,6 +379,8 @@ export default function App() {
       )}
 
       {eraOpen && <EraConverterModal onClose={() => setEraOpen(false)} />}
+
+      {dinoOpen && <DinoGameModal onClose={() => setDinoOpen(false)} />}
 
       {undo && (
         <Toast
